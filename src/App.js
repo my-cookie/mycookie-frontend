@@ -1,11 +1,16 @@
+import Router from "./pages/Router";
 import { Reset } from "styled-reset";
-import "./App.css";
+
+import Layout from "./pages/Layout";
 
 function App() {
   return (
-    <div>
+    <>
       <Reset />
-    </div>
+      <Layout>
+        <Router />
+      </Layout>
+    </>
   );
 }
 
