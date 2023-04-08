@@ -1,5 +1,4 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 function Layout({ children }) {
@@ -23,8 +22,8 @@ const MainLayout = styled.div`
   & > .contents_container {
     width: 100%;
     max-width: 550px;
-    height: calc(100% - 20vh);
-    margin-bottom: 5vh;
+    height: calc(100% - 10vh);
+
     border-radius: 40px;
     border: 12px solid #fff;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
@@ -34,7 +33,7 @@ const MainLayout = styled.div`
   }
   @media (min-width: 1000px) {
     & > .contents_container {
-      max-width: 390px;
+      max-width: 360px;
       max-height: 800px;
     }
   }

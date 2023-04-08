@@ -1,16 +1,31 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import MainCookie from "../assets/main_cookie_img.png";
+import MainCookie from "../assets/cookie_main.png";
 import Kakao from "../assets/kakao.png";
 
 function Login() {
+  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+  const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  const KakaoLoginBtn = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
+
   return (
     <LoginContainer>
-      <ImgContainer>
-        <img src={MainCookie} alt="사빠쿠" className="main_cookie" />
-      </ImgContainer>
-      <KakaoLogin>
-        <KakaoBtn src={Kakao} alt="카카오버튼" />
-      </KakaoLogin>
+      <div className="contents_container">
+        <div className="img_box">
+          <img src={MainCookie} alt="사빠쿠" className="main_cookie" />
+        </div>
+
+        <div className="kakaoBtn_box">
+          <KakaoLogin onClick={KakaoLoginBtn}>
+            <KakaoBtn src={Kakao} alt="카카오버튼" />
+          </KakaoLogin>
+        </div>
+      </div>
     </LoginContainer>
   );
 }
@@ -18,40 +33,49 @@ function Login() {
 export default Login;
 
 const LoginContainer = styled.div`
-  height: 100%;
-`;
+  height: 94%;
+  .contents_container {
+    height: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 0 30px;
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f8f8;
+    border: 20px solid #fff386;
+    border-radius: 40px;
+  }
 
-const ImgContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  position: absolute;
+  .img_box {
+    width: 100%;
+    height: 70%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
   .main_cookie {
-    width: 90%;
-    height: 95%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  .kakaoBtn_box {
+    width: 100%;
   }
 `;
 
 const KakaoLogin = styled.button`
-  width: 70%;
+  width: 100%;
   height: 55px;
   overflow: hidden;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   position: relative;
-  z-index: 999;
-  margin: 0 auto;
-  top: 550px;
-  display: flex;
-  justify-content: center;
-  background-color: #fee500;
-
-  @media (max-width: 500px) {
-    top: 720px;
-  }
 `;
 
 const KakaoBtn = styled.img`
