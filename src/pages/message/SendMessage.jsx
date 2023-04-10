@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-function ReadMessage() {
+function SendMessage() {
   return (
-    <ReadMessageContainer>
+    <SendMessageContainer>
       <div className="contents_container">
-        <div className="read_cookie">
-          <SelectCookieImg src="https://d4pwibjctaa5b.cloudfront.net/블루팡이맛.png" />
+        <div className="send_title">
+          <SendTitle>사랑을 담아</SendTitle>
+          <SendTitle>쿠키를 구워봐!</SendTitle>
         </div>
-        <div className="read_letter">
+        <div className="send_letter">
           <div className="message_background">
             <ToBox>
               <ToRead>____ 에게</ToRead>
@@ -21,19 +22,21 @@ function ReadMessage() {
             </FromBox>
           </div>
         </div>
-        <div className="read_btn">
-          <CheckBtn>확인</CheckBtn>
-          <DeleteBtn>삭제</DeleteBtn>
-          <CrimeBtn>신고</CrimeBtn>
+        <div className="send_btn">
+          <CheckBox>
+            <SendInput type="checkbox" />
+            <SendCheck>익명으로 보내기</SendCheck>
+          </CheckBox>
+          <SendBtn type="button">쿠키 보내기!</SendBtn>
         </div>
       </div>
-    </ReadMessageContainer>
+    </SendMessageContainer>
   );
 }
 
-export default ReadMessage;
+export default SendMessage;
 
-const ReadMessageContainer = styled.div`
+const SendMessageContainer = styled.div`
   height: 100%;
 
   .contents_container {
@@ -47,14 +50,16 @@ const ReadMessageContainer = styled.div`
     padding: 0 40px;
   }
 
-  .read_cookie {
+  .send_title {
     width: 100%;
-    padding: 30px 0;
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
   }
 
-  .read_letter {
+  .send_letter {
     width: 100%;
     height: 60%;
     margin-top: 10px;
@@ -69,15 +74,19 @@ const ReadMessageContainer = styled.div`
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
   }
-  .read_btn {
+  .send_btn {
     width: 100%;
+    height: 20%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
-const SelectCookieImg = styled.img`
-  width: 60px;
+const SendTitle = styled.p`
+  font-size: 1.4rem;
+  padding-bottom: 10px;
 `;
 
 const ToBox = styled.div`
@@ -99,39 +108,25 @@ const ToRead = styled.p``;
 const ReadMessageText = styled.p``;
 const FromRead = styled.p``;
 
-const CheckBtn = styled.button`
-  width: 70px;
-  height: 40px;
-  border: 3px solid #7fa3ff;
-  border-radius: 15px;
-  background-color: #ffffff;
-  font-family: "BRBA_B";
-  font-size: 0.8rem;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-right: 10px;
+const CheckBox = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
 `;
-const DeleteBtn = styled.button`
-  width: 70px;
-  height: 40px;
-  border: 3px solid #7fa3ff;
-  border-radius: 15px;
-  background-color: #ffffff;
-  font-family: "BRBA_B";
-  font-size: 0.8rem;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-right: 10px;
-`;
+const SendInput = styled.input``;
 
-const CrimeBtn = styled.button`
-  width: 70px;
-  height: 40px;
+const SendCheck = styled.p`
+  font-size: 0.8rem;
+`;
+const SendBtn = styled.button`
+  width: 150px;
+  height: 50px;
   border: 3px solid #7fa3ff;
   border-radius: 15px;
   background-color: #ffffff;
   font-family: "BRBA_B";
-  font-size: 0.8rem;
+  font-size: 1rem;
   cursor: pointer;
   margin-top: 10px;
   margin-right: 10px;

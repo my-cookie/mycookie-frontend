@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MainCookie from "../assets/cookie_main.png";
 import Kakao from "../assets/kakao.png";

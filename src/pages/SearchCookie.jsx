@@ -1,7 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { axiosInstance } from "../api/axios";
+import SearchBar from "../components/search/SearchBar";
+import SearchResultsList from "../components/search/SearchResultsList";
 
 function SearchCookie() {
+  // const [results, setResults] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [searchField, setSearchField] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const nicknameData = sessionStorage.getItem("nickname");
+  const nickname = JSON.parse(nicknameData);
+  const user_uuid = "b22a8b3a-0f76-4859-a7d5-7238a36c0cf9";
+
+  useEffect(() => {
+    axiosInstance
+      .post(`api/auth/search`, { nickname, user_uuid })
+      .then((response) => response.json())
+      .then((users) => {
+        setUsers(users);
+      });
+  }, []);
+
+  useEffect(() => {
+    setFilteredUsers(() =>
+      users.filter((user) =>
+        user.nickname.toLowerCase().includes(searchField.toLowerCase())
+      )
+    );
+  }, [searchField, users]);
+
   return (
     <SearchCookieBox>
       <div className="contents_container">
@@ -9,7 +37,18 @@ function SearchCookie() {
           <SearchTitle>쿠키 찾기</SearchTitle>
         </div>
         <div className="search_input">
-          <SearchInput />
+          {/* <SearchBar setResults={setResults} />
+          {results && results.length > 0 && (
+            <SearchResultsList results={results} />
+          )} */}
+          <SearchInput
+            type="search"
+            placeholder="친구를 찾아봐!"
+            onChange={(e) => setSearchField(e.target.value)}
+          />
+          {users?.map((users, index) => {
+            return <li key={index}>{users.nickname}</li>;
+          })}
         </div>
         <div className="search_send">
           <SearchSend>누구 에게</SearchSend>
@@ -73,13 +112,12 @@ const SearchTitle = styled.div`
 const SearchInput = styled.input`
   border: 1px solid black;
   border-radius: 10px;
-  width: 95%;
-  height: 30px;
+  width: 100%;
+  height: 50px;
   margin-top: 30px;
   outline: none;
   font-size: 1.2rem;
   font-family: "BRBA_B";
-  padding: 10px;
 `;
 
 const SearchSend = styled.p`

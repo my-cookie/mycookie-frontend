@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { axiosInstance } from "../../api/axios";
+import { axiosInstance } from "../api/axios";
 
-function SelectCookie() {
-  const navigate = useNavigate();
-  const [cookie, setCookie] = useState([]); // 서버에서 불러오는 쿠키
-  const [flavors, setFlavors] = useState([]); // 유저가 선택한 쿠키
-  const user_uuid = "b22a8b3a-0f76-4859-a7d5-7238a36c0cf9";
+function FriendSelectCookie() {
+  const [cookie, setCookie] = useState([]);
+  const [flavors, setFlavors] = useState();
 
   async function getCookie() {
     try {
@@ -25,35 +22,18 @@ function SelectCookie() {
 
   const handleClick = (e) => {
     console.log(e.target.id);
-
-    flavors.push(e.target.id);
-    setFlavors(flavors);
-    sessionStorage.setItem("cookie", JSON.stringify(flavors).replace(/"/g, ""));
+    setFlavors(e.target.id);
   };
-
-  const selectBtn = () => {
-    const nicknameData = sessionStorage.getItem("nickname");
-    const nickname = JSON.parse(nicknameData);
-    const flavorsCookie = sessionStorage.getItem("cookie");
-    const flavors = JSON.parse(flavorsCookie);
-
-    axiosInstance
-      .post(`api/auth/info`, { nickname, flavors, user_uuid })
-      .then((res) => {
-        console.log(res.data);
-        navigate("/mymessage");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   return (
-    <SelectCookieBox>
+    <FriendSelectBox>
       <div className="contents_container">
-        <div className="select_title">
-          <SelectTitle>너는 어떤 맛 쿠키야?</SelectTitle>
-          <SelectTip>tip. 모든 맛을 전부 다 선택해도 괜찮아!</SelectTip>
+        <div className="friend_select_title">
+          <FriendSelectTitle>친구가 선택한</FriendSelectTitle>
+          <FriendSelectTitle>쿠키맛은 뭘까?</FriendSelectTitle>
+
+          <FriendSelectTip>
+            tip. 친구의 쿠키맛을 맞혀야 보낼 수 있어!
+          </FriendSelectTip>
         </div>
 
         <div className="select_cookie">
@@ -68,32 +48,31 @@ function SelectCookie() {
                         alt={cookie.name}
                         className="cookie_img"
                       />
-                      <input
+                      <button
                         type="button"
                         id={cookie.id}
-                        value={cookie.name}
                         onClick={handleClick}
                         className="cookie_btn"
-                      />
+                      >
+                        {cookie.name}
+                      </button>
                     </li>
                   );
                 })}
             </CookieListBox>
           </div>
         </div>
-        <div className="select_btn">
-          <SelectBtn type="button" onClick={selectBtn}>
-            선택완료!
-          </SelectBtn>
+        <div className="friendSelect_btn">
+          <FriendSelectBtn type="button">선택완료!</FriendSelectBtn>
         </div>
       </div>
-    </SelectCookieBox>
+    </FriendSelectBox>
   );
 }
 
-export default SelectCookie;
+export default FriendSelectCookie;
 
-const SelectCookieBox = styled.div`
+const FriendSelectBox = styled.div`
   height: 100%;
 
   .contents_container {
@@ -107,7 +86,7 @@ const SelectCookieBox = styled.div`
     padding: 0 40px;
   }
 
-  .select_title {
+  .friend_select_title {
     width: 100%;
     height: 40%;
     display: flex;
@@ -124,7 +103,6 @@ const SelectCookieBox = styled.div`
   }
 
   .select_cookie_back {
-    width: 100%;
     height: 300px;
     border-radius: 40px;
     border: 1px solid #a7a7a7;
@@ -155,7 +133,7 @@ const SelectCookieBox = styled.div`
     margin: 5px;
   }
 
-  .select_btn {
+  .friendSelect_btn {
     width: 100%;
     height: 30%;
     display: flex;
@@ -163,12 +141,24 @@ const SelectCookieBox = styled.div`
   }
 `;
 
-const SelectTitle = styled.p`
+const FriendSelectTitle = styled.p`
   font-size: 1.4rem;
+  padding-bottom: 10px;
 `;
-const SelectTip = styled.p`
-  font-size: 0.6rem;
-  padding-top: 10px;
+const FriendSelectTip = styled.p`
+  font-size: 0.8rem;
+`;
+
+const FriendSelectBtn = styled.button`
+  width: 150px;
+  height: 50px;
+  border: 3px solid #7fa3ff;
+  border-radius: 20px;
+  background-color: #ffffff;
+  font-family: "BRBA_B";
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 20px;
 `;
 
 const CookieListBox = styled.ul`
@@ -194,16 +184,4 @@ const CookieListBox = styled.ul`
       width: 100%;
     }
   }
-`;
-
-const SelectBtn = styled.button`
-  width: 150px;
-  height: 50px;
-  border: 3px solid #7fa3ff;
-  border-radius: 20px;
-  background-color: #ffffff;
-  font-family: "BRBA_B";
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 20px;
 `;

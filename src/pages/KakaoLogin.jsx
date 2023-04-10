@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../api/axios";
@@ -10,11 +9,11 @@ function KakaoLogin() {
   const kakaoLoginCode = async () => {
     try {
       await axiosInstance.post(`api/auth/login`, { code }).then((result) => {
-        const { status, data } = result;
+        const { status } = result;
         console.log(status);
         if (status === 200) {
           navigate("/mymessage");
-        } else if (status === 201) {
+        } else if (status === 201 || status === 206) {
           navigate("/nickname");
         }
       });
