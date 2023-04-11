@@ -54,6 +54,7 @@ function Nickname() {
               <NicknameInput
                 type="text"
                 name="nickname"
+                maxlength="7"
                 value={nickname}
                 onChange={handleChange}
               />

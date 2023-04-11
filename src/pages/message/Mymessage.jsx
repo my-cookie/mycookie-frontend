@@ -176,12 +176,12 @@ const UnReadCookie = styled.button`
 
 const SendBtn = styled.button`
   width: 150px;
-  height: 45px;
+  height: 50px;
   border: 3px solid #7fa3ff;
   border-radius: 15px;
   background-color: #ffffff;
   font-family: "BRBA_B";
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   cursor: pointer;
   margin-top: 30px;
 `;

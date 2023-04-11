@@ -3,30 +3,24 @@ import styled from "styled-components";
 import { axiosInstance } from "../api/axios";
 
 function SearchCookie() {
-  // const [results, setResults] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [searchField, setSearchField] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const nicknameData = sessionStorage.getItem("nickname");
-  const nickname = JSON.parse(nicknameData);
-  const user_uuid = "b22a8b3a-0f76-4859-a7d5-7238a36c0cf9";
+  const [search, setSearch] = useState("");
+  const [searchField, setSearchField] = useState(""); // 유저가 입력한 닉네임
 
   useEffect(() => {
-    axiosInstance
-      .post(`api/auth/search`, { nickname, user_uuid })
-      .then((response) => response.json())
-      .then((users) => {
-        setUsers(users);
-      });
-  }, []);
+    if (searchField !== 0) {
+      axiosInstance
+        .post(`api/auth/search`, { nickname: searchField })
+        .then((response) => {
+          console.log(response.data);
+          setSearch(response.data);
+        });
+    }
+  }, [searchField]);
 
-  useEffect(() => {
-    setFilteredUsers(() =>
-      users.filter((user) =>
-        user.nickname.toLowerCase().includes(searchField.toLowerCase())
-      )
-    );
-  }, [searchField, users]);
+  const searchNickname = (e) => {
+    e.preventDefault();
+    setSearchField(e.target.value);
+  };
 
   return (
     <SearchCookieBox>
@@ -35,18 +29,17 @@ function SearchCookie() {
           <SearchTitle>쿠키 찾기</SearchTitle>
         </div>
         <div className="search_input">
-          {/* <SearchBar setResults={setResults} />
-          {results && results.length > 0 && (
-            <SearchResultsList results={results} />
-          )} */}
           <SearchInput
-            type="search"
+            type="text"
             placeholder="친구를 찾아봐!"
-            onChange={(e) => setSearchField(e.target.value)}
+            maxlength="7"
+            onChange={searchNickname}
           />
-          {users?.map((users, index) => {
-            return <li key={index}>{users.nickname}</li>;
-          })}
+          {/* <select>
+            {search?.map((search) => {
+              return <option key={search.id}>{search.nickname}</option>;
+            })}
+          </select> */}
         </div>
         <div className="search_send">
           <SearchSend>누구 에게</SearchSend>
