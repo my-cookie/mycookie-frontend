@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { axiosInstance } from "../api/axios";
-import SearchBar from "../components/search/SearchBar";
-import SearchResultsList from "../components/search/SearchResultsList";
 
 function SearchCookie() {
   // const [results, setResults] = useState([]);

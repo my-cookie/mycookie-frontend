@@ -15,15 +15,21 @@ function Nickname() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (nickname.length > 8) {
+    if (nickname.length >= 7) {
       alert("닉네임은 7글자까지 가능해요!");
     } else {
       axiosInstance
         .post(`api/auth/nickname`, { nickname, user_uuid })
-        .then((res) => {
-          console.log(res.data);
+        .then((result) => {
+          const { status } = result;
+          console.log(status);
+          if (status === 206) {
+            alert("이미 사용중인 닉네임 입니다!");
+            window.location.reload();
+          } else if (status === 200) {
+            navigate("/select");
+          }
           sessionStorage.setItem("nickname", JSON.stringify(nickname));
-          navigate("/select");
         })
         .catch((error) => {
           console.log(error);

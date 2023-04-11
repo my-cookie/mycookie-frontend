@@ -6,7 +6,7 @@ import { axiosInstance } from "../../api/axios";
 function SelectCookie() {
   const navigate = useNavigate();
   const [cookie, setCookie] = useState([]); // 서버에서 불러오는 쿠키
-  const [flavors, setFlavors] = useState([]); // 유저가 선택한 쿠키
+  const [flavor, setFlavors] = useState(""); // 유저가 선택한 쿠키
   const user_uuid = "b22a8b3a-0f76-4859-a7d5-7238a36c0cf9";
 
   async function getCookie() {
@@ -25,20 +25,25 @@ function SelectCookie() {
 
   const handleClick = (e) => {
     console.log(e.target.id);
+    // flavors.push(e.target.id);
+    if (flavor.length === 0) {
+      setFlavors(flavor + e.target.id);
+    } else {
+      setFlavors(flavor + `,${e.target.id}`);
+    }
 
-    flavors.push(e.target.id);
-    setFlavors(flavors);
-    sessionStorage.setItem("cookie", JSON.stringify(flavors).replace(/"/g, ""));
+    // sessionStorage.setItem("cookie", JSON.stringify(flavors));
   };
+
+  // setFlavors(flavors.split().join(","));
 
   const selectBtn = () => {
     const nicknameData = sessionStorage.getItem("nickname");
     const nickname = JSON.parse(nicknameData);
-    const flavorsCookie = sessionStorage.getItem("cookie");
-    const flavors = JSON.parse(flavorsCookie);
-
+    // const flavorsCookie = sessionStorage.getItem("cookie");
+    // const flavors = JSON.parse(flavorsCookie);
     axiosInstance
-      .post(`api/auth/info`, { nickname, flavors, user_uuid })
+      .post(`api/auth/info`, { nickname, flavor, user_uuid })
       .then((res) => {
         console.log(res.data);
         navigate("/mymessage");
