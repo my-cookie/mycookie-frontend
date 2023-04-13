@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { axiosInstance } from "../api/axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function SearchCookie() {
-  const [search, setSearch] = useState("");
-  const [searchField, setSearchField] = useState(""); // 유저가 입력한 닉네임
+  const [search, setSearch] = useState([]); // 검색 데이터 저장
+  const [searchField, setSearchField] = useState(""); // 검색창 onchange
+  const [bookmark, setBookmark] = useState([]); // 북마크 get
+  const [bookmarkId, setBookmarkId] = useState([]); // 북마크 target_id
+  const [receiver, setReceiver] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (searchField !== 0) {
       axiosInstance
         .post(`api/auth/search`, { nickname: searchField })
-        .then((response) => {
-          console.log(response.data);
-          setSearch(response.data);
+        .then((res) => {
+          setSearch(res.data);
         });
     }
   }, [searchField]);
@@ -20,6 +25,82 @@ function SearchCookie() {
   const searchNickname = (e) => {
     e.preventDefault();
     setSearchField(e.target.value);
+  };
+
+  useEffect(() => {
+    axiosInstance.get(`api/bookmark/item`).then((res) => {
+      setBookmark(res.data);
+      res.data.map((el) => setBookmarkId([...bookmarkId, el.target.id]));
+    });
+  }, []);
+
+  const favoriteAddHandler = (e) => {
+    console.log(e.target.id);
+    axiosInstance
+      .post(`api/bookmark/item`, { target: e.target.id })
+      .then((res) => {
+        setBookmarkId([e.target.id, ...bookmarkId]);
+        setBookmark([res.data, ...bookmark]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    console.log(bookmark);
+  }, [bookmark]);
+
+  const favoriteDeleteHandler = (e) => {
+    axiosInstance
+      .delete(`api/bookmark/item`, { data: { target: e.target.id } })
+      .then((res) => {
+        setBookmarkId(
+          bookmarkId.filter((el) => {
+            return el !== e.target.id;
+          })
+        );
+        setBookmark(
+          bookmark.filter((el) => {
+            return el.target.id !== e.target.id;
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    console.log(receiver);
+  }, [receiver]);
+
+  const sendHandler = (e) => {
+    console.log(bookmark);
+    console.log(e.target.id);
+    let receiverNickname = bookmark.filter((el) => {
+      return el.target.id == e.target.id;
+    });
+    console.log(receiverNickname);
+    setReceiver({
+      id: e.target.id,
+      nickname: receiverNickname[0].target.nickname
+    });
+
+    axiosInstance
+      .post(`api/msg/remain`, { receiver: e.target.id })
+      .then((res) => {
+        console.log(res.data);
+        alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
+      });
+  };
+
+  const submitBtn = () => {
+    navigate("/sendmessage", {
+      state: {
+        receiver: receiver
+      }
+    });
   };
 
   return (
@@ -34,27 +115,99 @@ function SearchCookie() {
             placeholder="친구를 찾아봐!"
             maxlength="7"
             onChange={searchNickname}
+            value={searchField}
           />
-          {/* <select>
-            {search?.map((search) => {
-              return <option key={search.id}>{search.nickname}</option>;
-            })}
-          </select> */}
         </div>
+        {!bookmark.length && !searchField.length ? (
+          <p className="no_search">등록된 즐겨찾기가 없네^^..</p>
+        ) : (
+          ""
+        )}
+        {searchField.length !== 0 ? (
+          <div className="search_box">
+            {search.length !== 0
+              ? search.map((search) => {
+                  console.log(search.id);
+                  return (
+                    <div key={search.id} className="box_list">
+                      {search.nickname}
+
+                      {bookmarkId.includes(`${search.id}`) ? (
+                        <button
+                          key={search.id}
+                          id={search.id}
+                          onClick={favoriteDeleteHandler}
+                          className="star_btn"
+                        >
+                          ★
+                        </button>
+                      ) : (
+                        <button
+                          key={search.id}
+                          id={search.id}
+                          onClick={favoriteAddHandler}
+                          className="star_btn"
+                        >
+                          ☆
+                        </button>
+                      )}
+                    </div>
+                  );
+                })
+              : "검색결과가 없습니다"}
+          </div>
+        ) : (
+          <div>
+            {bookmark.map((bookmark) => {
+              return (
+                <div
+                  key={bookmark.target.id}
+                  id={bookmark.target.id}
+                  className="bookmark_BG"
+                  onClick={sendHandler}
+                >
+                  <div
+                    className="btn_BG"
+                    id={bookmark.target.id}
+                    key={bookmark.target.id}
+                  >
+                    <li id={bookmark.target.id} className="box_list">
+                      {bookmark.target.nickname}
+                    </li>
+                    <button
+                      key={bookmark.target.id}
+                      id={bookmark.target.id}
+                      onClick={favoriteDeleteHandler}
+                      className="star_btn"
+                    >
+                      ★
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
         <div className="search_send">
-          <SearchSend>누구 에게</SearchSend>
-          <SearchSend>쿠키를 보낼까?</SearchSend>
+          {receiver.nickname ? (
+            <SearchSend>
+              <p className="strong">'{receiver.nickname}'</p>
+              <p> 에게 보낼까?</p>
+            </SearchSend>
+          ) : (
+            <SearchSend>누구에게 쿠키를 보낼까?</SearchSend>
+          )}
         </div>
         <div className="search_btn">
-          <SearchBtn type="submit">좋아!</SearchBtn>
+          <SearchBtn type="submit" onClick={submitBtn}>
+            좋아!
+          </SearchBtn>
         </div>
       </div>
     </SearchCookieBox>
   );
 }
-
 export default SearchCookie;
-
 const SearchCookieBox = styled.div`
   height: 100%;
   .contents_container {
@@ -72,30 +225,77 @@ const SearchCookieBox = styled.div`
     height: 10%;
     display: flex;
     justify-content: center;
+    padding-top: 10px;
   }
-
   .search_input {
     width: 100%;
-    height: 25%;
+    height: 15%;
   }
-
   .search_send {
     width: 100%;
-    height: 20%;
+    height: 15%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
   }
-
+  .box_list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .search_box {
+    width: 80%;
+    height: 15%;
+    background-color: #fff;
+    padding: 20px;
+    align-items: center;
+    margin: 10px auto;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    list-style: none;
+    overflow-y: scroll;
+  }
   .search_btn {
     width: 100%;
-    height: 30%;
+    height: 20%;
     display: flex;
     justify-content: center;
   }
-`;
 
+  .star_btn {
+    background: none;
+    border: none;
+    color: #7fa3ff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: 5px;
+  }
+
+  .btn_BG {
+    width: 95%;
+    height: 60%;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow-y: scroll;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .no_search {
+    padding: 10px;
+  }
+
+  .bookmark_BG {
+    margin-bottom: 10px;
+  }
+
+  .strong {
+    font-size: 2rem;
+    color: #ff7f8c;
+  }
+`;
 const SearchTitle = styled.div`
   font-size: 1.4rem;
   padding-top: 20px;
@@ -109,12 +309,16 @@ const SearchInput = styled.input`
   outline: none;
   font-size: 1.2rem;
   font-family: "BRBA_B";
+  box-sizing: border-box;
+  padding-left: 10px;
 `;
-
-const SearchSend = styled.p`
+const SearchSend = styled.div`
   font-family: "BRBA_B";
   font-size: 1.5rem;
-  padding-bottom: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 const SearchBtn = styled.button`

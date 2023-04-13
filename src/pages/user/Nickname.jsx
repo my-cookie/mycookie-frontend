@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../api/axios";
 
 function Nickname() {
   const navigate = useNavigate();
   const [nickname, setNickname] = useState("");
-  const user_uuid = "b22a8b3a-0f76-4859-a7d5-7238a36c0cf9";
+  const [uuid, setUuid] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    try {
+      setUuid(location.state.user_uuid);
+    } catch {
+      navigate("/");
+    }
+  }, []);
 
   const handleChange = (e) => {
     setNickname(e.target.value);
@@ -19,7 +28,7 @@ function Nickname() {
       alert("닉네임은 7글자까지 가능해요!");
     } else {
       axiosInstance
-        .post(`api/auth/nickname`, { nickname, user_uuid })
+        .post(`api/auth/nickname`, { nickname, user_uuid: uuid })
         .then((result) => {
           const { status } = result;
           console.log(status);
@@ -27,9 +36,10 @@ function Nickname() {
             alert("이미 사용중인 닉네임 입니다!");
             window.location.reload();
           } else if (status === 200) {
-            navigate("/select");
+            navigate("/select", {
+              state: { user_uuid: uuid, nickname: nickname }
+            });
           }
-          sessionStorage.setItem("nickname", JSON.stringify(nickname));
         })
         .catch((error) => {
           console.log(error);

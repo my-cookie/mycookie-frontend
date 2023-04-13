@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { axiosInstance } from "../../api/axios";
+import useAuth from "../../hooks/useAuth";
 
 function SelectCookie() {
   const navigate = useNavigate();
   const [cookie, setCookie] = useState([]); // 서버에서 불러오는 쿠키
   const [flavor, setFlavors] = useState(""); // 유저가 선택한 쿠키
-  const user_uuid = "b22a8b3a-0f76-4859-a7d5-7238a36c0cf9";
+  const [uuid, setUuid] = useState("");
+  const [nickname, serNickname] = useState("");
+  const location = useLocation();
+  // const user_uuid = location.state.user_uuid;
+  const { setAccessToken } = useAuth();
+
+  useEffect(() => {
+    try {
+      setUuid(location.state.user_uuid);
+      serNickname(location.state.nickname);
+    } catch {
+      navigate("/");
+    }
+  }, []);
 
   async function getCookie() {
     try {
@@ -23,30 +37,46 @@ function SelectCookie() {
     getCookie();
   }, []);
 
-  const handleClick = (e) => {
-    console.log(e.target.id);
-    // flavors.push(e.target.id);
+  useEffect(() => {
+    console.log(flavor);
+  }, [flavor]);
+
+  const handleClickPlus = (e) => {
     if (flavor.length === 0) {
-      setFlavors(flavor + e.target.id);
+      setFlavors(flavor + `${e.target.id}`);
     } else {
       setFlavors(flavor + `,${e.target.id}`);
     }
-
-    // sessionStorage.setItem("cookie", JSON.stringify(flavors));
   };
 
-  // setFlavors(flavors.split().join(","));
+  const handleClickMinus = (e) => {
+    if (flavor.length == 1) {
+      setFlavors(flavor.replace(`${e.target.id}`, ""));
+    } else if (flavor.indexOf(e.target.id.toString()) == 0) {
+      setFlavors(flavor.replace(`${e.target.id},`, ""));
+    } else if (flavor.includes(`,${e.target.id}`)) {
+      setFlavors(flavor.replace(`,${e.target.id}`, ""));
+    } else {
+      setFlavors(flavor.replace(`${e.target.id}`, ""));
+    }
+  };
 
   const selectBtn = () => {
-    const nicknameData = sessionStorage.getItem("nickname");
-    const nickname = JSON.parse(nicknameData);
-    // const flavorsCookie = sessionStorage.getItem("cookie");
-    // const flavors = JSON.parse(flavorsCookie);
+    if (flavor.length === 0) {
+      alert("1개 이상은 선택해야해! ");
+    }
     axiosInstance
-      .post(`api/auth/info`, { nickname, flavor, user_uuid })
-      .then((res) => {
-        console.log(res.data);
-        navigate("/mymessage");
+      .post(`api/auth/info`, { nickname, flavor, user_uuid: uuid })
+      .then((result) => {
+        const { status, data } = result;
+        console.log(status);
+
+        if (status === 200) {
+          setAccessToken(data.tokens.access);
+          navigate("/mymessage");
+        } else {
+          navigate("/");
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -66,21 +96,45 @@ function SelectCookie() {
             <CookieListBox>
               {cookie &&
                 cookie?.map((cookie, index) => {
-                  return (
-                    <li key={index} className="cookie_list">
-                      <img
-                        src={cookie.img}
-                        alt={cookie.name}
-                        className="cookie_img"
-                      />
-                      <input
-                        type="button"
-                        id={cookie.id}
-                        value={cookie.name}
-                        onClick={handleClick}
-                        className="cookie_btn"
-                      />
-                    </li>
+                  return flavor.includes(`${cookie.id}`) ? (
+                    <button
+                      className="cookie_all_btn"
+                      onClick={handleClickMinus}
+                      id={cookie.id}
+                      key={cookie.id}
+                    >
+                      <li className="cookie_list" id={cookie.id}>
+                        <img
+                          style={{ backgroundColor: "orange" }}
+                          src={cookie.img}
+                          alt={cookie.name}
+                          id={cookie.id}
+                          className="cookie_img"
+                        />
+                        <p className="cookie_btn" id={cookie.id}>
+                          {cookie.name}
+                        </p>
+                      </li>
+                    </button>
+                  ) : (
+                    <button
+                      className="cookie_all_btn"
+                      id={cookie.id}
+                      onClick={handleClickPlus}
+                      key={cookie.id}
+                    >
+                      <li className="cookie_list" id={cookie.id}>
+                        <img
+                          src={cookie.img}
+                          alt={cookie.name}
+                          id={cookie.id}
+                          className="cookie_img"
+                        />
+                        <p className="cookie_btn" id={cookie.id}>
+                          {cookie.name}
+                        </p>
+                      </li>
+                    </button>
                   );
                 })}
             </CookieListBox>
@@ -146,11 +200,12 @@ const SelectCookieBox = styled.div`
 
   .cookie_img {
     width: 100px;
+    border-radius: 10px;
   }
 
   .cookie_btn {
     width: 80px;
-    height: 40px;
+    height: 25px;
     border: 3px solid #7fa3ff;
     border-radius: 15px;
     background-color: #ffffff;
@@ -158,8 +213,14 @@ const SelectCookieBox = styled.div`
     font-size: 0.8rem;
     cursor: pointer;
     margin: 5px;
+    text-align: center;
+    align-items: center;
+    padding-top: 10px;
   }
-
+  .cookie_all_btn {
+    background: none;
+    border: none;
+  }
   .select_btn {
     width: 100%;
     height: 30%;
@@ -211,4 +272,19 @@ const SelectBtn = styled.button`
   font-size: 1rem;
   cursor: pointer;
   margin-top: 20px;
+`;
+
+const CookieSelectBtn = styled.input`
+  width: 80px;
+  height: 40px;
+  border: 3px solid #7fa3ff;
+  border-radius: 15px;
+  background-color: #ffffff;
+  font-family: "BRBA_B";
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin: 5px;
+  &:active {
+    background: orange;
+  }
 `;

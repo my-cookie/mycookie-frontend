@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { axiosInstance } from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 function FriendSelectCookie() {
+  const navigate = useNavigate();
   const [cookie, setCookie] = useState([]);
-  const [flavors, setFlavors] = useState();
+  const [flavor, setFlavors] = useState();
 
   async function getCookie() {
     try {
@@ -20,10 +22,46 @@ function FriendSelectCookie() {
     getCookie();
   }, []);
 
-  const handleClick = (e) => {
-    console.log(e.target.id);
-    setFlavors(e.target.id);
+  useEffect(() => {
+    console.log(flavor);
+  }, [flavor]);
+
+  const handleClickPlus = (e) => {
+    if (flavor.length === 0) {
+      setFlavors(flavor + `${e.target.id}`);
+    } else {
+      setFlavors(flavor + `,${e.target.id}`);
+    }
   };
+
+  const handleClickMinus = (e) => {
+    if (flavor.length === 1) {
+      setFlavors(flavor.replace(`${e.target.id}`, ""));
+    } else if (flavor.indexOf(e.target.id.toString()) === 0) {
+      setFlavors(flavor.replace(`${e.target.id},`, ""));
+    } else if (flavor.includes(`,${e.target.id}`)) {
+      setFlavors(flavor.replace(`,${e.target.id}`, ""));
+    } else {
+      setFlavors(flavor.replace(`${e.target.id}`, ""));
+    }
+  };
+
+  const selectBtn = () => {
+    if (flavor.length === 0) {
+      alert("1개 이상은 선택해야해! ");
+    }
+    axiosInstance
+      .post(`api/auth/info`, {})
+      .then((result) => {
+        const { status, data } = result;
+        console.log(status);
+        // navigate("/mymessage");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <FriendSelectBox>
       <div className="contents_container">
@@ -40,30 +78,55 @@ function FriendSelectCookie() {
           <div className="select_cookie_back">
             <CookieListBox>
               {cookie &&
-                cookie?.map((cookie, index) => {
-                  return (
-                    <li key={index} className="cookie_list">
-                      <img
-                        src={cookie.img}
-                        alt={cookie.name}
-                        className="cookie_img"
-                      />
-                      <button
-                        type="button"
-                        id={cookie.id}
-                        onClick={handleClick}
-                        className="cookie_btn"
-                      >
-                        {cookie.name}
-                      </button>
-                    </li>
+                cookie?.map((cookie) => {
+                  return flavor.includes(`${cookie.id}`) ? (
+                    <button
+                      className="cookie_all_btn"
+                      onClick={handleClickMinus}
+                      id={cookie.id}
+                      key={cookie.id}
+                    >
+                      <li className="cookie_list" id={cookie.id}>
+                        <img
+                          style={{ backgroundColor: "orange" }}
+                          src={cookie.img}
+                          alt={cookie.name}
+                          id={cookie.id}
+                          className="cookie_img"
+                        />
+                        <p className="cookie_btn" id={cookie.id}>
+                          {cookie.name}
+                        </p>
+                      </li>
+                    </button>
+                  ) : (
+                    <button
+                      className="cookie_all_btn"
+                      id={cookie.id}
+                      onClick={handleClickPlus}
+                      key={cookie.id}
+                    >
+                      <li className="cookie_list" id={cookie.id}>
+                        <img
+                          src={cookie.img}
+                          alt={cookie.name}
+                          id={cookie.id}
+                          className="cookie_img"
+                        />
+                        <p className="cookie_btn" id={cookie.id}>
+                          {cookie.name}
+                        </p>
+                      </li>
+                    </button>
                   );
                 })}
             </CookieListBox>
           </div>
         </div>
         <div className="friendSelect_btn">
-          <FriendSelectBtn type="button">선택완료!</FriendSelectBtn>
+          <FriendSelectBtn type="button" onClick={selectBtn}>
+            선택완료!
+          </FriendSelectBtn>
         </div>
       </div>
     </FriendSelectBox>

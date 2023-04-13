@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { axiosInstance } from "../../api/axios";
 
 function Mymessage() {
   const navigate = useNavigate();
@@ -11,6 +12,13 @@ function Mymessage() {
   const myInfoBtn = () => {
     navigate("/mypage");
   };
+
+  const receivedHandler = () => {
+    axiosInstance.get(`api/msg/receiver`).then((res) => {
+      console.log(res.data);
+    });
+  };
+
   return (
     <MymessageContainer>
       <div className="contents_container">
@@ -23,7 +31,7 @@ function Mymessage() {
           <MessageTitle>나의 쿠키함</MessageTitle>
         </div>
         <div className="message_select_btn">
-          <MessageReceived>받은 쿠키</MessageReceived>
+          <MessageReceived onClick={receivedHandler}>받은 쿠키</MessageReceived>
           <MessageSent>보낸 쿠키</MessageSent>
         </div>
         <div className="message_container">

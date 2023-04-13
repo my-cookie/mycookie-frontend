@@ -21,9 +21,8 @@ function App() {
     <>
       <Reset />
       <GlobalFonts />
-      <Layout>
-        <Router />
-      </Layout>
+
+      <Router />
     </>
   );
 }
