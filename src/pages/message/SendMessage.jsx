@@ -1,20 +1,33 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { axiosInstance } from "../../api/axios";
+import {
+  anonymousAtom,
+  contentAtom,
+  receiverAtom,
+  senderAtom
+} from "../../utils/atom";
 
 function SendMessage() {
-  const location = useLocation();
-  const [receiver, setReceiver] = useState(location.state?.receiver);
-  const [content, setContent] = useState("");
-  const [is_anonymous, setIs_anonymous] = useState(false);
-  const [senderName, setSenderName] = useState(location.state?.senderName);
+  const receiverNickname = useRecoilValue(receiverAtom);
+  const senderName = useRecoilValue(senderAtom);
+
+  const [content, setContent] = useRecoilState(contentAtom);
+  const [is_anonymous, setIs_anonymous] = useRecoilState(anonymousAtom);
+  const navigate = useNavigate();
 
   const checkHandler = () => {
     setIs_anonymous(!is_anonymous);
   };
 
-  const cookieSend = () => {};
+  const handleSetValue = (e) => {
+    setContent(e.target.value);
+  };
+
+  const cookieSend = () => {
+    navigate("/friendselect");
+  };
 
   return (
     <SendMessageContainer>
@@ -26,11 +39,14 @@ function SendMessage() {
         <div className="send_letter">
           <div className="message_background">
             <ToBox>
-              <ToRead>{receiver.nickname} </ToRead>
+              <ToRead>{receiverNickname.nickname} </ToRead>
               에게
             </ToBox>
             <TextBox>
-              <ReadMessageText placeholder="친구에게 보낼 쿠키를 작성해봐!"></ReadMessageText>
+              <ReadMessageText
+                placeholder="친구에게 보낼 쿠키를 작성해봐!"
+                onChange={(e) => handleSetValue(e)}
+              ></ReadMessageText>
             </TextBox>
             <FromBox>
               {is_anonymous == true ? (
@@ -50,7 +66,7 @@ function SendMessage() {
             />
             <SendCheck>익명으로 보내기</SendCheck>
           </CheckBox>
-          <SendBtn type="button" onClick={cookieSend}>
+          <SendBtn type="submit" onClick={cookieSend}>
             쿠키 보내기!
           </SendBtn>
         </div>
@@ -147,6 +163,7 @@ const ReadMessageText = styled.textarea`
   background: none;
   font-size: 1rem;
   line-height: 25px;
+  resize: none;
 `;
 const FromRead = styled.p`
   font-size: 1rem;

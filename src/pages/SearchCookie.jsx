@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { axiosInstance } from "../api/axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { receiverAtom, senderAtom } from "../utils/atom";
 
 function SearchCookie() {
   const [search, setSearch] = useState([]); // 검색 데이터 저장
   const [searchField, setSearchField] = useState(""); // 검색창 onchange
   const [bookmark, setBookmark] = useState([]); // 북마크 get
   const [bookmarkId, setBookmarkId] = useState([]); // 북마크 target_id
-  const [receiver, setReceiver] = useState("");
-  const [senderName, setSenderName] = useState();
-  const location = useLocation();
+  const [receiver, setReceiver] = useRecoilState(receiverAtom); //
+  const [senderName, setSenderName] = useRecoilState(senderAtom);
+  // const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -98,12 +100,13 @@ function SearchCookie() {
   };
 
   const submitBtn = () => {
-    navigate("/sendmessage", {
-      state: {
-        receiver: receiver,
-        senderName: senderName
-      }
-    });
+    navigate("/sendmessage");
+    // navigate("/sendmessage", {
+    //   state: {
+    //     receiver: receiver,
+    //     senderName: senderName
+    //   }
+    // });
   };
 
   return (

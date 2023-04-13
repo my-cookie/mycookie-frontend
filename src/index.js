@@ -4,6 +4,7 @@ import App from "./App";
 import axios from "axios";
 import { AuthContextProvider } from "./auth/AuthContext";
 import { BrowserRouter } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -15,8 +16,10 @@ axios.defaults.headers = {
 
 root.render(
   <BrowserRouter>
-    <AuthContextProvider>
-      <App />
-    </AuthContextProvider>
+    <RecoilRoot>
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
+    </RecoilRoot>
   </BrowserRouter>
 );

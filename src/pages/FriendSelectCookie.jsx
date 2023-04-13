@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { axiosInstance } from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { anonymousAtom, contentAtom, receiverAtom } from "../utils/atom";
 
 function FriendSelectCookie() {
   const navigate = useNavigate();
+  const receiver = useRecoilValue(receiverAtom);
+  const content = useRecoilValue(contentAtom);
+  const is_anonymous = useRecoilValue(anonymousAtom);
+
   const [cookie, setCookie] = useState([]);
-  const [flavor, setFlavors] = useState();
+  const [flavor, setFlavors] = useState("");
 
   async function getCookie() {
     try {
@@ -51,17 +57,30 @@ function FriendSelectCookie() {
       alert("1개 이상은 선택해야해! ");
     }
     axiosInstance
-      .post(`api/auth/info`, {})
+      .post(`api/msg/save`, {
+        receiver: parseInt(receiver.id),
+        content,
+        flavor: parseInt(flavor),
+        is_anonymous
+      })
       .then((result) => {
-        const { status, data } = result;
-        console.log(status);
-        // navigate("/mymessage");
+        const { status } = result;
+        if (status === 201) {
+          // navigate("/mymessage");
+        } else if (status === 429) {
+          alert("친구에게 보낼 쿠키를 다 소진했어!😥");
+        } else if (status === 406 || status === 400) {
+          alert("쿠키를 보낼 수 없어.. 다시 확인해 줄래? 🥲");
+        }
+        // console.log(status);
+        // console.log(result.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
+  console.log(parseInt(flavor));
   return (
     <FriendSelectBox>
       <div className="contents_container">
@@ -182,11 +201,12 @@ const FriendSelectBox = styled.div`
 
   .cookie_img {
     width: 100px;
+    border-radius: 10px;
   }
 
   .cookie_btn {
     width: 80px;
-    height: 40px;
+    height: 25px;
     border: 3px solid #7fa3ff;
     border-radius: 15px;
     background-color: #ffffff;
@@ -194,8 +214,15 @@ const FriendSelectBox = styled.div`
     font-size: 0.8rem;
     cursor: pointer;
     margin: 5px;
+    text-align: center;
+    align-items: center;
+    padding-top: 10px;
   }
 
+  .cookie_all_btn {
+    background: none;
+    border: none;
+  }
   .friendSelect_btn {
     width: 100%;
     height: 30%;
