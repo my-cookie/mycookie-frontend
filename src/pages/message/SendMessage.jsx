@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { axiosInstance } from "../../api/axios";
 
 function SendMessage() {
+  const location = useLocation();
+  const [receiver, setReceiver] = useState(location.state?.receiver);
+  const [content, setContent] = useState("");
+  const [is_anonymous, setIs_anonymous] = useState(false);
+  const [senderName, setSenderName] = useState(location.state?.senderName);
+
+  const checkHandler = () => {
+    setIs_anonymous(!is_anonymous);
+  };
+
+  const cookieSend = () => {};
+
   return (
     <SendMessageContainer>
       <div className="contents_container">
@@ -12,22 +26,33 @@ function SendMessage() {
         <div className="send_letter">
           <div className="message_background">
             <ToBox>
-              <ToRead>____ 에게</ToRead>
+              <ToRead>{receiver.nickname} </ToRead>
+              에게
             </ToBox>
             <TextBox>
-              <ReadMessageText>안녕 나야~~~</ReadMessageText>
+              <ReadMessageText placeholder="친구에게 보낼 쿠키를 작성해봐!"></ReadMessageText>
             </TextBox>
             <FromBox>
-              <FromRead>____ 보냄</FromRead>
+              {is_anonymous == true ? (
+                <p>익명 보냄</p>
+              ) : (
+                <FromRead>{senderName} 보냄</FromRead>
+              )}
             </FromBox>
           </div>
         </div>
         <div className="send_btn">
           <CheckBox>
-            <SendInput type="checkbox" />
+            <SendInput
+              type="checkbox"
+              checked={is_anonymous}
+              onChange={(e) => checkHandler(e)}
+            />
             <SendCheck>익명으로 보내기</SendCheck>
           </CheckBox>
-          <SendBtn type="button">쿠키 보내기!</SendBtn>
+          <SendBtn type="button" onClick={cookieSend}>
+            쿠키 보내기!
+          </SendBtn>
         </div>
       </div>
     </SendMessageContainer>
@@ -92,6 +117,9 @@ const SendTitle = styled.p`
 const ToBox = styled.div`
   width: 100%;
   height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 const TextBox = styled.div`
   width: 100%;
@@ -104,9 +132,25 @@ const FromBox = styled.div`
   justify-content: flex-end;
 `;
 
-const ToRead = styled.p``;
-const ReadMessageText = styled.p``;
-const FromRead = styled.p``;
+const ToRead = styled.p`
+  padding: 10px;
+  font-size: 1.3rem;
+  color: #7fa3ff;
+`;
+const ReadMessageText = styled.textarea`
+  width: 100%;
+  height: 90%;
+  font-family: "BRBA_B";
+  padding: 10px;
+  box-sizing: border-box;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  line-height: 25px;
+`;
+const FromRead = styled.p`
+  font-size: 1rem;
+`;
 
 const CheckBox = styled.div`
   display: flex;

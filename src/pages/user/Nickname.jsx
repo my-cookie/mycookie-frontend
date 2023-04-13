@@ -6,7 +6,7 @@ import { axiosInstance } from "../../api/axios";
 
 function Nickname() {
   const navigate = useNavigate();
-  const [nickname, setNickname] = useState("");
+  const [nickname, setNickname] = useState();
   const [uuid, setUuid] = useState("");
   const location = useLocation();
 

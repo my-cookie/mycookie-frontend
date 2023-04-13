@@ -9,6 +9,7 @@ function SearchCookie() {
   const [bookmark, setBookmark] = useState([]); // 북마크 get
   const [bookmarkId, setBookmarkId] = useState([]); // 북마크 target_id
   const [receiver, setReceiver] = useState("");
+  const [senderName, setSenderName] = useState();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -90,7 +91,8 @@ function SearchCookie() {
     axiosInstance
       .post(`api/msg/remain`, { receiver: e.target.id })
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data.sender_nickname);
+        setSenderName(res.data.sender_nickname);
         alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
       });
   };
@@ -98,7 +100,8 @@ function SearchCookie() {
   const submitBtn = () => {
     navigate("/sendmessage", {
       state: {
-        receiver: receiver
+        receiver: receiver,
+        senderName: senderName
       }
     });
   };
