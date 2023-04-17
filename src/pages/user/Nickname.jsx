@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { useLocation, useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../api/axios";
-import privateAxios from "../../hooks/useAxios";
+import axios from "axios";
 
 function Nickname() {
   const navigate = useNavigate();
@@ -28,7 +27,7 @@ function Nickname() {
     if (nickname.length >= 7) {
       alert("닉네임은 7글자까지 가능해요!");
     } else {
-      privateAxios
+      axios
         .post(`api/auth/nickname`, { nickname, user_uuid: uuid })
         .then((result) => {
           const { status } = result;
@@ -38,7 +37,7 @@ function Nickname() {
             window.location.reload();
           } else if (status === 200) {
             navigate("/select", {
-              state: { user_uuid: uuid, nickname: nickname }
+              state: { user_uuid: uuid, nickname: nickname },
             });
           }
         })
@@ -62,13 +61,7 @@ function Nickname() {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="nickname_input">
-              <NicknameInput
-                type="text"
-                name="nickname"
-                maxlength="7"
-                value={nickname}
-                onChange={handleChange}
-              />
+              <NicknameInput type="text" name="nickname" maxlength="7" value={nickname} onChange={handleChange} />
             </div>
 
             <div className="nickname_btn">

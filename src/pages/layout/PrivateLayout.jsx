@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import useAuth from "../../hooks/useAuth";
-import useAxios from "../../hooks/useAxios";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { accessAtom } from "../../utils/atom";
 
 function PrivateLayout() {
-  const { accessToken, setAccessToken } = useAuth();
   const navigate = useNavigate();
   const [init, setInit] = useState(false);
-  const privateAxios = useAxios();
+  const [accessToken, setAccessToken] = useRecoilState(accessAtom);
+
+  // useEffect(() => {
+  //   setInit(true);
+  // }, []);
 
   useEffect(() => {
-    setInit(true);
-    if (!accessToken && init) {
+    if (!accessToken) {
       console.log("access token 재발급");
-      privateAxios
+      axios
         .post("api/auth/access", {})
         .then((response) => {
           setAccessToken(response.data.access);
           console.log("재요청");
+          setInit(true);
         })
         .catch((err) => {
           console.log(err);
@@ -27,12 +31,16 @@ function PrivateLayout() {
     }
   }, [accessToken]);
 
-  return (
-    <MainLayout>
-      <div className="contents_container">
-        <Outlet />
-      </div>
-    </MainLayout>
+  return init ? (
+    <>
+      <MainLayout>
+        <div className="contents_container">
+          <Outlet />
+        </div>
+      </MainLayout>
+    </>
+  ) : (
+    ""
   );
 }
 

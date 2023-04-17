@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { axiosInstance } from "../../api/axios";
-import privateAxios from "../../hooks/useAxios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { receiverAtom, senderAtom } from "../../utils/atom";
@@ -17,11 +16,9 @@ function SearchCookie() {
 
   useEffect(() => {
     if (searchField !== 0) {
-      privateAxios
-        .post(`api/auth/search`, { nickname: searchField })
-        .then((res) => {
-          setSearch(res.data);
-        });
+      axios.post(`api/auth/search`, { nickname: searchField }).then((res) => {
+        setSearch(res.data);
+      });
     }
   }, [searchField]);
 
@@ -30,7 +27,7 @@ function SearchCookie() {
   };
 
   useEffect(() => {
-    privateAxios.get(`api/bookmark/item`).then((res) => {
+    axios.get(`api/bookmark/item`).then((res) => {
       setBookmark(res.data);
       res.data.map((el) => setBookmarkId([...bookmarkId, el.target.id]));
     });
@@ -38,7 +35,7 @@ function SearchCookie() {
 
   const favoriteAddHandler = (e) => {
     console.log(e.target.id);
-    privateAxios
+    axios
       .post(`api/bookmark/item`, { target: e.target.id })
       .then((res) => {
         setBookmarkId([e.target.id, ...bookmarkId]);
@@ -54,7 +51,7 @@ function SearchCookie() {
   }, [bookmark]);
 
   const favoriteDeleteHandler = (e) => {
-    privateAxios
+    axios
       .delete(`api/bookmark/item`, { data: { target: e.target.id } })
       .then((res) => {
         setBookmarkId(
@@ -85,20 +82,18 @@ function SearchCookie() {
     console.log(receiverNickname);
     setReceiver({
       id: e.target.id,
-      nickname: receiverNickname[0].target.nickname
+      nickname: receiverNickname[0].target.nickname,
     });
 
-    privateAxios
-      .post(`api/msg/remain`, { receiver: e.target.id })
-      .then((res) => {
-        console.log(res.data.sender_nickname);
-        setSenderName(res.data.sender_nickname);
-        if (res.data.count == 0) {
-          alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
-        } else {
-          alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
-        }
-      });
+    axios.post(`api/msg/remain`, { receiver: e.target.id }).then((res) => {
+      console.log(res.data.sender_nickname);
+      setSenderName(res.data.sender_nickname);
+      if (res.data.count == 0) {
+        alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
+      } else {
+        alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
+      }
+    });
   };
 
   const submitBtn = () => {
@@ -117,20 +112,18 @@ function SearchCookie() {
     console.log(receiverNickname);
     setReceiver({
       id: e.target.id,
-      nickname: receiverNickname[0].target.nickname
+      nickname: receiverNickname[0].target.nickname,
     });
 
-    privateAxios
-      .post(`api/msg/remain`, { receiver: e.target.id })
-      .then((res) => {
-        console.log(res.data.sender_nickname);
-        setSenderName(res.data.sender_nickname);
-        if (res.data.count == 0) {
-          alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
-        } else {
-          alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
-        }
-      });
+    axios.post(`api/msg/remain`, { receiver: e.target.id }).then((res) => {
+      console.log(res.data.sender_nickname);
+      setSenderName(res.data.sender_nickname);
+      if (res.data.count == 0) {
+        alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
+      } else {
+        alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
+      }
+    });
   };
 
   return (
@@ -140,48 +133,23 @@ function SearchCookie() {
           <SearchTitle>쿠키 찾기</SearchTitle>
         </div>
         <div className="search_input">
-          <SearchInput
-            type="text"
-            placeholder="친구를 찾아봐!"
-            maxlength="7"
-            onChange={searchNickname}
-            value={searchField}
-          />
+          <SearchInput type="text" placeholder="친구를 찾아봐!" maxlength="7" onChange={searchNickname} value={searchField} />
         </div>
-        {!bookmark.length && !searchField.length ? (
-          <p className="no_search">등록된 즐겨찾기가 없네^^..</p>
-        ) : (
-          ""
-        )}
+        {!bookmark.length && !searchField.length ? <p className="no_search">등록된 즐겨찾기가 없네^^..</p> : ""}
         {searchField.length !== 0 ? (
           <div className="search_box">
             {search.length !== 0
               ? search.map((search) => {
                   return (
-                    <div
-                      key={search.id}
-                      id={search.id}
-                      className="box_list"
-                      onClick={searchSelect}
-                    >
+                    <div key={search.id} id={search.id} className="box_list" onClick={searchSelect}>
                       {search.nickname}
 
                       {bookmarkId.includes(`${search.id}`) ? (
-                        <button
-                          key={search.id}
-                          id={search.id}
-                          onClick={favoriteDeleteHandler}
-                          className="star_btn"
-                        >
+                        <button key={search.id} id={search.id} onClick={favoriteDeleteHandler} className="star_btn">
                           ★
                         </button>
                       ) : (
-                        <button
-                          key={search.id}
-                          id={search.id}
-                          onClick={favoriteAddHandler}
-                          className="star_btn"
-                        >
+                        <button key={search.id} id={search.id} onClick={favoriteAddHandler} className="star_btn">
                           ☆
                         </button>
                       )}
@@ -194,26 +162,12 @@ function SearchCookie() {
           <div>
             {bookmark.map((bookmark) => {
               return (
-                <div
-                  key={bookmark.target.id}
-                  id={bookmark.target.id}
-                  className="bookmark_BG"
-                  onClick={sendHandler}
-                >
-                  <div
-                    className="btn_BG"
-                    id={bookmark.target.id}
-                    key={bookmark.target.id}
-                  >
+                <div key={bookmark.target.id} id={bookmark.target.id} className="bookmark_BG" onClick={sendHandler}>
+                  <div className="btn_BG" id={bookmark.target.id} key={bookmark.target.id}>
                     <li id={bookmark.target.id} className="box_list">
                       {bookmark.target.nickname}
                     </li>
-                    <button
-                      key={bookmark.target.id}
-                      id={bookmark.target.id}
-                      onClick={favoriteDeleteHandler}
-                      className="star_btn"
-                    >
+                    <button key={bookmark.target.id} id={bookmark.target.id} onClick={favoriteDeleteHandler} className="star_btn">
                       ★
                     </button>
                   </div>

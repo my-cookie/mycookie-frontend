@@ -12,15 +12,11 @@ function SenderCookie() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const senderIconData = senderData.data;
-    setSenderIcon(senderIconData);
-    console.log(senderIconData);
+    setSenderIcon(senderData);
   }, [senderData]);
 
   const sendHandler = (e) => {
-    const select = senderIcon.filter(
-      (senderIcon) => senderIcon.id == e.target.id
-    );
+    const select = senderIcon.filter((senderIcon) => senderIcon.id == e.target.id);
     setPostReadData(select);
 
     navigate("/readmessage");
@@ -31,17 +27,8 @@ function SenderCookie() {
       {senderIcon &&
         senderIcon.map((senderIcon) => {
           return (
-            <Button
-              key={senderIcon.id}
-              id={senderIcon.id}
-              onClick={sendHandler}
-            >
-              <img
-                src={senderIcon.flavor.img}
-                id={senderIcon.id}
-                alt="img"
-                width={50}
-              />
+            <Button key={senderIcon.id} id={senderIcon.id} onClick={sendHandler}>
+              <img src={senderIcon.flavor.img} id={senderIcon.id} alt="img" width={50} />
             </Button>
           );
         })}
