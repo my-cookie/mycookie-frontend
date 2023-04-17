@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../api/axios";
+import privateAxios from "../../hooks/useAxios";
 
 function Nickname() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function Nickname() {
     if (nickname.length >= 7) {
       alert("닉네임은 7글자까지 가능해요!");
     } else {
-      axiosInstance
+      privateAxios
         .post(`api/auth/nickname`, { nickname, user_uuid: uuid })
         .then((result) => {
           const { status } = result;

@@ -1,18 +1,20 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import FriendSelectCookie from "./FriendSelectCookie";
+import FriendSelectCookie from "../pages/message/FriendSelectCookie";
 import KakaoLogin from "./KakaoLogin";
 import Login from "./Login";
 import Mymessage from "./message/Mymessage";
-import ReadMessage from "./message/ReadMessage";
+import SenderReadMessage from "./message/SenderReadMessage";
+import ReceiverReadMessage from "./message/ReceiverReadMessage";
 import SendMessage from "./message/SendMessage";
-import SearchCookie from "./SearchCookie";
+import SearchCookie from "../pages/message/SearchCookie";
 import MyPage from "./user/MyPage";
-
 import Nickname from "./user/Nickname";
 import SelectCookie from "./user/SelectCookie";
-import PrivateLayout from "./PrivateLayout";
-import Layout from "./Layout";
+import Layout from "../pages/layout/Layout";
+import PrivateLayout from "../pages/layout/PrivateLayout";
+import LoadingMsg from "./loading/LoadingMsg";
+import CompletedMsg from "./message/CompletedMsg";
 
 function Router() {
   return (
@@ -25,10 +27,18 @@ function Router() {
 
       <Route element={<PrivateLayout />}>
         <Route path="/mymessage" element={<Mymessage />} />
-        <Route path="/readmessage" element={<ReadMessage />} />
+        <Route path="/readmessage" element={<SenderReadMessage />} />
+        <Route
+          path="/receiver_read_message"
+          element={<ReceiverReadMessage />}
+        />
+
         <Route path="/sendmessage" element={<SendMessage />} />
-        <Route path="/friendselect" element={<FriendSelectCookie />} />
         <Route path="/searchcookie" element={<SearchCookie />} />
+        <Route path="/friendselect" element={<FriendSelectCookie />} />
+        <Route path="/completed" element={<CompletedMsg />} />
+
+        <Route path="/loadingmsg" element={<LoadingMsg />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
       </Route>

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
 
+import loadingCookie from "../assets/loading_cookie.gif";
+
 function KakaoLogin() {
   const navigate = useNavigate();
   let code = new URL(window.location.href).searchParams.get("code");
@@ -30,7 +32,12 @@ function KakaoLogin() {
     kakaoLoginCode();
   }, []);
 
-  return <div>KakaoLogin</div>;
+  return (
+    <div>
+      {" "}
+      <img src={loadingCookie} alt="loading" width={300} />
+    </div>
+  );
 }
 
 export default KakaoLogin;

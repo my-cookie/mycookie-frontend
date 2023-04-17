@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { axiosInstance } from "../api/axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { axiosInstance } from "../../api/axios";
+import privateAxios from "../../hooks/useAxios";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { receiverAtom, senderAtom } from "../utils/atom";
+import { receiverAtom, senderAtom } from "../../utils/atom";
 
 function SearchCookie() {
   const [search, setSearch] = useState([]); // 검색 데이터 저장
@@ -12,12 +13,11 @@ function SearchCookie() {
   const [bookmarkId, setBookmarkId] = useState([]); // 북마크 target_id
   const [receiver, setReceiver] = useRecoilState(receiverAtom); //
   const [senderName, setSenderName] = useRecoilState(senderAtom);
-  // const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (searchField !== 0) {
-      axiosInstance
+      privateAxios
         .post(`api/auth/search`, { nickname: searchField })
         .then((res) => {
           setSearch(res.data);
@@ -26,12 +26,11 @@ function SearchCookie() {
   }, [searchField]);
 
   const searchNickname = (e) => {
-    e.preventDefault();
     setSearchField(e.target.value);
   };
 
   useEffect(() => {
-    axiosInstance.get(`api/bookmark/item`).then((res) => {
+    privateAxios.get(`api/bookmark/item`).then((res) => {
       setBookmark(res.data);
       res.data.map((el) => setBookmarkId([...bookmarkId, el.target.id]));
     });
@@ -39,7 +38,7 @@ function SearchCookie() {
 
   const favoriteAddHandler = (e) => {
     console.log(e.target.id);
-    axiosInstance
+    privateAxios
       .post(`api/bookmark/item`, { target: e.target.id })
       .then((res) => {
         setBookmarkId([e.target.id, ...bookmarkId]);
@@ -55,7 +54,7 @@ function SearchCookie() {
   }, [bookmark]);
 
   const favoriteDeleteHandler = (e) => {
-    axiosInstance
+    privateAxios
       .delete(`api/bookmark/item`, { data: { target: e.target.id } })
       .then((res) => {
         setBookmarkId(
@@ -79,7 +78,6 @@ function SearchCookie() {
   }, [receiver]);
 
   const sendHandler = (e) => {
-    console.log(bookmark);
     console.log(e.target.id);
     let receiverNickname = bookmark.filter((el) => {
       return el.target.id == e.target.id;
@@ -90,23 +88,49 @@ function SearchCookie() {
       nickname: receiverNickname[0].target.nickname
     });
 
-    axiosInstance
+    privateAxios
       .post(`api/msg/remain`, { receiver: e.target.id })
       .then((res) => {
         console.log(res.data.sender_nickname);
         setSenderName(res.data.sender_nickname);
-        alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
+        if (res.data.count == 0) {
+          alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
+        } else {
+          alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
+        }
       });
   };
 
   const submitBtn = () => {
-    navigate("/sendmessage");
-    // navigate("/sendmessage", {
-    //   state: {
-    //     receiver: receiver,
-    //     senderName: senderName
-    //   }
-    // });
+    if (!receiver.nickname) {
+      alert("친구를 선택해야 해!🥸");
+    } else {
+      navigate("/sendmessage");
+    }
+  };
+
+  const searchSelect = (e) => {
+    console.log(e.target.id);
+    let receiverNickname = bookmark.filter((el) => {
+      return el.target.id == e.target.id;
+    });
+    console.log(receiverNickname);
+    setReceiver({
+      id: e.target.id,
+      nickname: receiverNickname[0].target.nickname
+    });
+
+    privateAxios
+      .post(`api/msg/remain`, { receiver: e.target.id })
+      .then((res) => {
+        console.log(res.data.sender_nickname);
+        setSenderName(res.data.sender_nickname);
+        if (res.data.count == 0) {
+          alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
+        } else {
+          alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
+        }
+      });
   };
 
   return (
@@ -133,9 +157,13 @@ function SearchCookie() {
           <div className="search_box">
             {search.length !== 0
               ? search.map((search) => {
-                  console.log(search.id);
                   return (
-                    <div key={search.id} className="box_list">
+                    <div
+                      key={search.id}
+                      id={search.id}
+                      className="box_list"
+                      onClick={searchSelect}
+                    >
                       {search.nickname}
 
                       {bookmarkId.includes(`${search.id}`) ? (
@@ -260,7 +288,7 @@ const SearchCookieBox = styled.div`
     border-radius: 20px;
     font-size: 1.2rem;
     list-style: none;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
   }
   .search_btn {
     width: 100%;
@@ -284,7 +312,7 @@ const SearchCookieBox = styled.div`
     padding: 10px;
     background-color: #fff;
     border-radius: 10px;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     display: flex;
     justify-content: space-between;
   }
@@ -298,7 +326,7 @@ const SearchCookieBox = styled.div`
   }
 
   .strong {
-    font-size: 2rem;
+    font-size: 1.2rem;
     color: #ff7f8c;
   }
 `;
@@ -320,7 +348,7 @@ const SearchInput = styled.input`
 `;
 const SearchSend = styled.div`
   font-family: "BRBA_B";
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   padding: 10px;
   display: flex;
   flex-direction: row;

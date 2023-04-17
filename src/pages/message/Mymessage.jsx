@@ -1,44 +1,47 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { axiosInstance } from "../../api/axios";
+
+import ReceiverCookie from "../../components/ReceiverCookie";
+import SenderCookie from "../../components/SenderCookie";
 
 function Mymessage() {
   const navigate = useNavigate();
+  const [viewPage, setViewPage] = useState(true);
+
   const sendCookieBtn = () => {
     navigate("/searchcookie");
-  };
-
-  const myInfoBtn = () => {
-    navigate("/mypage");
-  };
-
-  const receivedHandler = () => {
-    axiosInstance.get(`api/msg/receiver`).then((res) => {
-      console.log(res.data);
-    });
   };
 
   return (
     <MymessageContainer>
       <div className="contents_container">
         <div className="go_mypage">
-          <MyPageBtn type="button" onClick={myInfoBtn}>
-            내정보
+          <MyPageBtn type="button">
+            <Link to="/mypage">내정보</Link>
           </MyPageBtn>
         </div>
         <div className="message_title">
           <MessageTitle>나의 쿠키함</MessageTitle>
         </div>
         <div className="message_select_btn">
-          <MessageReceived onClick={receivedHandler}>받은 쿠키</MessageReceived>
-          <MessageSent>보낸 쿠키</MessageSent>
-        </div>
-        <div className="message_container">
-          <div className="message_background">
+          <div>
+            <MessageReceived onClick={() => setViewPage(true)}>
+              받은쿠키
+            </MessageReceived>
+            <MessageSent onClick={() => setViewPage(false)}>
+              보낸쿠키
+            </MessageSent>
+          </div>
+          <div>
             <AllCookie>전체쿠키</AllCookie>
             <ReadCookie>읽은쿠키</ReadCookie>
             <UnReadCookie>안읽은쿠키</UnReadCookie>
+          </div>
+        </div>
+        <div className="message_container">
+          <div className="message_background">
+            {viewPage ? <ReceiverCookie /> : <SenderCookie />}
           </div>
         </div>
         <div className="message_btn">
@@ -75,20 +78,23 @@ const MymessageContainer = styled.div`
   }
   .message_title {
     width: 100%;
-    height: 10%;
+    height: 5%;
     display: flex;
     justify-content: center;
+    padding-bottom: 10px;
   }
   .message_select_btn {
     width: 100%;
-    height: 10%;
+    height: 20%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
 
   .message_container {
     width: 100%;
-    height: 350px;
+    height: 50%;
     display: flex;
     justify-content: center;
     text-align: center;
@@ -96,7 +102,7 @@ const MymessageContainer = styled.div`
 
   .message_background {
     width: 100%;
-    height: 350px;
+    height: 300px;
     border-radius: 40px;
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
@@ -118,6 +124,10 @@ const MyPageBtn = styled.button`
   color: white;
   font-size: 0.6rem;
   margin-top: 15px;
+  a {
+    color: #fff;
+    text-decoration: none;
+  }
 `;
 
 const MessageTitle = styled.p`
@@ -149,11 +159,11 @@ const MessageSent = styled.button`
 `;
 
 const AllCookie = styled.button`
-  width: 55px;
+  width: 65px;
   height: 40px;
-  border: 3px solid #7fa3ff;
+  border: 3px solid #fff;
   border-radius: 15px;
-  background-color: #ffffff;
+  background-color: #7fa3ff;
   font-family: "BRBA_B";
   font-size: 0.6rem;
   cursor: pointer;
@@ -161,22 +171,22 @@ const AllCookie = styled.button`
   margin-right: 10px;
 `;
 const ReadCookie = styled.button`
-  width: 55px;
+  width: 65px;
   height: 40px;
-  border: 3px solid #7fa3ff;
+  border: 3px solid #fff;
   border-radius: 15px;
-  background-color: #ffffff;
+  background-color: #7fa3ff;
   font-family: "BRBA_B";
   font-size: 0.6rem;
   cursor: pointer;
   margin-right: 10px;
 `;
 const UnReadCookie = styled.button`
-  width: 61px;
+  width: 65px;
   height: 40px;
-  border: 3px solid #7fa3ff;
+  border: 3px solid #fff;
   border-radius: 15px;
-  background-color: #ffffff;
+  background-color: #7fa3ff;
   font-family: "BRBA_B";
   font-size: 0.6rem;
   cursor: pointer;

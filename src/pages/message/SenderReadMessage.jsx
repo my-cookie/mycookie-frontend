@@ -1,28 +1,40 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { postSenderIconAtom } from "../../utils/atom";
 
 function ReadMessage() {
+  const selectID = useRecoilValue(postSenderIconAtom);
+
   return (
     <ReadMessageContainer>
       <div className="contents_container">
-        <div className="read_cookie">
-          <SelectCookieImg src="https://d4pwibjctaa5b.cloudfront.net/블루팡이맛.png" />
+        <div>
+          <MessageBox>
+            <div className="read_cookie">
+              <SelectCookieImg src={selectID[0].flavor.img} />
+            </div>
+            <div className="read_letter">
+              <div className="message_background">
+                <ToBox>
+                  <ToRead>{selectID[0].receiver.nickname} 에게</ToRead>
+                </ToBox>
+                <TextBox>
+                  <ReadMessageText>{selectID[0].content}</ReadMessageText>
+                </TextBox>
+                <FromBox>
+                  <FromRead>{selectID[0].sender.nickname}</FromRead>
+                </FromBox>
+              </div>
+            </div>
+          </MessageBox>
         </div>
-        <div className="read_letter">
-          <div className="message_background">
-            <ToBox>
-              <ToRead>____ 에게</ToRead>
-            </ToBox>
-            <TextBox>
-              <ReadMessageText>안녕 나야~~~</ReadMessageText>
-            </TextBox>
-            <FromBox>
-              <FromRead>____ 보냄</FromRead>
-            </FromBox>
-          </div>
-        </div>
+
         <div className="read_btn">
-          <CheckBtn>확인</CheckBtn>
+          <CheckBtn>
+            <Link to="/mymessage">확인</Link>
+          </CheckBtn>
           <DeleteBtn>삭제</DeleteBtn>
           <CrimeBtn>신고</CrimeBtn>
         </div>
@@ -110,7 +122,12 @@ const CheckBtn = styled.button`
   cursor: pointer;
   margin-top: 10px;
   margin-right: 10px;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;
+
 const DeleteBtn = styled.button`
   width: 70px;
   height: 40px;
@@ -136,3 +153,5 @@ const CrimeBtn = styled.button`
   margin-top: 10px;
   margin-right: 10px;
 `;
+
+const MessageBox = styled.div``;

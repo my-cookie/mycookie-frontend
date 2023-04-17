@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { axiosInstance } from "../api/axios";
+import { axiosInstance } from "../../api/axios";
+import privateAxios from "../../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { anonymousAtom, contentAtom, receiverAtom } from "../utils/atom";
+import { anonymousAtom, contentAtom, receiverAtom } from "../../utils/atom";
 
 function FriendSelectCookie() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function FriendSelectCookie() {
 
   async function getCookie() {
     try {
-      const res = await axiosInstance.get(`api/flavor/cookies`);
+      const res = await privateAxios.get(`api/flavor/cookies`);
       console.log(res.data);
       setCookie(res.data);
     } catch (error) {
@@ -56,7 +57,7 @@ function FriendSelectCookie() {
     if (flavor.length === 0) {
       alert("1개 이상은 선택해야해! ");
     }
-    axiosInstance
+    privateAxios
       .post(`api/msg/save`, {
         receiver: parseInt(receiver.id),
         content,
@@ -64,9 +65,13 @@ function FriendSelectCookie() {
         is_anonymous
       })
       .then((result) => {
-        const { status } = result;
+        const { status, data } = result;
         if (status === 201) {
-          // navigate("/mymessage");
+          if (data.is_success == false) {
+            alert("친구의 쿠키 맛이 아냐!🤔 다시 선택해봐!");
+          } else {
+            navigate("/loadingmsg");
+          }
         } else if (status === 429) {
           alert("친구에게 보낼 쿠키를 다 소진했어!😥");
         } else if (status === 406 || status === 400) {
@@ -80,7 +85,6 @@ function FriendSelectCookie() {
       });
   };
 
-  console.log(parseInt(flavor));
   return (
     <FriendSelectBox>
       <div className="contents_container">

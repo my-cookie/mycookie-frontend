@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { axiosInstance } from "../../api/axios";
+import privateAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 
 function SelectCookie() {
@@ -25,7 +26,7 @@ function SelectCookie() {
 
   async function getCookie() {
     try {
-      const res = await axiosInstance.get(`api/flavor/cookies`);
+      const res = await privateAxios.get(`api/flavor/cookies`);
       console.log(res.data);
       setCookie(res.data);
     } catch (error) {
@@ -65,7 +66,7 @@ function SelectCookie() {
     if (flavor.length === 0) {
       alert("1개 이상은 선택해야해! ");
     }
-    axiosInstance
+    privateAxios
       .post(`api/auth/info`, { nickname, flavor, user_uuid: uuid })
       .then((result) => {
         const { status, data } = result;

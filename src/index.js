@@ -5,6 +5,7 @@ import axios from "axios";
 import { AuthContextProvider } from "./auth/AuthContext";
 import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
+import { Suspense } from "react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -15,11 +16,13 @@ axios.defaults.headers = {
 };
 
 root.render(
-  <BrowserRouter>
-    <RecoilRoot>
-      <AuthContextProvider>
-        <App />
-      </AuthContextProvider>
-    </RecoilRoot>
-  </BrowserRouter>
+  <RecoilRoot>
+    <Suspense fallback={<div>Loading...</div>}>
+      <BrowserRouter>
+        <AuthContextProvider>
+          <App />
+        </AuthContextProvider>
+      </BrowserRouter>
+    </Suspense>
+  </RecoilRoot>
 );

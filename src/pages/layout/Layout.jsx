@@ -1,32 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import React from "react";
+import { Outlet } from "react-router-dom";
 import styled from "styled-components";
-import useAxios from "../hooks/useAxios";
 
-function PrivateLayout() {
-  const { accessToken, setAccessToken } = useAuth();
-  const navigate = useNavigate();
-  const [init, setInit] = useState(false);
-  const privateAxios = useAxios();
-
-  useEffect(() => {
-    setInit(true);
-    if (!accessToken && init) {
-      console.log("access token 재발급");
-      privateAxios
-        .post("api/auth/access", {})
-        .then((response) => {
-          setAccessToken(response.data.access);
-          console.log("재요청");
-        })
-        .catch((err) => {
-          console.log(err);
-          return navigate("/");
-        });
-    }
-  }, [accessToken]);
-
+function Layout() {
   return (
     <MainLayout>
       <div className="contents_container">
@@ -36,7 +12,7 @@ function PrivateLayout() {
   );
 }
 
-export default PrivateLayout;
+export default Layout;
 
 const MainLayout = styled.div`
   width: 100%;
@@ -64,7 +40,7 @@ const MainLayout = styled.div`
       max-height: 800px;
     }
   }
-  // 전체 화면
+
   @media (max-width: 500px) {
     padding: 0;
     & > .contents_container {
