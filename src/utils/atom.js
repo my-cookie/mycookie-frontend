@@ -1,9 +1,14 @@
 import { atom, atomFamily, selector } from "recoil";
 import axios from "axios";
 
+import { recoilPersist } from "recoil-persist";
+
+const { persistAtom } = recoilPersist();
+
 export const accessAtom = atom({
   key: "accessAtom",
-  default: null
+  default: null,
+  effects_UNSTABLE: [persistAtom]
 });
 
 export const remainAtom = atom({

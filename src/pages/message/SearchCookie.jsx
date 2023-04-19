@@ -38,7 +38,7 @@ function SearchCookie() {
   useEffect(() => {
     axiosInstance.get(`api/bookmark/item`).then((res) => {
       setBookmark(res.data);
-      // res.data.map((el) => setBookmarkId([...bookmarkId, el.target.id]));
+      res.data.map((el) => setBookmarkId([...bookmarkId, el.target.id]));
     });
   }, []);
 
@@ -54,7 +54,7 @@ function SearchCookie() {
       .post(`api/bookmark/item`, { target: e.target.id })
       .then((result) => {
         const { status, res } = result;
-        // setBookmarkId(e.target.id);
+        setBookmarkId(e.target.id);
         if (status === 201) {
           setBookmarkId([e.target.id, ...bookmarkId]);
           setBookmark([res.data, ...bookmark]);
@@ -99,9 +99,9 @@ function SearchCookie() {
   };
 
   // 받는 사람
-  useEffect(() => {
-    console.log(receiver);
-  }, [receiver]);
+  // useEffect(() => {
+  //   console.log(receiver);
+  // }, [receiver]);
 
   // 북마크 된 유저 클릭 시
   const sendHandler = (e) => {
@@ -144,12 +144,12 @@ function SearchCookie() {
   const searchSelect = (e) => {
     console.log(e.target.id);
     let toReceiver = search.filter((el) => {
-      return el.target.id == e.target.id;
+      return el.id == e.target.id;
     });
     console.log(toReceiver);
     setReceiver({
       id: e.target.id,
-      nickname: toReceiver[0].target.nickname
+      nickname: toReceiver[0].nickname
     });
 
     axiosInstance

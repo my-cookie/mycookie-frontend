@@ -27,8 +27,8 @@ function CompletedMsg() {
           <img src={completedImg} alt="전송완료" width={300} />
         </div>
         <div className="completed_remain">
-          <p>{info.receiver_nickname}</p>
-          <p>{info.count}</p>
+          {/* <p>{info.receiver_nickname}</p>
+          <p>{info.count}</p> */}
           <p>오늘 에게 보낼 쿠키는 개 남아있어!</p>
         </div>
         <div className="completed_btn_box">

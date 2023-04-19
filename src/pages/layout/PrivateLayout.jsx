@@ -11,7 +11,6 @@ function PrivateLayout() {
   const [accessToken, setAccessToken] = useRecoilState(accessAtom);
 
   useEffect(() => {
-    console.log("1");
     setInit(true);
   }, []);
 
