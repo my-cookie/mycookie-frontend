@@ -5,8 +5,7 @@ module.exports = (app) => {
     "/api",
     createProxyMiddleware({
       target: "http://118.67.130.33:8000",
-      changeOrigin: true,
-      secure: true
+      changeOrigin: true
     })
   );
 };

@@ -1,11 +1,15 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import ReceiverCookie from "../../components/ReceiverCookie";
 import SenderCookie from "../../components/SenderCookie";
 import { useRecoilValue } from "recoil";
-import { getReceiverSelector, getSenderSelector } from "../../utils/atom";
+import {
+  getReceiverSelector,
+  getSenderSelector,
+  privateAxios
+} from "../../utils/atom";
 
 function Mymessage() {
   const navigate = useNavigate();
@@ -53,8 +57,8 @@ function Mymessage() {
               <>
                 <SenderCookie />
               </>
-            )} */}
-            {/* {readPage ? (
+            )}
+            {readPage ? (
               <div>
                 <Button
                   key={receiverData.id}

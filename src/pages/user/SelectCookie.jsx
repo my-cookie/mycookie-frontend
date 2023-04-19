@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
+import { accessAtom } from "../../utils/atom";
 import axios from "axios";
 
 function SelectCookie() {
@@ -12,7 +13,7 @@ function SelectCookie() {
   const [nickname, serNickname] = useState("");
   const location = useLocation();
   // const user_uuid = location.state.user_uuid;
-  const [accessToken, setAccessToken] = useRecoilState(accessToken);
+  const [accessToken, setAccessToken] = useRecoilState(accessAtom);
 
   useEffect(() => {
     try {

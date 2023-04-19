@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import completedImg from "../../assets/completed_cookie.png";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { privateAxios, receiverAtom, remainAtom } from "../../utils/atom";
 
 function CompletedMsg() {
+  const [receiver, setReceiver] = useRecoilState(receiverAtom); // 받은 쿠키
+  const [remain, setRemain] = useRecoilState(remainAtom); // 앞에서 클릭한 id
+  const [info, setInfo] = useState();
+
+  const axiosInstance = useRecoilValue(privateAxios);
+
+  useEffect(() => {
+    axiosInstance.post(`api/msg/remain`, { receiver: remain }).then((res) => {
+      console.log(res.data);
+      setInfo(res.data);
+    });
+  }, []);
+
   return (
     <CompletedMsgBox>
       <div className="contents_container">
@@ -12,7 +27,9 @@ function CompletedMsg() {
           <img src={completedImg} alt="전송완료" width={300} />
         </div>
         <div className="completed_remain">
-          <p>오늘 바보4에게 보낼 쿠키는 0개 남아있어!</p>
+          <p>{info.receiver_nickname}</p>
+          <p>{info.count}</p>
+          <p>오늘 에게 보낼 쿠키는 개 남아있어!</p>
         </div>
         <div className="completed_btn_box">
           <CompletedBtn>

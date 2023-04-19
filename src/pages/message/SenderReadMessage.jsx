@@ -1,11 +1,41 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { postSenderIconAtom } from "../../utils/atom";
+import { postSenderIconAtom, privateAxios } from "../../utils/atom";
 
 function ReadMessage() {
   const selectID = useRecoilValue(postSenderIconAtom);
+  const axiosInstance = useRecoilValue(privateAxios);
+  const navigate = useNavigate();
+
+  const deleteMsg = () => {
+    axiosInstance
+      .patch(`api/msg/sender/delete`, { message_id: selectID[0].id })
+      .then((result) => {
+        const { status } = result;
+        if (status === 200) {
+          console.log("메세지 삭제 완료");
+          navigate("/mymessage");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const spamMsg = () => {
+    axiosInstance
+      .post(`api/msg/spam`, { message: selectID[0].id })
+      .then((result) => {
+        const { status } = result;
+        if (status === 201) {
+          alert("신고완료!😡");
+        } else if (status === 406) {
+          alert("이미 신고된 쿠키야!");
+        }
+      });
+  };
 
   return (
     <ReadMessageContainer>
@@ -35,8 +65,8 @@ function ReadMessage() {
           <CheckBtn>
             <Link to="/mymessage">확인</Link>
           </CheckBtn>
-          <DeleteBtn>삭제</DeleteBtn>
-          <CrimeBtn>신고</CrimeBtn>
+          <DeleteBtn onClick={deleteMsg}>삭제</DeleteBtn>
+          <CrimeBtn onClick={spamMsg}>신고</CrimeBtn>
         </div>
       </div>
     </ReadMessageContainer>

@@ -11,6 +11,11 @@ function PrivateLayout() {
   const [accessToken, setAccessToken] = useRecoilState(accessAtom);
 
   useEffect(() => {
+    console.log("1");
+    setInit(true);
+  }, []);
+
+  useEffect(() => {
     if (!accessToken) {
       console.log("access token 재발급");
       axios

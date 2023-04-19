@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { privateAxios, receiverAtom, senderAtom } from "../../utils/atom";
+import {
+  privateAxios,
+  receiverAtom,
+  remainAtom,
+  senderAtom
+} from "../../utils/atom";
 
 function SearchCookie() {
   const [search, setSearch] = useState([]); // 검색 데이터 저장
@@ -11,6 +16,7 @@ function SearchCookie() {
   const [bookmarkId, setBookmarkId] = useState([]); // 북마크 target_id
   const [receiver, setReceiver] = useRecoilState(receiverAtom); // 받은 쿠키
   const [senderName, setSenderName] = useRecoilState(senderAtom); // 보낸 쿠키
+  const [remain, setRemain] = useRecoilState(remainAtom);
   const navigate = useNavigate();
   const axiosInstance = useRecoilValue(privateAxios);
 
@@ -108,6 +114,7 @@ function SearchCookie() {
       id: e.target.id,
       nickname: receiverNickname[0].target.nickname
     });
+    setRemain(e.target.id);
 
     axiosInstance
       .post(`api/msg/remain`, { receiver: e.target.id })
