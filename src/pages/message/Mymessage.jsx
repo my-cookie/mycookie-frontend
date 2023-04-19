@@ -1,22 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import ReceiverCookie from "../../components/ReceiverCookie";
 import SenderCookie from "../../components/SenderCookie";
 import { useRecoilValue } from "recoil";
-import {
-  getReceiverSelector,
-  getSenderSelector,
-  privateAxios
-} from "../../utils/atom";
+import { privateAxios } from "../../utils/atom";
 
 function Mymessage() {
   const navigate = useNavigate();
   const [viewPage, setViewPage] = useState(true);
   const [readPage, setReadPage] = useState(true);
-  const receiverData = useRecoilValue(getReceiverSelector);
-  const senderData = useRecoilValue(getSenderSelector);
+  const [newReceiver, setNewReceiver] = useState({});
+  const axiosInstance = useRecoilValue(privateAxios);
+
+  const handleReceiverDataChange = useCallback(() => {
+    axiosInstance.get(`api/msg/receiver`).then((res) => {
+      console.log(res.data);
+    });
+  }, [newReceiver]);
+
+  useEffect(() => {
+    handleReceiverDataChange();
+  }, [handleReceiverDataChange]);
 
   const sendCookieBtn = () => {
     navigate("/searchcookie");

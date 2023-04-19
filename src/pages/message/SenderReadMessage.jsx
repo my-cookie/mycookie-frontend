@@ -2,13 +2,19 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { postSenderIconAtom, privateAxios } from "../../utils/atom";
+import {
+  getReceiverSelector,
+  postSenderIconAtom,
+  privateAxios
+} from "../../utils/atom";
 
 function ReadMessage() {
   const selectID = useRecoilValue(postSenderIconAtom);
+  const receiverData = useRecoilValue(getReceiverSelector); // 전체 데이터
   const axiosInstance = useRecoilValue(privateAxios);
   const navigate = useNavigate();
 
+  console.log(selectID);
   const deleteMsg = () => {
     axiosInstance
       .patch(`api/msg/sender/delete`, { message_id: selectID[0].id })
@@ -16,6 +22,9 @@ function ReadMessage() {
         const { status } = result;
         if (status === 200) {
           console.log("메세지 삭제 완료");
+          // receiverData = receiverData.filter(
+          //   (receiverData) => receiverData !== selectID
+          // );
           navigate("/mymessage");
         }
       })

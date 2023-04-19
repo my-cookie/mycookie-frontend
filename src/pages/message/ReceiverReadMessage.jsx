@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
@@ -9,15 +9,10 @@ import {
 } from "../../utils/atom";
 
 function ReadMessage() {
-  const RselectID = useRecoilValue(postReceiverIconAtom);
+  const RselectID = useRecoilValue(postReceiverIconAtom); // 선택한 id
+  const receiverData = useRecoilValue(getReceiverSelector); // 전체 데이터
   const axiosInstance = useRecoilValue(privateAxios);
   const navigate = useNavigate();
-  const receiverData = useRecoilValue(getReceiverSelector);
-  const [deleteID, setDeleteID] = useState();
-
-  useEffect(() => {
-    console.log(receiverData);
-  }, []);
 
   const deleteMsg = () => {
     axiosInstance
@@ -26,7 +21,7 @@ function ReadMessage() {
         const { status } = result;
         if (status === 200) {
           console.log("메세지 삭제 완료");
-          // navigate("/mymessage");
+          navigate("/mymessage", { replace: true });
         }
       })
       .catch((err) => {

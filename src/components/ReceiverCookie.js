@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { getReceiverSelector, postReceiverIconAtom } from "../utils/atom";
+import {
+  getReceiverSelector,
+  postReceiverIconAtom,
+  privateAxios
+} from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +12,20 @@ function ReceiverCookie() {
   const receiverData = useRecoilValue(getReceiverSelector);
   const [receiverIcon, setReceiverIcon] = useState();
   const [readData, setReadData] = useRecoilState(postReceiverIconAtom);
+  const axiosInstance = useRecoilValue(privateAxios);
+  const [newReceiver, setNewReceiver] = useState([]);
   const navigate = useNavigate();
+
+  const handleReceiverDataChange = useCallback(() => {
+    axiosInstance.get(`api/msg/receiver`).then((res) => {
+      console.log(res.data);
+      setNewReceiver(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    handleReceiverDataChange();
+  }, [handleReceiverDataChange]);
 
   useEffect(() => {
     setReceiverIcon(receiverData);
@@ -19,23 +36,23 @@ function ReceiverCookie() {
       (receiverIcon) => receiverIcon.id == e.target.id
     );
     setReadData(select);
-
+    console.log(select);
     navigate("/receiver_read_message");
   };
 
   return (
     <MyContainer>
-      {receiverIcon &&
-        receiverIcon.map((receiverIcon) => {
+      {newReceiver &&
+        newReceiver.map((newReceiver) => {
           return (
             <Button
-              key={receiverIcon.id}
-              id={receiverIcon.id}
+              key={newReceiver.id}
+              id={newReceiver.id}
               onClick={clickHandler}
             >
               <img
-                src={receiverIcon.flavor.img}
-                id={receiverIcon.id}
+                src={newReceiver.flavor.img}
+                id={newReceiver.id}
                 alt="img"
                 width={50}
               />

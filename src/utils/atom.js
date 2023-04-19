@@ -64,16 +64,10 @@ export const privateAxios = selector({
   }
 });
 
-export const getDataTrigger = atomFamily({
-  key: "getDataTrigger",
-  default: Date.now()
-});
-
 // 받은 쿠키
 export const getReceiverSelector = selector({
   key: "get/receiverSelector",
   get: async ({ get }) => {
-    get(getDataTrigger("getReceiverSelector"));
     const PrivateAxios = get(privateAxios);
     try {
       const res = await PrivateAxios.get(`api/msg/receiver`);
@@ -82,9 +76,6 @@ export const getReceiverSelector = selector({
     } catch (error) {
       console.log(error);
     }
-  },
-  set: ({ set }) => {
-    set(getDataTrigger("getReceiverSelector"), Date.now());
   }
 });
 

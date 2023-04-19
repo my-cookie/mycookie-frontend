@@ -1,15 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { getSenderSelector, postSenderIconAtom } from "../utils/atom";
+import React, { useCallback, useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  getSenderSelector,
+  postSenderIconAtom,
+  privateAxios
+} from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 function SenderCookie() {
-  const senderData = useRecoilValue(getSenderSelector);
-
-  const [senderIcon, setSenderIcon] = useState();
-  const [postReadDate, setPostReadData] = useRecoilState(postSenderIconAtom);
+  const senderData = useRecoilValue(getSenderSelector); // 전체 data
+  const [senderIcon, setSenderIcon] = useState(); //얘도 전체
+  const [postReadDate, setPostReadData] = useRecoilState(postSenderIconAtom); // 선택된 쿠키
   const navigate = useNavigate();
+  const axiosInstance = useRecoilValue(privateAxios);
+  const [newSender, setSender] = useState([]);
+
+  const handleSenderDataChange = useCallback(() => {
+    axiosInstance.get(`api/msg/sender`).then((res) => {
+      console.log(res.data);
+      setSender(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    handleSenderDataChange();
+  }, [handleSenderDataChange]);
 
   useEffect(() => {
     setSenderIcon(senderData);
@@ -20,23 +36,19 @@ function SenderCookie() {
       (senderIcon) => senderIcon.id == e.target.id
     );
     setPostReadData(select);
-
+    console.log(select); // 클릭한 id
     navigate("/readmessage");
   };
 
   return (
     <MyContainer>
-      {senderIcon &&
-        senderIcon.map((senderIcon) => {
+      {newSender &&
+        newSender.map((newSender) => {
           return (
-            <Button
-              key={senderIcon.id}
-              id={senderIcon.id}
-              onClick={sendHandler}
-            >
+            <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
               <img
-                src={senderIcon.flavor.img}
-                id={senderIcon.id}
+                src={newSender.flavor.img}
+                id={newSender.id}
                 alt="img"
                 width={50}
               />
