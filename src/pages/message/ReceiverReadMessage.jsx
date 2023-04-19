@@ -2,41 +2,64 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { postReceiverIconAtom } from "../../utils/atom";
+import { postReceiverIconAtom, privateAxios } from "../../utils/atom";
 
 function ReadMessage() {
   const RselectID = useRecoilValue(postReceiverIconAtom);
-  console.log(RselectID);
+  const axiosInstance = useRecoilValue(privateAxios);
+  console.log(RselectID[0].id);
+
+  const deleteMsg = () => {
+    axiosInstance
+      .post(`msg/receiver/delete`, { message_id: RselectID[0].id })
+      .then((res) => {
+        alert("삭제완료!😎");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const spamMsg = () => {
+    axiosInstance
+      .post(`api/msg/spam`, { message: RselectID[0].id })
+      .then((result) => {
+        const { status } = result;
+        if (status === 201) {
+          alert("신고완료!😡");
+        } else if (status === 406) {
+          alert("이미 신고된 쿠키야!");
+        }
+      });
+  };
   return (
     <ReadMessageContainer>
       <div className="contents_container">
-        <div>
-          <MessageBox>
-            <div className="read_cookie">
-              <SelectCookieImg src={RselectID[0].flavor.img} />
+        <MessageBox>
+          <div className="read_cookie">
+            <SelectCookieImg src={RselectID[0].flavor.img} />
+          </div>
+          <div className="read_letter">
+            <div className="message_background">
+              <ToBox>
+                <ToRead>{RselectID[0].receiver.nickname} 에게</ToRead>
+              </ToBox>
+              <TextBox>
+                <ReadMessageText>{RselectID[0].content}</ReadMessageText>
+              </TextBox>
+              <FromBox>
+                <FromRead>{RselectID[0].sender.nickname}</FromRead>
+              </FromBox>
             </div>
-            <div className="read_letter">
-              <div className="message_background">
-                <ToBox>
-                  <ToRead>{RselectID[0].receiver.nickname} 에게</ToRead>
-                </ToBox>
-                <TextBox>
-                  <ReadMessageText>{RselectID[0].content}</ReadMessageText>
-                </TextBox>
-                <FromBox>
-                  <FromRead>{RselectID[0].sender.nickname}</FromRead>
-                </FromBox>
-              </div>
-            </div>
-          </MessageBox>
-        </div>
+          </div>
+        </MessageBox>
 
         <div className="read_btn">
           <CheckBtn>
             <Link to="/mymessage">확인</Link>
           </CheckBtn>
-          <DeleteBtn>삭제</DeleteBtn>
-          <CrimeBtn>신고</CrimeBtn>
+          <DeleteBtn onClick={deleteMsg}>삭제</DeleteBtn>
+          <CrimeBtn onClick={spamMsg}>신고</CrimeBtn>
         </div>
       </div>
     </ReadMessageContainer>
@@ -154,4 +177,6 @@ const CrimeBtn = styled.button`
   margin-right: 10px;
 `;
 
-const MessageBox = styled.div``;
+const MessageBox = styled.div`
+  width: 100%;
+`;

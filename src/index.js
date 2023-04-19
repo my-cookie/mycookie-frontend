@@ -2,7 +2,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import axios from "axios";
-import { AuthContextProvider } from "./auth/AuthContext";
 import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { Suspense } from "react";
@@ -19,9 +18,7 @@ root.render(
   <RecoilRoot>
     <Suspense fallback={<div>Loading...</div>}>
       <BrowserRouter>
-        <AuthContextProvider>
-          <App />
-        </AuthContextProvider>
+        <App />
       </BrowserRouter>
     </Suspense>
   </RecoilRoot>

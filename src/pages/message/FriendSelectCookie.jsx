@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { axiosInstance } from "../../api/axios";
-import privateAxios from "../../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { anonymousAtom, contentAtom, receiverAtom } from "../../utils/atom";
+import {
+  anonymousAtom,
+  contentAtom,
+  privateAxios,
+  receiverAtom
+} from "../../utils/atom";
+import axios from "axios";
 
 function FriendSelectCookie() {
   const navigate = useNavigate();
@@ -14,10 +18,11 @@ function FriendSelectCookie() {
 
   const [cookie, setCookie] = useState([]);
   const [flavor, setFlavors] = useState("");
+  const axiosInstance = useRecoilValue(privateAxios);
 
   async function getCookie() {
     try {
-      const res = await privateAxios.get(`api/flavor/cookies`);
+      const res = await axios.get(`api/flavor/cookies`);
       console.log(res.data);
       setCookie(res.data);
     } catch (error) {
@@ -57,7 +62,7 @@ function FriendSelectCookie() {
     if (flavor.length === 0) {
       alert("1개 이상은 선택해야해! ");
     }
-    privateAxios
+    axiosInstance
       .post(`api/msg/save`, {
         receiver: parseInt(receiver.id),
         content,

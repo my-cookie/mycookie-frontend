@@ -12,9 +12,7 @@ function SenderCookie() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const senderIconData = senderData.data;
-    setSenderIcon(senderIconData);
-    console.log(senderIconData);
+    setSenderIcon(senderData);
   }, [senderData]);
 
   const sendHandler = (e) => {

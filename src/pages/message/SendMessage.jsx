@@ -12,11 +12,11 @@ import {
 function SendMessage() {
   const receiverNickname = useRecoilValue(receiverAtom);
   const senderName = useRecoilValue(senderAtom);
-
   const [content, setContent] = useRecoilState(contentAtom);
   const [is_anonymous, setIs_anonymous] = useRecoilState(anonymousAtom);
   const navigate = useNavigate();
 
+  console.log(senderName);
   const checkHandler = () => {
     setIs_anonymous(!is_anonymous);
   };

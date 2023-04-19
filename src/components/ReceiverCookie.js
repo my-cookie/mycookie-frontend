@@ -6,14 +6,12 @@ import { useNavigate } from "react-router-dom";
 
 function ReceiverCookie() {
   const receiverData = useRecoilValue(getReceiverSelector);
-
   const [receiverIcon, setReceiverIcon] = useState();
   const [readData, setReadData] = useRecoilState(postReceiverIconAtom);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const receiverIconData = receiverData;
-    setReceiverIcon(receiverIconData);
+    setReceiverIcon(receiverData);
   }, [receiverData]);
 
   const clickHandler = (e) => {

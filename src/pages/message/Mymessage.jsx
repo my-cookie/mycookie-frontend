@@ -4,10 +4,15 @@ import styled from "styled-components";
 
 import ReceiverCookie from "../../components/ReceiverCookie";
 import SenderCookie from "../../components/SenderCookie";
+import { useRecoilValue } from "recoil";
+import { getReceiverSelector, getSenderSelector } from "../../utils/atom";
 
 function Mymessage() {
   const navigate = useNavigate();
   const [viewPage, setViewPage] = useState(true);
+  const [readPage, setReadPage] = useState(true);
+  const receiverData = useRecoilValue(getReceiverSelector);
+  const senderData = useRecoilValue(getSenderSelector);
 
   const sendCookieBtn = () => {
     navigate("/searchcookie");
@@ -34,20 +39,58 @@ function Mymessage() {
             </MessageSent>
           </div>
           <div>
-            <AllCookie>전체쿠키</AllCookie>
-            <ReadCookie>읽은쿠키</ReadCookie>
-            <UnReadCookie>안읽은쿠키</UnReadCookie>
+            <AllCookie onClick={() => setViewPage(true)}>전체쿠키</AllCookie>
+            <ReadCookie onClick={() => setReadPage(true)}>읽은쿠키</ReadCookie>
+            <UnReadCookie onClick={() => setReadPage(false)}>
+              안읽은쿠키
+            </UnReadCookie>
           </div>
         </div>
         <div className="message_container">
           <div className="message_background">
             {viewPage ? <ReceiverCookie /> : <SenderCookie />}
+            {/* {viewPage && (
+              <>
+                <SenderCookie />
+              </>
+            )} */}
+            {/* {readPage ? (
+              <div>
+                <Button
+                  key={receiverData.id}
+                  id={receiverData.id}
+                  // onClick={clickHandler}
+                >
+                  <img
+                    src={receiverData.flavor}
+                    id={receiverData.id}
+                    alt="img"
+                    width={50}
+                  />
+                </Button>
+              </div>
+            ) : (
+              <div>
+                <Button
+                  key={senderData.id}
+                  id={senderData.id}
+                  // onClick={clickHandler}
+                >
+                  <img
+                    src={senderData.flavor}
+                    id={senderData.id}
+                    alt="img"
+                    width={50}
+                  />
+                </Button>
+              </div>
+            )} */}
           </div>
-        </div>
-        <div className="message_btn">
-          <SendBtn type="button" onClick={sendCookieBtn}>
-            쿠키 보내러 가기
-          </SendBtn>
+          <div className="message_btn">
+            <SendBtn type="button" onClick={sendCookieBtn}>
+              쿠키 보내러 가기
+            </SendBtn>
+          </div>
         </div>
       </div>
     </MymessageContainer>
@@ -94,10 +137,7 @@ const MymessageContainer = styled.div`
 
   .message_container {
     width: 100%;
-    height: 50%;
-    display: flex;
-    justify-content: center;
-    text-align: center;
+    height: 70%;
   }
 
   .message_background {
@@ -203,3 +243,8 @@ const SendBtn = styled.button`
   cursor: pointer;
   margin-top: 30px;
 `;
+
+// const Button = styled.button`
+//   background: none;
+//   border: none;
+// `;

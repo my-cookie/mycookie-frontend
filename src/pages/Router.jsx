@@ -15,6 +15,7 @@ import Layout from "../pages/layout/Layout";
 import PrivateLayout from "../pages/layout/PrivateLayout";
 import LoadingMsg from "./loading/LoadingMsg";
 import CompletedMsg from "./message/CompletedMsg";
+import Feedback from "./Feedback";
 
 function Router() {
   return (
@@ -32,14 +33,13 @@ function Router() {
           path="/receiver_read_message"
           element={<ReceiverReadMessage />}
         />
-
         <Route path="/sendmessage" element={<SendMessage />} />
         <Route path="/searchcookie" element={<SearchCookie />} />
         <Route path="/friendselect" element={<FriendSelectCookie />} />
         <Route path="/completed" element={<CompletedMsg />} />
-
         <Route path="/loadingmsg" element={<LoadingMsg />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/feedback" element={<Feedback />} />
         <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
       </Route>
     </Routes>

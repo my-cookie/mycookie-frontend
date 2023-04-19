@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { axiosInstance } from "../../api/axios";
-import privateAxios from "../../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { receiverAtom, senderAtom } from "../../utils/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { privateAxios, receiverAtom, senderAtom } from "../../utils/atom";
 
 function SearchCookie() {
   const [search, setSearch] = useState([]); // 검색 데이터 저장
   const [searchField, setSearchField] = useState(""); // 검색창 onchange
   const [bookmark, setBookmark] = useState([]); // 북마크 get
   const [bookmarkId, setBookmarkId] = useState([]); // 북마크 target_id
-  const [receiver, setReceiver] = useRecoilState(receiverAtom); //
-  const [senderName, setSenderName] = useRecoilState(senderAtom);
+  const [receiver, setReceiver] = useRecoilState(receiverAtom); // 받은 쿠키
+  const [senderName, setSenderName] = useRecoilState(senderAtom); // 보낸 쿠키
   const navigate = useNavigate();
+  const axiosInstance = useRecoilValue(privateAxios);
 
   useEffect(() => {
     if (searchField !== 0) {
-      privateAxios
+      axiosInstance
         .post(`api/auth/search`, { nickname: searchField })
         .then((res) => {
           setSearch(res.data);
@@ -29,68 +28,91 @@ function SearchCookie() {
     setSearchField(e.target.value);
   };
 
+  // 북마크 데이터 get
   useEffect(() => {
-    privateAxios.get(`api/bookmark/item`).then((res) => {
+    axiosInstance.get(`api/bookmark/item`).then((res) => {
       setBookmark(res.data);
-      res.data.map((el) => setBookmarkId([...bookmarkId, el.target.id]));
+      // res.data.map((el) => setBookmarkId([...bookmarkId, el.target.id]));
     });
   }, []);
 
-  const favoriteAddHandler = (e) => {
-    console.log(e.target.id);
-    privateAxios
-      .post(`api/bookmark/item`, { target: e.target.id })
-      .then((res) => {
-        setBookmarkId([e.target.id, ...bookmarkId]);
-        setBookmark([res.data, ...bookmark]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
+  // 현재 북마크 되어 있는 유저
   useEffect(() => {
     console.log(bookmark);
   }, [bookmark]);
 
+  // 즐겨찾기 추가
+  const favoriteAddHandler = (e) => {
+    console.log(e.target.id);
+    axiosInstance
+      .post(`api/bookmark/item`, { target: e.target.id })
+      .then((result) => {
+        const { status, res } = result;
+        // setBookmarkId(e.target.id);
+        if (status === 201) {
+          setBookmarkId([e.target.id, ...bookmarkId]);
+          setBookmark([res.data, ...bookmark]);
+        } else if (status === 206) {
+          alert("이미 즐겨찾기에 등록되어 있어!");
+        } else if (status === 400) {
+          alert("뭔가 잘못되었어..!😳");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  console.log(bookmarkId);
+  console.log(bookmark);
+
+  // 즐겨찾기 삭제
   const favoriteDeleteHandler = (e) => {
-    privateAxios
-      .delete(`api/bookmark/item`, { data: { target: e.target.id } })
-      .then((res) => {
-        setBookmarkId(
-          bookmarkId.filter((el) => {
-            return el !== e.target.id;
-          })
-        );
-        setBookmark(
-          bookmark.filter((el) => {
-            return el.target.id !== e.target.id;
-          })
-        );
+    console.log(e.target.id);
+    axiosInstance
+      .delete(`api/bookmark/item`, { target: e.target.id })
+      .then((result) => {
+        const { status } = result;
+        if (status === 200) {
+          setBookmarkId(
+            bookmarkId.filter((el) => {
+              return el !== e.target.id;
+            })
+          );
+          setBookmark(
+            bookmark.filter((el) => {
+              return el.target.id !== e.target.id;
+            })
+          );
+        } else if (status === 400) {
+          alert("뭔가 잘못되었어..!😳");
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
+  // 받는 사람
   useEffect(() => {
     console.log(receiver);
   }, [receiver]);
 
+  // 북마크 된 유저 클릭 시
   const sendHandler = (e) => {
     console.log(e.target.id);
     let receiverNickname = bookmark.filter((el) => {
       return el.target.id == e.target.id;
     });
-    console.log(receiverNickname);
+    console.log(receiverNickname); // 현재 클릭한 유저를 북마크 된 리스트에서 찾아냄
     setReceiver({
       id: e.target.id,
       nickname: receiverNickname[0].target.nickname
     });
 
-    privateAxios
+    axiosInstance
       .post(`api/msg/remain`, { receiver: e.target.id })
       .then((res) => {
+        console.log(res.data);
         console.log(res.data.sender_nickname);
         setSenderName(res.data.sender_nickname);
         if (res.data.count == 0) {
@@ -101,6 +123,7 @@ function SearchCookie() {
       });
   };
 
+  // 쿠키 보내기 버튼
   const submitBtn = () => {
     if (!receiver.nickname) {
       alert("친구를 선택해야 해!🥸");
@@ -109,21 +132,22 @@ function SearchCookie() {
     }
   };
 
+  console.log(search);
+  // 쿠키 찾기
   const searchSelect = (e) => {
     console.log(e.target.id);
-    let receiverNickname = bookmark.filter((el) => {
+    let toReceiver = search.filter((el) => {
       return el.target.id == e.target.id;
     });
-    console.log(receiverNickname);
+    console.log(toReceiver);
     setReceiver({
       id: e.target.id,
-      nickname: receiverNickname[0].target.nickname
+      nickname: toReceiver[0].target.nickname
     });
 
-    privateAxios
+    axiosInstance
       .post(`api/msg/remain`, { receiver: e.target.id })
       .then((res) => {
-        console.log(res.data.sender_nickname);
         setSenderName(res.data.sender_nickname);
         if (res.data.count == 0) {
           alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");

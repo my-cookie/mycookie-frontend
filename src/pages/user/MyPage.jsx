@@ -1,25 +1,101 @@
-import React from "react";
+import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { privateAxios } from "../../utils/atom";
+import { Link, useNavigate } from "react-router-dom";
 
 function MyPage() {
+  const navigate = useNavigate();
+  const axiosInstance = useRecoilValue(privateAxios);
+  const [nickname, setNickname] = useState("");
+
+  const onChangeNickname = (e) => {
+    setNickname(e.target.value);
+  };
+
+  const changeNick = () => {
+    axiosInstance
+      .patch(`api/auth/nickname/edit`, { nickname: nickname })
+      .then((result) => {
+        const { status } = result;
+        console.log(status);
+        if (nickname.length > 7) {
+          alert("닉네임은 7글자 까지야! 🤭");
+        } else if (status === 400) {
+          alert("이미 사용중인 닉네임이야! 🫣");
+        } else if (status === 406) {
+          alert("닉네임 변경 횟수를 모두 사용했어! 😭");
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const changeFlavor = () => {
+    axiosInstance.get(`api/auth/myflavor/edit`).then((result) => {
+      const { status } = result;
+      if (status === 200) {
+        axiosInstance.post(`api/auth/myflavor/edit`).then((res) => {
+          console.log(res.data);
+        });
+      } else if (status === 406) {
+        alert("오늘은 쿠키맛 변경을 할 수 없어😣");
+      }
+    });
+  };
+
+  // 로그아웃
+  const logoutHandler = () => {
+    axiosInstance
+      .post(`api/auth/logout`)
+      .then((res) => {
+        console.log(res.data);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // 회원탈퇴
+  const signoutHandler = () => {
+    axiosInstance
+      .post(`api/auth/signout`)
+      .then((res) => {
+        console.log(res.data);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <MyPageBox>
       <div className="contents_container">
         <div className="mypage_title">마이페이지</div>
         <div className="mypage_nick">
-          <NickChangeInput />
-          <NickChangeBtn> 닉네임 변경</NickChangeBtn>
+          <NickChangeInput
+            type="text"
+            placeholder="닉네임 바꿀래?"
+            maxlength="7"
+            onChange={onChangeNickname}
+          />
+          <NickChangeBtn onClick={changeNick}>닉네임 변경</NickChangeBtn>
         </div>
         <div className="mypage_btn_box">
-          <MypageBtn>내 쿠키 변경</MypageBtn>
-          <MypageBtn>마이쿠키함 가기</MypageBtn>
+          <MypageBtn onClick={changeFlavor}>내 쿠키 변경</MypageBtn>
+          <MypageBtn>
+            <Link to="/mymessage">마이쿠키함 가기</Link>
+          </MypageBtn>
         </div>
         <div className="mypage_btn_box">
-          <MypageBtn>로그아웃</MypageBtn>
-          <MypageBtn>탈퇴하기</MypageBtn>
+          <MypageBtn onClick={logoutHandler}>로그아웃</MypageBtn>
+          <MypageBtn onClick={signoutHandler}>탈퇴하기</MypageBtn>
         </div>
         <div className="mypage_btn_box">
-          <ToMypageBtn>문의하기</ToMypageBtn>
+          <ToMypageBtn>
+            <Link to="/feedback">문의하기</Link>
+          </ToMypageBtn>
         </div>
       </div>
     </MyPageBox>
@@ -43,7 +119,7 @@ const MyPageBox = styled.div`
   }
   .mypage_title {
     width: 100%;
-    height: 10%;
+    height: 20%;
     display: flex;
     justify-content: center;
     font-size: 1.5rem;
@@ -60,11 +136,12 @@ const MyPageBox = styled.div`
     height: 10%;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 `;
 
 const NickChangeInput = styled.input`
-  width: 200px;
+  width: 160px;
   height: 40px;
   border: none;
   background: none;
@@ -76,8 +153,8 @@ const NickChangeInput = styled.input`
   outline: none;
 `;
 const NickChangeBtn = styled.button`
-  width: 100px;
-  height: 40px;
+  width: 110px;
+  height: 50px;
   border: 3px solid #7fa3ff;
   border-radius: 20px;
   background-color: #ffffff;
@@ -97,6 +174,10 @@ const MypageBtn = styled.button`
   font-size: 1rem;
   cursor: pointer;
   margin-left: 10px;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;
 
 const ToMypageBtn = styled.button`
@@ -109,4 +190,8 @@ const ToMypageBtn = styled.button`
   font-size: 1rem;
   cursor: pointer;
   margin-left: 10px;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;

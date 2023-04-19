@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { axiosInstance } from "../../api/axios";
-import privateAxios from "../../hooks/useAxios";
-import useAuth from "../../hooks/useAuth";
+import { useRecoilState } from "recoil";
+import axios from "axios";
 
 function SelectCookie() {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ function SelectCookie() {
   const [nickname, serNickname] = useState("");
   const location = useLocation();
   // const user_uuid = location.state.user_uuid;
-  const { setAccessToken } = useAuth();
+  const [accessToken, setAccessToken] = useRecoilState(accessToken);
 
   useEffect(() => {
     try {
@@ -26,7 +25,7 @@ function SelectCookie() {
 
   async function getCookie() {
     try {
-      const res = await privateAxios.get(`api/flavor/cookies`);
+      const res = await axios.get(`api/flavor/cookies`);
       console.log(res.data);
       setCookie(res.data);
     } catch (error) {
@@ -66,7 +65,7 @@ function SelectCookie() {
     if (flavor.length === 0) {
       alert("1개 이상은 선택해야해! ");
     }
-    privateAxios
+    axios
       .post(`api/auth/info`, { nickname, flavor, user_uuid: uuid })
       .then((result) => {
         const { status, data } = result;

@@ -14,7 +14,9 @@ function LoadingLogin() {
   return (
     <LoadingLoginBox>
       <div className="contents_container">
-        <img src={loadingCookie} alt="loading" />
+        <div className="loading_img">
+          <img src={loadingCookie} alt="loading" className="cookie_img" />
+        </div>
       </div>
     </LoadingLoginBox>
   );
@@ -34,5 +36,14 @@ const LoadingLoginBox = styled.div`
     font-family: "BRBA_B";
     margin: 0 auto;
     padding: 0 40px;
+  }
+  .loading_img {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    justify-content: center;
+  }
+  .cookie_img {
+    align-items: center;
   }
 `;
