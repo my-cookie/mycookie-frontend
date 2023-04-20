@@ -1,4 +1,4 @@
-import { atom, atomFamily, selector } from "recoil";
+import { atom, selector } from "recoil";
 import axios from "axios";
 
 import { recoilPersist } from "recoil-persist";

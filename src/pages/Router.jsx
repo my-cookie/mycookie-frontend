@@ -16,6 +16,7 @@ import PrivateLayout from "../pages/layout/PrivateLayout";
 import LoadingMsg from "./loading/LoadingMsg";
 import CompletedMsg from "./message/CompletedMsg";
 import Feedback from "./Feedback";
+import ChangeSelectCookie from "./message/ChangeSelectCookie";
 
 function Router() {
   return (
@@ -36,6 +37,7 @@ function Router() {
         <Route path="/sendmessage" element={<SendMessage />} />
         <Route path="/searchcookie" element={<SearchCookie />} />
         <Route path="/friendselect" element={<FriendSelectCookie />} />
+        <Route path="/changeselect" element={<ChangeSelectCookie />} />
         <Route path="/completed" element={<CompletedMsg />} />
         <Route path="/loadingmsg" element={<LoadingMsg />} />
         <Route path="/mypage" element={<MyPage />} />

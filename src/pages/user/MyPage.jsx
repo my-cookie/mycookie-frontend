@@ -13,6 +13,7 @@ function MyPage() {
     setNickname(e.target.value);
   };
 
+  // 닉네임 변경
   const changeNick = () => {
     axiosInstance
       .patch(`api/auth/nickname/edit`, { nickname: nickname })
@@ -30,18 +31,20 @@ function MyPage() {
       .catch((error) => console.log(error));
   };
 
-  const changeFlavor = () => {
-    axiosInstance.get(`api/auth/myflavor/edit`).then((result) => {
-      const { status } = result;
-      if (status === 200) {
-        axiosInstance.post(`api/auth/myflavor/edit`).then((res) => {
-          console.log(res.data);
-        });
-      } else if (status === 406) {
-        alert("오늘은 쿠키맛 변경을 할 수 없어😣");
-      }
-    });
-  };
+  // 쿠키 변경
+  // const changeFlavor = () => {
+  //   axiosInstance.get(`api/auth/myflavor/edit`)
+  //   .then((result) => {
+  //     const { status } = result;
+  //     if (status === 200) {
+  //       console.log('쿠키맛 변경 가능')
+  //       navigate('/select')
+  //       }
+  //      else if (status === 406) {
+  //       alert("오늘은 쿠키맛 변경을 할 수 없어😣");
+  //     }
+  //   });
+  // };
 
   // 로그아웃
   const logoutHandler = () => {
@@ -83,7 +86,9 @@ function MyPage() {
           <NickChangeBtn onClick={changeNick}>닉네임 변경</NickChangeBtn>
         </div>
         <div className="mypage_btn_box">
-          <MypageBtn onClick={changeFlavor}>내 쿠키 변경</MypageBtn>
+          <MypageBtn>
+            <Link to="/changeselect">내 쿠키 변경</Link>
+          </MypageBtn>
           <MypageBtn>
             <Link to="/mymessage">마이쿠키함 가기</Link>
           </MypageBtn>

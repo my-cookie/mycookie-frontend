@@ -1,96 +1,89 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import styled from "styled-components";
 import {
   privateAxios,
   receiverAtom,
   remainAtom,
   senderAtom
 } from "../../utils/atom";
+import { useNavigate } from "react-router-dom";
 
 function SearchCookie() {
-  const [search, setSearch] = useState([]); // 검색 데이터 저장
-  const [searchField, setSearchField] = useState(""); // 검색창 onchange
-  const [bookmark, setBookmark] = useState([]); // 북마크 get
-  const [bookmarkId, setBookmarkId] = useState([]); // 북마크 target_id
+  const axiosInstance = useRecoilValue(privateAxios);
+  const [nickname, setNickname] = useState(""); // 검색시 입력되는 닉네임
+  const [search, setSearch] = useState([]); // 검색 api 데이터 저장
+  const [bookmark, setBookmark] = useState([]); // 북마크 api 데이터
+  const [bookmarkId, setBookmarkId] = useState([]); // 내가 한 북마크
   const [receiver, setReceiver] = useRecoilState(receiverAtom); // 받은 쿠키
   const [senderName, setSenderName] = useRecoilState(senderAtom); // 보낸 쿠키
   const [remain, setRemain] = useRecoilState(remainAtom);
   const navigate = useNavigate();
-  const axiosInstance = useRecoilValue(privateAxios);
+  const [clicked, unClicked] = useState(false);
 
-  useEffect(() => {
-    if (searchField !== 0) {
-      axiosInstance
-        .post(`api/auth/search`, { nickname: searchField })
-        .then((res) => {
-          setSearch(res.data);
-        });
-    }
-  }, [searchField]);
-
-  const searchNickname = (e) => {
-    setSearchField(e.target.value);
+  // 검색창에 입력되는 닉네임
+  const inputNickname = (e) => {
+    setNickname(e.target.value);
   };
 
-  // 북마크 데이터 get
+  // 검색에 입력된 닉네임을 post 서버에서 찾음
   useEffect(() => {
+    if (nickname !== 0) {
+      axiosInstance
+        .post(`api/auth/search`, { nickname: nickname })
+        .then((res) => {
+          console.log("닉네임post", res.data);
+          setSearch(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [nickname]);
+
+  // 서버에 저장된 북마크 get
+  const handleGetBookmark = useCallback(() => {
     axiosInstance.get(`api/bookmark/item`).then((res) => {
+      console.log(res.data);
       setBookmark(res.data);
-      res.data.map((el) => setBookmarkId([...bookmarkId, el.target.id]));
     });
   }, []);
 
-  // 현재 북마크 되어 있는 유저
   useEffect(() => {
-    console.log(bookmark);
-  }, [bookmark]);
+    handleGetBookmark();
+  }, [handleGetBookmark]);
 
-  // 즐겨찾기 추가
-  const favoriteAddHandler = (e) => {
-    console.log(e.target.id);
+  // 북마크 함
+  const AddBookmarkHandler = (e) => {
     axiosInstance
-      .post(`api/bookmark/item`, { target: e.target.id })
+      .post(`api/bookmark/item`, { target: parseInt(e.target.id) })
       .then((result) => {
-        const { status, res } = result;
-        setBookmarkId(e.target.id);
+        const { status } = result;
         if (status === 201) {
-          setBookmarkId([e.target.id, ...bookmarkId]);
-          setBookmark([res.data, ...bookmark]);
+          console.log(status);
+          setNickname(""); // 작동안함
+          setBookmarkId(parseInt(e.target.id));
+          unClicked(true);
+          handleGetBookmark();
         } else if (status === 206) {
-          alert("이미 즐겨찾기에 등록되어 있어!");
+          alert("이미 추가된 쿠키야!😉");
         } else if (status === 400) {
-          alert("뭔가 잘못되었어..!😳");
+          alert("자기 자신은 추가할 수 없어!");
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   };
-  console.log(bookmarkId);
-  console.log(bookmark);
 
-  // 즐겨찾기 삭제
-  const favoriteDeleteHandler = (e) => {
-    console.log(e.target.id);
+  // 북마크 해제
+  const DeleteBookmarkHandler = (e) => {
+    console.log(typeof e.target.id);
     axiosInstance
-      .delete(`api/bookmark/item`, { target: e.target.id })
+      .delete(`api/bookmark/item`, { data: { target: e.target.id } })
       .then((result) => {
         const { status } = result;
         if (status === 200) {
-          setBookmarkId(
-            bookmarkId.filter((el) => {
-              return el !== e.target.id;
-            })
-          );
-          setBookmark(
-            bookmark.filter((el) => {
-              return el.target.id !== e.target.id;
-            })
-          );
-        } else if (status === 400) {
-          alert("뭔가 잘못되었어..!😳");
+          handleGetBookmark();
+          unClicked(false);
         }
       })
       .catch((err) => {
@@ -98,18 +91,21 @@ function SearchCookie() {
       });
   };
 
-  // 받는 사람
-  // useEffect(() => {
-  //   console.log(receiver);
-  // }, [receiver]);
+  // 좋아! 버튼
+  const cookieSubmitBtn = () => {
+    if (!receiver.nickname) {
+      alert("친구를 선택해야 해!🥸");
+    } else {
+      navigate("/sendmessage");
+    }
+  };
 
-  // 북마크 된 유저 클릭 시
+  // 북마크 되어 있는 유저 div 클릭시
   const sendHandler = (e) => {
     console.log(e.target.id);
     let receiverNickname = bookmark.filter((el) => {
       return el.target.id == e.target.id;
     });
-    console.log(receiverNickname); // 현재 클릭한 유저를 북마크 된 리스트에서 찾아냄
     setReceiver({
       id: e.target.id,
       nickname: receiverNickname[0].target.nickname
@@ -117,10 +113,9 @@ function SearchCookie() {
     setRemain(e.target.id);
 
     axiosInstance
-      .post(`api/msg/remain`, { receiver: e.target.id })
+      .post(`api/msg/remain`, { receiver: parseInt(e.target.id) })
       .then((res) => {
         console.log(res.data);
-        console.log(res.data.sender_nickname);
         setSenderName(res.data.sender_nickname);
         if (res.data.count == 0) {
           alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
@@ -130,19 +125,12 @@ function SearchCookie() {
       });
   };
 
-  // 쿠키 보내기 버튼
-  const submitBtn = () => {
-    if (!receiver.nickname) {
-      alert("친구를 선택해야 해!🥸");
-    } else {
-      navigate("/sendmessage");
-    }
-  };
+  console.log(receiver);
+  console.log(remain);
 
-  console.log(search);
-  // 쿠키 찾기
+  // 쿠키 검색할 때 div 클릭 시
   const searchSelect = (e) => {
-    console.log(e.target.id);
+    setNickname(""); // 작동안함
     let toReceiver = search.filter((el) => {
       return el.id == e.target.id;
     });
@@ -151,9 +139,10 @@ function SearchCookie() {
       id: e.target.id,
       nickname: toReceiver[0].nickname
     });
+    setRemain(e.target.id);
 
     axiosInstance
-      .post(`api/msg/remain`, { receiver: e.target.id })
+      .post(`api/msg/remain`, { receiver: parseInt(e.target.id) })
       .then((res) => {
         setSenderName(res.data.sender_nickname);
         if (res.data.count == 0) {
@@ -175,84 +164,82 @@ function SearchCookie() {
             type="text"
             placeholder="친구를 찾아봐!"
             maxlength="7"
-            onChange={searchNickname}
-            value={searchField}
+            onChange={inputNickname}
           />
         </div>
-        {!bookmark.length && !searchField.length ? (
-          <p className="no_search">등록된 즐겨찾기가 없네^^..</p>
+        {nickname.length > 0 ? (
+          <div className="search_box">
+            {search
+              ? search.map((search) => {
+                  return (
+                    <SearchDiv
+                      id={search.id}
+                      key={search.id}
+                      onClick={searchSelect}
+                    >
+                      <SearchUl id={search.id} key={search.id}>
+                        <SearchList id={search.id} key={search.id}>
+                          {search.nickname}
+                        </SearchList>
+                        {clicked ? (
+                          <button id={search.id} className="star_btn">
+                            ★
+                          </button>
+                        ) : (
+                          <button
+                            id={search.id}
+                            className="star_btn"
+                            onClick={AddBookmarkHandler}
+                          >
+                            ☆
+                          </button>
+                        )}
+                      </SearchUl>
+                    </SearchDiv>
+                  );
+                })
+              : ""}
+          </div>
         ) : (
           ""
         )}
-        {searchField.length !== 0 ? (
-          <div className="search_box">
-            {search.length !== 0
-              ? search.map((search) => {
+        <div>
+          <div className="bookmark_BG">
+            {bookmark
+              ? bookmark.map((bookmark) => {
                   return (
                     <div
-                      key={search.id}
-                      id={search.id}
-                      className="box_list"
-                      onClick={searchSelect}
+                      className="btn_BG"
+                      key={bookmark.target.id}
+                      id={bookmark.target.id}
+                      onClick={sendHandler}
                     >
-                      {search.nickname}
-
-                      {bookmarkId.includes(`${search.id}`) ? (
+                      <BookmarkUl
+                        id={bookmark.target.id}
+                        key={bookmark.target.id}
+                      >
+                        <li
+                          className="box_list"
+                          id={bookmark.target.id}
+                          key={bookmark.target.id}
+                        >
+                          {bookmark.target.nickname}
+                        </li>
                         <button
-                          key={search.id}
-                          id={search.id}
-                          onClick={favoriteDeleteHandler}
+                          id={bookmark.target.id}
                           className="star_btn"
+                          onClick={DeleteBookmarkHandler}
                         >
                           ★
                         </button>
-                      ) : (
-                        <button
-                          key={search.id}
-                          id={search.id}
-                          onClick={favoriteAddHandler}
-                          className="star_btn"
-                        >
-                          ☆
-                        </button>
-                      )}
+                      </BookmarkUl>
                     </div>
                   );
                 })
-              : "검색결과가 없습니다"}
+              : ""}
           </div>
-        ) : (
-          <div>
-            {bookmark.map((bookmark) => {
-              return (
-                <div
-                  key={bookmark.target.id}
-                  id={bookmark.target.id}
-                  className="bookmark_BG"
-                  onClick={sendHandler}
-                >
-                  <div
-                    className="btn_BG"
-                    id={bookmark.target.id}
-                    key={bookmark.target.id}
-                  >
-                    <li id={bookmark.target.id} className="box_list">
-                      {bookmark.target.nickname}
-                    </li>
-                    <button
-                      key={bookmark.target.id}
-                      id={bookmark.target.id}
-                      onClick={favoriteDeleteHandler}
-                      className="star_btn"
-                    >
-                      ★
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+        </div>
+
         <div className="search_send">
           {receiver.nickname ? (
             <SearchSend>
@@ -264,7 +251,7 @@ function SearchCookie() {
           )}
         </div>
         <div className="search_btn">
-          <SearchBtn type="submit" onClick={submitBtn}>
+          <SearchBtn type="submit" onClick={cookieSubmitBtn}>
             좋아!
           </SearchBtn>
         </div>
@@ -272,7 +259,9 @@ function SearchCookie() {
     </SearchCookieBox>
   );
 }
+
 export default SearchCookie;
+
 const SearchCookieBox = styled.div`
   height: 100%;
   .contents_container {
@@ -308,17 +297,19 @@ const SearchCookieBox = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 10px 0 10px;
   }
   .search_box {
-    width: 80%;
+    width: 100%;
     height: 15%;
     background-color: #fff;
-    padding: 20px;
     align-items: center;
-    margin: 10px auto;
     border-radius: 20px;
-    font-size: 1.2rem;
+    font-size: 1rem;
     list-style: none;
+    margin-bottom: 10px;
+    display: flex;
+
     /* overflow-y: scroll; */
   }
   .search_btn {
@@ -334,7 +325,7 @@ const SearchCookieBox = styled.div`
     color: #7fa3ff;
     font-size: 1.3rem;
     font-weight: 700;
-    padding: 5px;
+    padding: 0 10px 0 10px;
   }
 
   .btn_BG {
@@ -343,9 +334,9 @@ const SearchCookieBox = styled.div`
     padding: 10px;
     background-color: #fff;
     border-radius: 10px;
-    /* overflow-y: scroll; */
     display: flex;
     justify-content: space-between;
+    margin-bottom: 10px;
   }
 
   .no_search {
@@ -361,10 +352,12 @@ const SearchCookieBox = styled.div`
     color: #ff7f8c;
   }
 `;
+
 const SearchTitle = styled.div`
   font-size: 1.4rem;
   padding-top: 20px;
 `;
+
 const SearchInput = styled.input`
   border: 1px solid black;
   border-radius: 10px;
@@ -377,6 +370,7 @@ const SearchInput = styled.input`
   box-sizing: border-box;
   padding-left: 10px;
 `;
+
 const SearchSend = styled.div`
   font-family: "BRBA_B";
   font-size: 1.2rem;
@@ -396,4 +390,25 @@ const SearchBtn = styled.button`
   font-size: 1rem;
   cursor: pointer;
   margin-top: 20px;
+`;
+
+const BookmarkUl = styled.ul`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+`;
+
+const SearchDiv = styled.div`
+  width: 100%;
+`;
+const SearchUl = styled.ul`
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 10px 0 10px;
+`;
+const SearchList = styled.li`
+  box-sizing: border-box;
+  padding: 10px;
 `;
