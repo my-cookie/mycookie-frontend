@@ -45,7 +45,7 @@ function ReadMessage() {
   return (
     <ReadMessageContainer>
       <div className="contents_container">
-        <MessageBox>
+        <MessageBoxDiv>
           <div className="read_cookie">
             <SelectCookieImg src={RselectID[0].flavor.img} />
           </div>
@@ -62,7 +62,7 @@ function ReadMessage() {
               </FromBox>
             </div>
           </div>
-        </MessageBox>
+        </MessageBoxDiv>
 
         <div className="read_btn">
           <CheckBtn>
@@ -158,6 +158,7 @@ const CheckBtn = styled.button`
   a {
     text-decoration: none;
     color: black;
+    padding: 20%;
   }
 `;
 
@@ -187,6 +188,4 @@ const CrimeBtn = styled.button`
   margin-right: 10px;
 `;
 
-const MessageBox = styled.div`
-  width: 100%;
-`;
+const MessageBoxDiv = styled.div``;

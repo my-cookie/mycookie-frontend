@@ -31,21 +31,6 @@ function MyPage() {
       .catch((error) => console.log(error));
   };
 
-  // 쿠키 변경
-  // const changeFlavor = () => {
-  //   axiosInstance.get(`api/auth/myflavor/edit`)
-  //   .then((result) => {
-  //     const { status } = result;
-  //     if (status === 200) {
-  //       console.log('쿠키맛 변경 가능')
-  //       navigate('/select')
-  //       }
-  //      else if (status === 406) {
-  //       alert("오늘은 쿠키맛 변경을 할 수 없어😣");
-  //     }
-  //   });
-  // };
-
   // 로그아웃
   const logoutHandler = () => {
     axiosInstance
@@ -128,12 +113,20 @@ const MyPageBox = styled.div`
     display: flex;
     justify-content: center;
     font-size: 1.5rem;
+    @media (min-width: 390px) {
+      height: 10%;
+      align-items: center;
+    }
   }
   .mypage_nick {
     width: 100%;
     height: 20%;
     display: flex;
     justify-content: center;
+    @media (min-width: 390px) {
+      height: 35%;
+      align-items: center;
+    }
   }
 
   .mypage_btn_box {

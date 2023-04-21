@@ -164,6 +164,7 @@ const CheckBtn = styled.button`
   a {
     text-decoration: none;
     color: black;
+    padding: 20%;
   }
 `;
 

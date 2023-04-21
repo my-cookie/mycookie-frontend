@@ -63,6 +63,8 @@ export default SenderCookie;
 
 const MyContainer = styled.div`
   padding: 10px;
+  @media (min-width: 390px) {
+  }
 `;
 
 const Button = styled.button`

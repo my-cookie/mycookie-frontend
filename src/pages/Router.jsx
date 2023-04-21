@@ -17,6 +17,7 @@ import LoadingMsg from "./loading/LoadingMsg";
 import CompletedMsg from "./message/CompletedMsg";
 import Feedback from "./Feedback";
 import ChangeSelectCookie from "./message/ChangeSelectCookie";
+import LoadingLogin from "./loading/LoadingLogin";
 
 function Router() {
   return (
@@ -39,6 +40,7 @@ function Router() {
         <Route path="/friendselect" element={<FriendSelectCookie />} />
         <Route path="/changeselect" element={<ChangeSelectCookie />} />
         <Route path="/completed" element={<CompletedMsg />} />
+        <Route path="/loading" element={<LoadingLogin />} />
         <Route path="/loadingmsg" element={<LoadingMsg />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/feedback" element={<Feedback />} />

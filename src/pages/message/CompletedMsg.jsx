@@ -8,17 +8,19 @@ import { privateAxios, receiverAtom, remainAtom } from "../../utils/atom";
 function CompletedMsg() {
   const [receiver, setReceiver] = useRecoilState(receiverAtom); // 받은 쿠키
   const [remain, setRemain] = useRecoilState(remainAtom); // 앞에서 클릭한 id
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState([]);
   const axiosInstance = useRecoilValue(privateAxios);
 
   console.log(receiver);
   console.log(remain);
   console.log(info);
   useEffect(() => {
-    axiosInstance.post(`api/msg/remain`, { receiver: remain }).then((res) => {
-      console.log(res.data);
-      setInfo(res.data);
-    });
+    axiosInstance
+      .post(`api/msg/remain`, { receiver: parseInt(remain) })
+      .then((res) => {
+        console.log(res.data);
+        setInfo(res.data);
+      });
   }, []);
 
   return (

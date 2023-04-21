@@ -78,7 +78,7 @@ function SearchCookie() {
   const DeleteBookmarkHandler = (e) => {
     console.log(typeof e.target.id);
     axiosInstance
-      .delete(`api/bookmark/item`, { data: { target: e.target.id } })
+      .delete(`api/bookmark/item`, { data: { target: parseInt(e.target.id) } })
       .then((result) => {
         const { status } = result;
         if (status === 200) {
@@ -241,7 +241,7 @@ function SearchCookie() {
         </div>
 
         <div className="search_send">
-          {receiver.nickname ? (
+          {clicked ? (
             <SearchSend>
               <p className="strong">'{receiver.nickname}'</p>
               <p> 에게 보낼까?</p>
@@ -284,6 +284,9 @@ const SearchCookieBox = styled.div`
   .search_input {
     width: 100%;
     height: 15%;
+    @media (min-width: 390px) {
+      height: 10%;
+    }
   }
   .search_send {
     width: 100%;
@@ -309,6 +312,9 @@ const SearchCookieBox = styled.div`
     list-style: none;
     margin-bottom: 10px;
     display: flex;
+    @media (min-width: 390px) {
+      height: 10%;
+    }
 
     /* overflow-y: scroll; */
   }
@@ -337,6 +343,9 @@ const SearchCookieBox = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+    @media (min-width: 390px) {
+      width: 93%;
+    }
   }
 
   .no_search {

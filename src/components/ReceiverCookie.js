@@ -66,7 +66,11 @@ function ReceiverCookie() {
 export default ReceiverCookie;
 
 const MyContainer = styled.div`
+  width: 100%;
   padding: 10px;
+  @media (min-width: 390px) {
+    width: 90%;
+  }
 `;
 
 const Button = styled.button`

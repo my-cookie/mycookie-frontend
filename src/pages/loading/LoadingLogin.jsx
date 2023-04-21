@@ -1,11 +1,8 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import loadingCookie from "../../assets/loading_cookie.gif";
 
 function LoadingLogin() {
-  const navigate = useNavigate();
-
   useEffect(() => {
     setTimeout(() => {
       //   navigate("/completed");
@@ -39,11 +36,14 @@ const LoadingLoginBox = styled.div`
   }
   .loading_img {
     width: 100%;
-    height: 40%;
+
     display: flex;
     justify-content: center;
   }
   .cookie_img {
+    width: 100%;
+    display: flex;
+    justify-content: center;
     align-items: center;
   }
 `;
