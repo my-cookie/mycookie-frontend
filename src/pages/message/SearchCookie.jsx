@@ -284,9 +284,6 @@ const SearchCookieBox = styled.div`
   .search_input {
     width: 100%;
     height: 15%;
-    @media (min-width: 390px) {
-      height: 10%;
-    }
   }
   .search_send {
     width: 100%;

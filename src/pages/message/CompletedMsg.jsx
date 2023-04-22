@@ -81,7 +81,7 @@ const CompletedMsgBox = styled.div`
     height: 10%;
     display: flex;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 0.9rem;
     align-items: center;
   }
   .completed_btn_box {

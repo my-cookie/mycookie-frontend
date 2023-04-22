@@ -104,9 +104,9 @@ const MyMsgContainer = styled.div`
     border-radius: 15px;
     background-color: #ffffff;
     font-family: "BRBA_B";
-    font-size: 1rem;
+    font-size: 0.78rem;
     box-sizing: border-box;
-    padding: 4px;
+    padding: 9px;
     cursor: pointer;
     text-align: center;
 
@@ -136,11 +136,10 @@ const MyMsgContainer = styled.div`
     border-radius: 15px;
     background-color: #7fa3ff;
     font-family: "BRBA_B";
-    font-size: 0.96rem;
+    font-size: 0.78rem;
     cursor: pointer;
-    font-size: 1rem;
     box-sizing: border-box;
-    padding: 4px;
+    padding: 9px;
     @media (max-width: 1000px) {
       width: 80px;
       font-size: 0.8rem;
@@ -160,9 +159,9 @@ const MyMsgContainer = styled.div`
     background-color: #7fa3ff;
     font-family: "BRBA_B";
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: 0.78rem;
     box-sizing: border-box;
-    padding: 4px;
+    padding: 7px;
 
     @media (max-width: 1000px) {
       width: 80px;

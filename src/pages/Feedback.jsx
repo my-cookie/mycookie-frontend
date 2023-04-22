@@ -159,4 +159,5 @@ const FeedbackBtn = styled.button`
 
 const StyledSelect = styled(Select)`
   width: 120px;
+  height: 30px;
 `;

@@ -98,9 +98,6 @@ const SendMessageContainer = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 10px;
-    @media (min-width: 390px) {
-      height: 20%;
-    }
   }
 
   .send_letter {
@@ -109,9 +106,6 @@ const SendMessageContainer = styled.div`
     margin-top: 10px;
     display: flex;
     justify-content: center;
-    @media (min-width: 390px) {
-      height: 50%;
-    }
   }
   .message_background {
     width: 100%;
@@ -128,9 +122,6 @@ const SendMessageContainer = styled.div`
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    @media (min-width: 390px) {
-      height: 15%;
-    }
   }
 `;
 

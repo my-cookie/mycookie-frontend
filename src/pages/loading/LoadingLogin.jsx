@@ -36,7 +36,7 @@ const LoadingLoginBox = styled.div`
   }
   .loading_img {
     width: 100%;
-
+    align-items: center;
     display: flex;
     justify-content: center;
   }

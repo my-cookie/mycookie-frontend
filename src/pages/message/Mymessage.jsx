@@ -1,17 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
-import ReceiverCookie from "../../components/ReceiverCookie";
-import SenderCookie from "../../components/SenderCookie";
-import { useRecoilValue } from "recoil";
-import { privateAxios } from "../../utils/atom";
 import MsgContainer from "../../components/MsgContainer";
 
 function Mymessage() {
   const navigate = useNavigate();
-  // const [viewPage, setViewPage] = useState(true);
-  // const [readPage, setReadPage] = useState(true);
 
   const sendCookieBtn = () => {
     navigate("/searchcookie");
@@ -84,17 +77,18 @@ const MymessageContainer = styled.div`
 `;
 const MyPageBtn = styled.button`
   background-color: #7fa3ff;
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   border: 3px solid white;
   font-family: "BRBA_B";
   border-radius: 50%;
   color: white;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   margin-top: 15px;
   a {
     color: #fff;
     text-decoration: none;
+    padding: 5px 0;
   }
 `;
 
