@@ -160,6 +160,10 @@ const NickChangeBtn = styled.button`
   font-size: 1rem;
   cursor: pointer;
   margin-left: 10px;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;
 
 const MypageBtn = styled.button`

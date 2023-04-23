@@ -77,14 +77,13 @@ const MymessageContainer = styled.div`
 `;
 const MyPageBtn = styled.button`
   background-color: #7fa3ff;
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   border: 3px solid white;
   font-family: "BRBA_B";
   border-radius: 50%;
   color: white;
-  font-size: 0.75rem;
-  margin-top: 15px;
+  font-size: 0.7rem;
   a {
     color: #fff;
     text-decoration: none;
@@ -107,4 +106,8 @@ const SendBtn = styled.button`
   font-size: 1.2rem;
   cursor: pointer;
   margin-top: 30px;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;

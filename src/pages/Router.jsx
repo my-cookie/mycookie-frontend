@@ -40,7 +40,7 @@ function Router() {
         <Route path="/friendselect" element={<FriendSelectCookie />} />
         <Route path="/changeselect" element={<ChangeSelectCookie />} />
         <Route path="/completed" element={<CompletedMsg />} />
-        <Route path="/loading" element={<LoadingLogin />} />
+        {/* <Route path="/loading" element={<LoadingLogin />} /> */}
         <Route path="/loadingmsg" element={<LoadingMsg />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/feedback" element={<Feedback />} />

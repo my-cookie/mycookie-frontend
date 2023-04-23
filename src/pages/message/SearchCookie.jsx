@@ -396,6 +396,10 @@ const SearchBtn = styled.button`
   font-size: 1rem;
   cursor: pointer;
   margin-top: 20px;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;
 
 const BookmarkUl = styled.ul`

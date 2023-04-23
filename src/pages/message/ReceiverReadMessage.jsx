@@ -173,6 +173,10 @@ const DeleteBtn = styled.button`
   cursor: pointer;
   margin-top: 10px;
   margin-right: 10px;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;
 
 const CrimeBtn = styled.button`
@@ -186,6 +190,11 @@ const CrimeBtn = styled.button`
   cursor: pointer;
   margin-top: 10px;
   margin-right: 10px;
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;
 
 const MessageBoxDiv = styled.div``;

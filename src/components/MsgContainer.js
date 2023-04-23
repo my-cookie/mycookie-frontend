@@ -3,28 +3,16 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import styled from "styled-components";
 import ReceiverCookie from "./ReceiverCookie";
 import SenderCookie from "./SenderCookie";
-import AllCookie from "./AllCookie";
-import Btn from "../assets/button_cookie.png";
-import ReadLetter from "./ReadLetter";
-import UnReadLetter from "./UnReadLetter";
 
 function MsgContainer() {
-  //   const axiosInstance = useRecoilValue(privateAxios);
-
   return (
     <MyMsgContainer>
-      <Tabs classname="tabs">
+      <Tabs className="tabs">
         <div className="message_select_btn">
           <TabList className="tab_list">
             <div className="tab_list_letter">
               <Tab className="tab_letter">받은편지</Tab>
               <Tab className="tab_letter">보낸편지</Tab>
-              <Tab className="tab_all_btn">
-                <img src={Btn} alt="button" width={60} />
-                전체편지
-              </Tab>
-              <Tab className="tab_all">읽은편지</Tab>
-              <Tab className="tab_all_un">안읽은편지</Tab>
             </div>
           </TabList>
         </div>
@@ -35,16 +23,6 @@ function MsgContainer() {
             </TabPanel>
             <TabPanel>
               <SenderCookie />
-            </TabPanel>
-
-            <TabPanel>
-              <AllCookie />
-            </TabPanel>
-            <TabPanel>
-              <ReadLetter />
-            </TabPanel>
-            <TabPanel>
-              <UnReadLetter />
             </TabPanel>
           </div>
         </div>
@@ -71,7 +49,6 @@ const MyMsgContainer = styled.div`
       margin-bottom: 20px;
     }
   }
-
   .tab_list {
     display: flex;
     justify-content: center;
@@ -90,7 +67,6 @@ const MyMsgContainer = styled.div`
     align-items: center;
     text-align: center;
   }
-
   .tab_list_all {
     display: flex;
     justify-content: center;
@@ -106,10 +82,10 @@ const MyMsgContainer = styled.div`
     font-family: "BRBA_B";
     font-size: 0.78rem;
     box-sizing: border-box;
-    padding: 9px;
+    padding-top: 12px;
     cursor: pointer;
     text-align: center;
-
+    margin: 0 5px;
     @media (max-width: 1000px) {
       width: 80px;
       font-size: 0.8rem;
@@ -128,7 +104,6 @@ const MyMsgContainer = styled.div`
     font-size: 0.6rem;
     width: 100px;
   }
-
   .tab_all {
     width: 75px;
     height: 45px;
@@ -162,7 +137,6 @@ const MyMsgContainer = styled.div`
     font-size: 0.78rem;
     box-sizing: border-box;
     padding: 7px;
-
     @media (max-width: 1000px) {
       width: 80px;
       font-size: 0.8rem;
@@ -180,5 +154,9 @@ const MyMsgContainer = styled.div`
     border-radius: 40px;
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
+  }
+  .tab_panel {
+    box-sizing: border-box;
+    padding: 10px;
   }
 `;
