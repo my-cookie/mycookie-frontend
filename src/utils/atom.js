@@ -5,50 +5,67 @@ import axios from "axios";
 
 // const { persistAtom } = recoilPersist();
 
+export const uuidAtom = atom({
+  key: "uuidAtom",
+  default: null,
+});
+
+export const roomAtom = atom({
+  key: "roomAtom",
+  default: null,
+});
+
+export const sendingAtom = atom({
+  key: "sendingAtom",
+  default: false,
+});
+
 export const accessAtom = atom({
   key: "accessAtom",
-  default: null
+  default: null,
+  // effects_UNSTABLE: [persistAtom],
+  default: null,
   // effects_UNSTABLE: [persistAtom]
 });
 
 export const remainAtom = atom({
   key: "remainAtom",
-  default: ""
+  default: "",
 });
 
 export const receiverAtom = atom({
   key: "receiverAtom",
-  default: ""
+  default: "",
 });
 
 export const senderAtom = atom({
   key: "senderAtom",
-  default: ""
+  default: "",
 });
 
 export const contentAtom = atom({
   key: "contentAtom",
-  default: ""
+  default: "",
 });
 
 export const anonymousAtom = atom({
   key: "anonymousAtom",
-  default: false
+  default: false,
 });
 
 export const iconAtom = atom({
   key: "iconAtom",
-  default: ""
+  default: "",
 });
 
 export const postSenderIconAtom = atom({
   key: "postSenderIconAtom",
-  default: ""
+  default: "",
 });
 
 export const postReceiverIconAtom = atom({
   key: "postReceiverIconAtom",
-  default: ""
+  default: "",
 });
 
 export const privateAxios = selector({
@@ -57,11 +74,11 @@ export const privateAxios = selector({
     const accessToken = get(accessAtom);
     const privateAxios = axios.create({
       headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
     return privateAxios;
-  }
+  },
 });
 
 // 받은 쿠키
@@ -76,7 +93,7 @@ export const getReceiverSelector = selector({
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 });
 
 // 보낸 쿠키
@@ -91,5 +108,5 @@ export const getSenderSelector = selector({
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 });

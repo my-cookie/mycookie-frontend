@@ -1,28 +1,64 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-import { useRecoilState } from "recoil";
-import { accessAtom } from "../../utils/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios } from "../../utils/atom";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 function PrivateLayout() {
   const navigate = useNavigate();
   const [init, setInit] = useState(false);
   const [accessToken, setAccessToken] = useRecoilState(accessAtom);
+  const [uuid, setUuid] = useRecoilState(uuidAtom);
+  const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
+  const [isSending, setIsSending] = useRecoilState(sendingAtom);
+  const client = useRef("");
+  const axiosInstance = useRecoilValue(privateAxios);
+
+  useEffect(() => {
+    if (init && currentroom) {
+      client.current = new W3CWebSocket("ws://127.0.0.1:8000/ws/msg/" + currentroom + "/"); //gets room_name from the state and connects to the backend server
+      console.log("connected");
+
+      if (isSending === false) {
+        client.current.onopen = function () {
+          console.log("WebSocket Client Connected");
+          client.current.onmessage = function (e) {
+            console.log("메시지와따", e);
+            const data = JSON.parse(e.data);
+            console.log(data);
+            axiosInstance
+              .patch(`api/msg/receiver/alarm`, { message_id: data.msg_id })
+              .then((result) => {
+                const { status } = result;
+                if (status === 200) {
+                  console.log(result.data);
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          };
+        };
+      }
+    }
+  }, [init, currentroom]);
 
   useEffect(() => {
     setInit(true);
   }, []);
 
   useEffect(() => {
-    if (!accessToken) {
+    if (init && !accessToken) {
       console.log("access token 재발급");
       axios
         .post(`/api/auth/access`, {})
         .then((response) => {
           setAccessToken(response.data.access);
+          setUuid(response.data.user.uuid.split("-").join(""));
+          setCurrentroom(response.data.user.uuid.split("-").join(""));
           console.log("재요청");
-          setInit(true);
         })
         .catch((err) => {
           console.log(err);
