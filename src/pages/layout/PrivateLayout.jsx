@@ -80,7 +80,7 @@ function PrivateLayout() {
         })
         .then((response) => {
           setUuid(response.data.uuid.split("-").join(""));
-          setCurrentroom(response.user.uuid.split("-").join(""));
+          setCurrentroom(response.data.uuid.split("-").join(""));
           console.log("재요청");
         })
 
