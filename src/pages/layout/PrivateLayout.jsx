@@ -3,14 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  accessAtom,
-  uuidAtom,
-  roomAtom,
-  sendingAtom,
-  privateAxios,
-  sendmsgAtom
-} from "../../utils/atom";
+import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios, sendmsgAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 function PrivateLayout() {
@@ -31,9 +24,7 @@ function PrivateLayout() {
 
   useEffect(() => {
     if (init && currentroom) {
-      client.current = new W3CWebSocket(
-        process.env.REACT_APP_WS_URL + currentroom + "/"
-      ); //gets room_name from the state and connects to the backend server
+      client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
       console.log("connected");
 
       if (isSending === false) {
@@ -65,7 +56,7 @@ function PrivateLayout() {
             JSON.stringify({
               type: "chat_message",
               msg_id: msg,
-              receiver_uuid: currentroom
+              receiver_uuid: currentroom,
             })
           );
           setCurrentroom(uuid);
@@ -83,10 +74,16 @@ function PrivateLayout() {
         .post(`/api/auth/access`, {})
         .then((response) => {
           setAccessToken(response.data.access);
-          setUuid(response.data.user.uuid.split("-").join(""));
-          setCurrentroom(response.data.user.uuid.split("-").join(""));
+        })
+        .then(() => {
+          axiosInstance.get(`/api/auth/info/uuid`);
+        })
+        .then((response) => {
+          setUuid(response.data.uuid.split("-").join(""));
+          setCurrentroom(response.user.uuid.split("-").join(""));
           console.log("재요청");
         })
+
         .catch((err) => {
           console.log(err);
           return navigate("/");
