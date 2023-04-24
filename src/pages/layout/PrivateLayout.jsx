@@ -3,7 +3,14 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios, sendmsgAtom } from "../../utils/atom";
+import {
+  accessAtom,
+  uuidAtom,
+  roomAtom,
+  sendingAtom,
+  privateAxios,
+  sendmsgAtom
+} from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 function PrivateLayout() {
@@ -20,12 +27,15 @@ function PrivateLayout() {
 
   useEffect(() => {
     if (init && currentroom) {
-      client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
+      client.current = new W3CWebSocket(
+        process.env.REACT_APP_WS_URL + currentroom + "/"
+      ); //gets room_name from the state and connects to the backend server
       console.log("connected");
 
       if (isSending === false) {
         client.current.onopen = function () {
           console.log("WebSocket Client Connected");
+          console.log(currentroom);
           client.current.onmessage = function (e) {
             console.log("메시지와따", e);
             const data = JSON.parse(e.data);
@@ -50,7 +60,7 @@ function PrivateLayout() {
             JSON.stringify({
               type: "chat_message",
               msg_id: msg,
-              receiver_uuid: currentroom,
+              receiver_uuid: currentroom
             })
           );
           setCurrentroom(uuid);

@@ -6,18 +6,21 @@ const RouteChangeTracker = () => {
   const location = useLocation();
   const [initialized, setInitialized] = useState(false);
 
+  // localhost는 기록하지 않음
   useEffect(() => {
     if (!window.location.href.includes("localhost")) {
-      ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID);
+      ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRAKING_ID);
+      setInitialized(true);
     }
-    setInitialized(true);
   }, []);
 
+  // location 변경 감지시 pageview 이벤트 전송
   useEffect(() => {
     if (initialized) {
-      ReactGA.pageview(location.pathname + location.search);
+      ReactGA.set({ page: location.pathname });
+      ReactGA.send("pageview");
     }
-  }, [initialized.location]);
+  }, [initialized, location]);
 };
 
 export default RouteChangeTracker;

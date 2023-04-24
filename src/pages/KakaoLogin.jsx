@@ -4,6 +4,7 @@ import axios from "axios";
 import loadingCookie from "../assets/loading_cookie.gif";
 import { useRecoilState } from "recoil";
 import { accessAtom, uuidAtom, roomAtom } from "../utils/atom";
+import styled from "styled-components";
 
 function KakaoLogin() {
   const navigate = useNavigate();
@@ -37,11 +38,16 @@ function KakaoLogin() {
   }, []);
 
   return (
-    <div>
-      {" "}
+    <KakaoLoading>
       <img src={loadingCookie} alt="loading" width={300} />
-    </div>
+    </KakaoLoading>
   );
 }
 
 export default KakaoLogin;
+
+const KakaoLoading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

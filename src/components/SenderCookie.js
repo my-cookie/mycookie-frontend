@@ -160,20 +160,12 @@ const MyContainer = styled.div`
     padding-top: 13px;
     cursor: pointer;
     text-align: center;
-    margin: 0 5px;
+    margin: 0 3px;
   }
   .send_box {
     width: 100%;
     box-sizing: border-box;
   }
-  /* 
-  .send_box::-webkit-scrollbar {
-    display: none;
-  } */
-
-  /* .send_box_scroll {
-    overflow-y: scroll;
-  } */
 
   .sender_nickname {
     font-family: "BRBA_B";

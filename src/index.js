@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { Suspense } from "react";
 import ReactGA from "react-ga";
+import LoadingLogin from "./pages/loading/LoadingLogin";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const TRACKING_ID = process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID;
@@ -20,7 +21,7 @@ axios.defaults.headers = {
 
 root.render(
   <RecoilRoot>
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LoadingLogin />}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
