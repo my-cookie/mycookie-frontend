@@ -52,7 +52,7 @@ function SenderCookie() {
           </TabList>
         </div>
         <div className="send_box">
-          <TabPanel>
+          <TabPanel className="send_box_scroll">
             {newSender &&
               newSender.map((newSender) => {
                 return (
@@ -67,29 +67,11 @@ function SenderCookie() {
                       alt="img"
                       width={50}
                     />
+                    <p className="sender_nickname">
+                      {newSender.sender.nickname}
+                    </p>
                   </Button>
                 );
-              })}
-          </TabPanel>
-          <TabPanel>
-            {newSender &&
-              newSender.map((newSender) => {
-                if (newSender.is_read == false) {
-                  return (
-                    <Button
-                      key={newSender.id}
-                      id={newSender.id}
-                      onClick={sendHandler}
-                    >
-                      <img
-                        src={newSender.flavor.img}
-                        id={newSender.id}
-                        alt="img"
-                        width={50}
-                      />
-                    </Button>
-                  );
-                }
               })}
           </TabPanel>
           <TabPanel>
@@ -108,6 +90,33 @@ function SenderCookie() {
                         alt="img"
                         width={50}
                       />
+                      <p className="sender_nickname">
+                        {newSender.sender.nickname}
+                      </p>
+                    </Button>
+                  );
+                }
+              })}
+          </TabPanel>
+          <TabPanel>
+            {newSender &&
+              newSender.map((newSender) => {
+                if (newSender.is_read == false) {
+                  return (
+                    <Button
+                      key={newSender.id}
+                      id={newSender.id}
+                      onClick={sendHandler}
+                    >
+                      <img
+                        src={newSender.flavor.img}
+                        id={newSender.id}
+                        alt="img"
+                        width={50}
+                      />
+                      <p className="sender_nickname">
+                        {newSender.sender.nickname}
+                      </p>
                     </Button>
                   );
                 }
@@ -155,11 +164,20 @@ const MyContainer = styled.div`
   .send_box {
     width: 100%;
     box-sizing: border-box;
-    overflow: scroll;
+    overflow-y: scroll;
   }
-
+  /* 
   .send_box::-webkit-scrollbar {
     display: none;
+  } */
+
+  /* .send_box_scroll {
+    overflow: scroll;
+  } */
+
+  .sender_nickname {
+    font-family: "BRBA_B";
+    font-size: 0.7rem;
   }
 `;
 

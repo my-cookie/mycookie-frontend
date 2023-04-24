@@ -67,29 +67,11 @@ function ReceiverCookie() {
                       alt="img"
                       width={50}
                     />
+                    <p className="receiver_nickname">
+                      {newReceiver.receiver.nickname}
+                    </p>
                   </Button>
                 );
-              })}
-          </TabPanel>
-          <TabPanel>
-            {newReceiver &&
-              newReceiver.map((newReceiver) => {
-                if (newReceiver.is_read == false) {
-                  return (
-                    <Button
-                      key={newReceiver.id}
-                      id={newReceiver.id}
-                      onClick={clickHandler}
-                    >
-                      <img
-                        src={newReceiver.flavor.img}
-                        id={newReceiver.id}
-                        alt="img"
-                        width={50}
-                      />
-                    </Button>
-                  );
-                }
               })}
           </TabPanel>
           <TabPanel>
@@ -108,6 +90,33 @@ function ReceiverCookie() {
                         alt="img"
                         width={50}
                       />
+                      <p className="receiver_nickname">
+                        {newReceiver.receiver.nickname}
+                      </p>
+                    </Button>
+                  );
+                }
+              })}
+          </TabPanel>
+          <TabPanel>
+            {newReceiver &&
+              newReceiver.map((newReceiver) => {
+                if (newReceiver.is_read == false) {
+                  return (
+                    <Button
+                      key={newReceiver.id}
+                      id={newReceiver.id}
+                      onClick={clickHandler}
+                    >
+                      <img
+                        src={newReceiver.flavor.img}
+                        id={newReceiver.id}
+                        alt="img"
+                        width={50}
+                      />
+                      <p className="receiver_nickname">
+                        {newReceiver.receiver.nickname}
+                      </p>
                     </Button>
                   );
                 }
@@ -160,6 +169,11 @@ const MyContainer = styled.div`
 
   .receive_box::-webkit-scrollbar {
     display: none;
+  }
+
+  .receiver_nickname {
+    font-family: "BRBA_B";
+    font-size: 0.7rem;
   }
 `;
 

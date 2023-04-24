@@ -42,6 +42,38 @@ function ReadMessage() {
       });
   };
 
+  const time = RselectID[0].created_at;
+
+  function uTcLocal(time) {
+    let localDate = new Date(time);
+
+    let nowMonth = (localDate.getMonth() + 1).toString();
+    if (nowMonth.length === 1) nowMonth = "0" + nowMonth;
+
+    let nowDate = localDate.getDate().toString();
+    if (nowDate.length === 1) nowDate = "0" + nowDate;
+
+    let nowHours = localDate.getHours().toString();
+    if (nowHours.length === 1) nowHours = "0" + nowHours;
+
+    let nowMinutes = localDate.getMinutes().toString();
+    if (nowMinutes.length === 1) nowMinutes = "0" + nowMinutes;
+
+    let changeDate =
+      localDate.getFullYear() +
+      "-" +
+      nowMonth +
+      "-" +
+      nowDate +
+      " " +
+      nowHours +
+      ":" +
+      nowMinutes;
+    return changeDate;
+  }
+
+  console.log(uTcLocal(time));
+
   return (
     <ReadMessageContainer>
       <div className="contents_container">
@@ -58,6 +90,7 @@ function ReadMessage() {
                 <ReadMessageText>{RselectID[0].content}</ReadMessageText>
               </TextBox>
               <FromBox>
+                <FromDate>{uTcLocal(time)}</FromDate>
                 <FromRead>{RselectID[0].sender.nickname}</FromRead>
               </FromBox>
             </div>
@@ -137,12 +170,16 @@ const FromBox = styled.div`
   width: 100%;
   height: 35px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const ToRead = styled.p``;
 const ReadMessageText = styled.p``;
-const FromRead = styled.p``;
+const FromRead = styled.p`
+  font-size: 0.8rem;
+  padding-bottom: 10px;
+`;
 
 const CheckBtn = styled.button`
   width: 70px;
@@ -198,3 +235,9 @@ const CrimeBtn = styled.button`
 `;
 
 const MessageBoxDiv = styled.div``;
+
+const FromDate = styled.p`
+  font-size: 0.8rem;
+  font-family: "BRBA_B";
+  padding-bottom: 10px;
+`;

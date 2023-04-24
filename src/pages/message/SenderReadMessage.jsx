@@ -22,9 +22,6 @@ function ReadMessage() {
         const { status } = result;
         if (status === 200) {
           console.log("메세지 삭제 완료");
-          // receiverData = receiverData.filter(
-          //   (receiverData) => receiverData !== selectID
-          // );
           navigate("/mymessage");
         }
       })
@@ -46,6 +43,38 @@ function ReadMessage() {
       });
   };
 
+  const time = selectID[0].created_at;
+
+  function uTcLocal(time) {
+    let localDate = new Date(time);
+
+    let nowMonth = (localDate.getMonth() + 1).toString();
+    if (nowMonth.length === 1) nowMonth = "0" + nowMonth;
+
+    let nowDate = localDate.getDate().toString();
+    if (nowDate.length === 1) nowDate = "0" + nowDate;
+
+    let nowHours = localDate.getHours().toString();
+    if (nowHours.length === 1) nowHours = "0" + nowHours;
+
+    let nowMinutes = localDate.getMinutes().toString();
+    if (nowMinutes.length === 1) nowMinutes = "0" + nowMinutes;
+
+    let changeDate =
+      localDate.getFullYear() +
+      "-" +
+      nowMonth +
+      "-" +
+      nowDate +
+      " " +
+      nowHours +
+      ":" +
+      nowMinutes;
+    return changeDate;
+  }
+
+  console.log(uTcLocal(time));
+
   return (
     <ReadMessageContainer>
       <div className="contents_container">
@@ -63,6 +92,7 @@ function ReadMessage() {
                   <ReadMessageText>{selectID[0].content}</ReadMessageText>
                 </TextBox>
                 <FromBox>
+                  <FromDate>{uTcLocal(time)}</FromDate>
                   <FromRead>{selectID[0].sender.nickname}</FromRead>
                 </FromBox>
               </div>
@@ -119,6 +149,14 @@ const ReadMessageContainer = styled.div`
     border-radius: 40px;
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 2px;
+      background: #ccc;
+    }
   }
   .read_btn {
     width: 100%;
@@ -143,12 +181,16 @@ const FromBox = styled.div`
   width: 100%;
   height: 35px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const ToRead = styled.p``;
 const ReadMessageText = styled.p``;
-const FromRead = styled.p``;
+const FromRead = styled.p`
+  padding-bottom: 10px;
+  font-size: 0.8rem;
+`;
 
 const CheckBtn = styled.button`
   width: 70px;
@@ -195,3 +237,8 @@ const CrimeBtn = styled.button`
 `;
 
 const MessageBox = styled.div``;
+const FromDate = styled.p`
+  font-size: 0.8rem;
+  font-family: "BRBA_B";
+  padding-bottom: 10px;
+`;
