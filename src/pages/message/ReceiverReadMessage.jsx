@@ -90,8 +90,8 @@ function ReadMessage() {
                 <ReadMessageText>{RselectID[0].content}</ReadMessageText>
               </TextBox>
               <FromBox>
-                <FromDate>{uTcLocal(time)}</FromDate>
                 <FromRead>{RselectID[0].sender.nickname}</FromRead>
+                <FromDate>{uTcLocal(time)}</FromDate>
               </FromBox>
             </div>
           </div>
@@ -170,15 +170,26 @@ const FromBox = styled.div`
   width: 100%;
   height: 35px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
 `;
 
 const ToRead = styled.p``;
 const ReadMessageText = styled.p``;
 const FromRead = styled.p`
-  font-size: 0.8rem;
+  font-size: 1rem;
   padding-bottom: 10px;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const FromDate = styled.p`
+  font-size: 0.8rem;
+  font-family: "BRBA_B";
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  color: #6c6c6c;
 `;
 
 const CheckBtn = styled.button`
@@ -235,9 +246,3 @@ const CrimeBtn = styled.button`
 `;
 
 const MessageBoxDiv = styled.div``;
-
-const FromDate = styled.p`
-  font-size: 0.8rem;
-  font-family: "BRBA_B";
-  padding-bottom: 10px;
-`;

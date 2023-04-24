@@ -159,7 +159,6 @@ const MyContainer = styled.div`
     padding-top: 13px;
     cursor: pointer;
     text-align: center;
-    margin: 0 5px;
   }
   .receive_box {
     width: 100%;

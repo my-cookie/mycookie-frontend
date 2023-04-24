@@ -154,6 +154,15 @@ const MyMsgContainer = styled.div`
     border-radius: 40px;
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
+    overflow-y: scroll;
+    /* &::-webkit-scrollbar {
+      width: 5px;
+      height: 50px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 2px;
+      background: #ccc;
+    } */
   }
   .tab_panel {
     box-sizing: border-box;

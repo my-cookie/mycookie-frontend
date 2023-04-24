@@ -133,6 +133,8 @@ export default SenderCookie;
 const MyContainer = styled.div`
   width: 100%;
 
+  .send_tabs {
+  }
   .send_tabs_message {
     width: 100%;
     display: flex;
@@ -164,7 +166,6 @@ const MyContainer = styled.div`
   .send_box {
     width: 100%;
     box-sizing: border-box;
-    overflow-y: scroll;
   }
   /* 
   .send_box::-webkit-scrollbar {
@@ -172,7 +173,7 @@ const MyContainer = styled.div`
   } */
 
   /* .send_box_scroll {
-    overflow: scroll;
+    overflow-y: scroll;
   } */
 
   .sender_nickname {

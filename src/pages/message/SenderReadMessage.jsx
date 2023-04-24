@@ -92,8 +92,8 @@ function ReadMessage() {
                   <ReadMessageText>{selectID[0].content}</ReadMessageText>
                 </TextBox>
                 <FromBox>
-                  <FromDate>{uTcLocal(time)}</FromDate>
                   <FromRead>{selectID[0].sender.nickname}</FromRead>
+                  <FromDate>{uTcLocal(time)}</FromDate>
                 </FromBox>
               </div>
             </div>
@@ -150,13 +150,6 @@ const ReadMessageContainer = styled.div`
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
     overflow-y: auto;
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-    &::-webkit-scrollbar-thumb {
-      border-radius: 2px;
-      background: #ccc;
-    }
   }
   .read_btn {
     width: 100%;
@@ -181,8 +174,8 @@ const FromBox = styled.div`
   width: 100%;
   height: 35px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
 `;
 
 const ToRead = styled.p``;
@@ -190,6 +183,18 @@ const ReadMessageText = styled.p``;
 const FromRead = styled.p`
   padding-bottom: 10px;
   font-size: 0.8rem;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const FromDate = styled.p`
+  font-size: 0.8rem;
+  font-family: "BRBA_B";
+  padding-bottom: 10px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  color: #6c6c6c;
 `;
 
 const CheckBtn = styled.button`
@@ -237,8 +242,3 @@ const CrimeBtn = styled.button`
 `;
 
 const MessageBox = styled.div``;
-const FromDate = styled.p`
-  font-size: 0.8rem;
-  font-family: "BRBA_B";
-  padding-bottom: 10px;
-`;
