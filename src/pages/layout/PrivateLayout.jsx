@@ -101,7 +101,7 @@ function PrivateLayout() {
     }
   }, [accessToken]);
 
-  return init ? (
+  return accessToken ? (
     <>
       <MainLayout>
         <div className="contents_container">
