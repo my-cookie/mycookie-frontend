@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import {
-  anonymousAtom,
-  contentAtom,
-  privateAxios,
-  receiverAtom
-} from "../../utils/atom";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { anonymousAtom, contentAtom, privateAxios, receiverAtom, sendingAtom, roomAtom, sendmsgAtom } from "../../utils/atom";
 import axios from "axios";
 
 function FriendSelectCookie() {
@@ -19,6 +14,9 @@ function FriendSelectCookie() {
   const [cookie, setCookie] = useState([]);
   const [flavor, setFlavors] = useState("");
   const axiosInstance = useRecoilValue(privateAxios);
+  const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
+  const [isSending, setIsSending] = useRecoilState(sendingAtom);
+  const [msg, setMsg] = useRecoilState(sendmsgAtom);
 
   async function getCookie() {
     try {
@@ -68,7 +66,7 @@ function FriendSelectCookie() {
         receiver: parseInt(receiver.id),
         content,
         flavor: parseInt(flavor),
-        is_anonymous
+        is_anonymous,
       })
       .then((result) => {
         const { status, data } = result;
@@ -76,6 +74,9 @@ function FriendSelectCookie() {
           if (data.is_success == false) {
             alert("친구의 쿠키 맛이 아냐!🤔 다시 선택해봐!");
           } else {
+            setCurrentroom(data.receiver_uuid.split("-").join(""));
+            setIsSending(true);
+            setMsg(data.msg_id);
             navigate("/loadingmsg");
           }
         } else if (status === 429) {
@@ -96,9 +97,7 @@ function FriendSelectCookie() {
           <FriendSelectTitle>친구가 선택한</FriendSelectTitle>
           <FriendSelectTitle>쿠키맛은 뭘까?</FriendSelectTitle>
 
-          <FriendSelectTip>
-            tip. 친구의 쿠키맛을 맞혀야 보낼 수 있어!
-          </FriendSelectTip>
+          <FriendSelectTip>tip. 친구의 쿠키맛을 맞혀야 보낼 수 있어!</FriendSelectTip>
         </div>
 
         <div className="select_cookie">
@@ -107,39 +106,18 @@ function FriendSelectCookie() {
               {cookie &&
                 cookie?.map((cookie) => {
                   return flavor.includes(`${cookie.id}`) ? (
-                    <button
-                      className="cookie_all_btn"
-                      onClick={handleClickMinus}
-                      id={cookie.id}
-                      key={cookie.id}
-                    >
+                    <button className="cookie_all_btn" onClick={handleClickMinus} id={cookie.id} key={cookie.id}>
                       <li className="cookie_list" id={cookie.id}>
-                        <img
-                          style={{ backgroundColor: "orange" }}
-                          src={cookie.img}
-                          alt={cookie.name}
-                          id={cookie.id}
-                          className="cookie_img"
-                        />
+                        <img style={{ backgroundColor: "orange" }} src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>
                       </li>
                     </button>
                   ) : (
-                    <button
-                      className="cookie_all_btn"
-                      id={cookie.id}
-                      onClick={handleClickPlus}
-                      key={cookie.id}
-                    >
+                    <button className="cookie_all_btn" id={cookie.id} onClick={handleClickPlus} key={cookie.id}>
                       <li className="cookie_list" id={cookie.id}>
-                        <img
-                          src={cookie.img}
-                          alt={cookie.name}
-                          id={cookie.id}
-                          className="cookie_img"
-                        />
+                        <img src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>

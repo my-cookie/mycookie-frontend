@@ -20,6 +20,11 @@ export const sendingAtom = atom({
   default: false,
 });
 
+export const sendmsgAtom = atom({
+  key: "sendmsgAtom",
+  default: null,
+});
+
 export const accessAtom = atom({
   key: "accessAtom",
   default: null,

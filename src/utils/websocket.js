@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     if (connect == true && currentroom !== undefined) {
-      client.current = new W3CWebSocket("ws://127.0.0.1:8000/ws/msg/" + currentroom + "/"); //gets room_name from the state and connects to the backend server
+      client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
       // client.current = new W3CWebSocket("ws:///ws/" + roomname + "/"); //gets room_name from the state and connects to the backend server
       console.log("connected");
 

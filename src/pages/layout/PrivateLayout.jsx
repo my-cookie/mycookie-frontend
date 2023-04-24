@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios } from "../../utils/atom";
+import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios, sendmsgAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 function PrivateLayout() {
@@ -13,12 +13,14 @@ function PrivateLayout() {
   const [uuid, setUuid] = useRecoilState(uuidAtom);
   const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
   const [isSending, setIsSending] = useRecoilState(sendingAtom);
+  const [msg, setMsg] = useRecoilState(sendmsgAtom);
+
   const client = useRef("");
   const axiosInstance = useRecoilValue(privateAxios);
 
   useEffect(() => {
     if (init && currentroom) {
-      client.current = new W3CWebSocket("ws://127.0.0.1:8000/ws/msg/" + currentroom + "/"); //gets room_name from the state and connects to the backend server
+      client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
       console.log("connected");
 
       if (isSending === false) {
@@ -40,6 +42,20 @@ function PrivateLayout() {
                 console.log(err);
               });
           };
+        };
+      }
+      if (isSending === true) {
+        client.current.onopen = function () {
+          client.current.send(
+            JSON.stringify({
+              type: "chat_message",
+              msg_id: msg,
+              receiver_uuid: currentroom,
+            })
+          );
+          setCurrentroom(uuid);
+          setIsSending(false);
+          setMsg(null);
         };
       }
     }
