@@ -72,8 +72,6 @@ function ReadMessage() {
     return changeDate;
   }
 
-  console.log(uTcLocal(time));
-
   return (
     <ReadMessageContainer>
       <div className="contents_container">

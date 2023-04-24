@@ -19,7 +19,6 @@ function SenderCookie() {
 
   const handleSenderDataChange = useCallback(() => {
     axiosInstance.get(`api/msg/sender`).then((res) => {
-      console.log(res.data);
       setSender(res.data);
     });
   }, []);

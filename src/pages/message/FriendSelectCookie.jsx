@@ -42,7 +42,8 @@ function FriendSelectCookie() {
     if (flavor.length === 0) {
       setFlavors(flavor + `${e.target.id}`);
     } else {
-      setFlavors(flavor + `,${e.target.id}`);
+      alert("하나만 선택하면 돼!");
+      // setFlavors(flavor + `,${e.target.id}`);
     }
   };
 
@@ -60,7 +61,7 @@ function FriendSelectCookie() {
 
   const selectBtn = () => {
     if (flavor.length === 0) {
-      alert("1개 이상은 선택해야해! ");
+      alert("친구가 선택한 맛 하나를 골라봐!");
     }
     axiosInstance
       .post(`api/msg/save`, {
@@ -82,8 +83,6 @@ function FriendSelectCookie() {
         } else if (status === 406 || status === 400) {
           alert("쿠키를 보낼 수 없어.. 다시 확인해 줄래? 🥲");
         }
-        // console.log(status);
-        // console.log(result.data);
       })
       .catch((error) => {
         console.log(error);

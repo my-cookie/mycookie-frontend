@@ -68,14 +68,14 @@ function MyPage() {
             maxlength="7"
             onChange={onChangeNickname}
           />
-          <NickChangeBtn onClick={changeNick}>닉네임 변경</NickChangeBtn>
+          <NickChangeBtn onClick={changeNick}>닉네임변경</NickChangeBtn>
         </div>
         <div className="mypage_btn_box">
           <MypageBtn>
             <Link to="/changeselect">내 쿠키 변경</Link>
           </MypageBtn>
           <MypageBtn>
-            <Link to="/mymessage">마이쿠키함 가기</Link>
+            <Link to="/mymessage">마이쿠키함</Link>
           </MypageBtn>
         </div>
         <div className="mypage_btn_box">

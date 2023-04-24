@@ -73,8 +73,6 @@ function ReadMessage() {
     return changeDate;
   }
 
-  console.log(uTcLocal(time));
-
   return (
     <ReadMessageContainer>
       <div className="contents_container">
@@ -182,7 +180,7 @@ const ToRead = styled.p``;
 const ReadMessageText = styled.p``;
 const FromRead = styled.p`
   padding-bottom: 10px;
-  font-size: 0.8rem;
+  font-size: 1rem;
   display: flex;
   justify-content: flex-end;
 `;

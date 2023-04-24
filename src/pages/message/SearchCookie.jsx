@@ -32,7 +32,6 @@ function SearchCookie() {
       axiosInstance
         .post(`api/auth/search`, { nickname: nickname })
         .then((res) => {
-          console.log("닉네임post", res.data);
           setSearch(res.data);
         })
         .catch((err) => {
@@ -44,7 +43,6 @@ function SearchCookie() {
   // 서버에 저장된 북마크 get
   const handleGetBookmark = useCallback(() => {
     axiosInstance.get(`api/bookmark/item`).then((res) => {
-      console.log(res.data);
       setBookmark(res.data);
     });
   }, []);
@@ -102,7 +100,6 @@ function SearchCookie() {
 
   // 북마크 되어 있는 유저 div 클릭시
   const sendHandler = (e) => {
-    console.log(e.target.id);
     let receiverNickname = bookmark.filter((el) => {
       return el.target.id == e.target.id;
     });
@@ -116,6 +113,7 @@ function SearchCookie() {
       .post(`api/msg/remain`, { receiver: parseInt(e.target.id) })
       .then((res) => {
         console.log(res.data);
+        unClicked(true);
         setSenderName(res.data.sender_nickname);
         if (res.data.count == 0) {
           alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
@@ -124,9 +122,6 @@ function SearchCookie() {
         }
       });
   };
-
-  console.log(receiver);
-  console.log(remain);
 
   // 쿠키 검색할 때 div 클릭 시
   const searchSelect = (e) => {
@@ -146,6 +141,7 @@ function SearchCookie() {
       .then((res) => {
         setSenderName(res.data.sender_nickname);
         if (res.data.count == 0) {
+          unClicked(true);
           alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
         } else {
           alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");

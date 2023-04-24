@@ -19,7 +19,6 @@ function ReceiverCookie() {
 
   const handleReceiverDataChange = useCallback(() => {
     axiosInstance.get(`api/msg/receiver`).then((res) => {
-      console.log(res.data);
       setNewReceiver(res.data);
     });
   }, []);
