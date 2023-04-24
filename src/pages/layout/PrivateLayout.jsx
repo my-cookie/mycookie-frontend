@@ -75,9 +75,19 @@ function PrivateLayout() {
         .then((response) => {
           setAccessToken(response.data.access);
         })
-        .then(() => {
-          axiosInstance.get(`/api/auth/info/uuid`);
-        })
+
+        .catch((err) => {
+          console.log(err);
+          return navigate("/");
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (accessToken) {
+      console.log("uuid 받기");
+      axiosInstance
+        .get(`/api/auth/info/uuid`)
         .then((response) => {
           setUuid(response.data.uuid.split("-").join(""));
           setCurrentroom(response.data.uuid.split("-").join(""));
@@ -89,7 +99,7 @@ function PrivateLayout() {
           return navigate("/");
         });
     }
-  }, []);
+  }, [accessToken]);
 
   return init ? (
     <>
