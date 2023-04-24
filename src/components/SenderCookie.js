@@ -1,17 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  getSenderSelector,
-  postSenderIconAtom,
-  privateAxios
-} from "../utils/atom";
+import { postSenderIconAtom, privateAxios } from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 function SenderCookie() {
-  const senderData = useRecoilValue(getSenderSelector); // 전체 data
-  const [senderIcon, setSenderIcon] = useState(); //얘도 전체
   const [postReadDate, setPostReadData] = useRecoilState(postSenderIconAtom); // 선택된 쿠키
   const navigate = useNavigate();
   const axiosInstance = useRecoilValue(privateAxios);
@@ -27,14 +21,8 @@ function SenderCookie() {
     handleSenderDataChange();
   }, [handleSenderDataChange]);
 
-  useEffect(() => {
-    setSenderIcon(senderData);
-  }, [senderData]);
-
   const sendHandler = (e) => {
-    const select = senderIcon.filter(
-      (senderIcon) => senderIcon.id == e.target.id
-    );
+    const select = newSender.filter((newSender) => newSender.id == e.target.id);
     setPostReadData(select);
     console.log(select); // 클릭한 id
     navigate("/readmessage");
@@ -55,20 +43,9 @@ function SenderCookie() {
             {newSender &&
               newSender.map((newSender) => {
                 return (
-                  <Button
-                    key={newSender.id}
-                    id={newSender.id}
-                    onClick={sendHandler}
-                  >
-                    <img
-                      src={newSender.flavor.img}
-                      id={newSender.id}
-                      alt="img"
-                      width={50}
-                    />
-                    <p className="sender_nickname">
-                      {newSender.sender.nickname}
-                    </p>
+                  <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                    <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                    <p className="sender_nickname">{newSender.sender.nickname}</p>
                   </Button>
                 );
               })}
@@ -78,20 +55,9 @@ function SenderCookie() {
               newSender.map((newSender) => {
                 if (newSender.is_read == true) {
                   return (
-                    <Button
-                      key={newSender.id}
-                      id={newSender.id}
-                      onClick={sendHandler}
-                    >
-                      <img
-                        src={newSender.flavor.img}
-                        id={newSender.id}
-                        alt="img"
-                        width={50}
-                      />
-                      <p className="sender_nickname">
-                        {newSender.sender.nickname}
-                      </p>
+                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                      <p className="sender_nickname">{newSender.sender.nickname}</p>
                     </Button>
                   );
                 }
@@ -102,20 +68,9 @@ function SenderCookie() {
               newSender.map((newSender) => {
                 if (newSender.is_read == false) {
                   return (
-                    <Button
-                      key={newSender.id}
-                      id={newSender.id}
-                      onClick={sendHandler}
-                    >
-                      <img
-                        src={newSender.flavor.img}
-                        id={newSender.id}
-                        alt="img"
-                        width={50}
-                      />
-                      <p className="sender_nickname">
-                        {newSender.sender.nickname}
-                      </p>
+                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                      <p className="sender_nickname">{newSender.sender.nickname}</p>
                     </Button>
                   );
                 }

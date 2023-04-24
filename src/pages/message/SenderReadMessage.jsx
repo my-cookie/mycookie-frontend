@@ -2,15 +2,10 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import {
-  getReceiverSelector,
-  postSenderIconAtom,
-  privateAxios
-} from "../../utils/atom";
+import { postSenderIconAtom, privateAxios } from "../../utils/atom";
 
 function ReadMessage() {
   const selectID = useRecoilValue(postSenderIconAtom);
-  const receiverData = useRecoilValue(getReceiverSelector); // 전체 데이터
   const axiosInstance = useRecoilValue(privateAxios);
   const navigate = useNavigate();
 
@@ -31,16 +26,14 @@ function ReadMessage() {
   };
 
   const spamMsg = () => {
-    axiosInstance
-      .post(`api/msg/spam`, { message: selectID[0].id })
-      .then((result) => {
-        const { status } = result;
-        if (status === 201) {
-          alert("신고완료!😡");
-        } else if (status === 406) {
-          alert("이미 신고된 쿠키야!");
-        }
-      });
+    axiosInstance.post(`api/msg/spam`, { message: selectID[0].id }).then((result) => {
+      const { status } = result;
+      if (status === 201) {
+        alert("신고완료!😡");
+      } else if (status === 406) {
+        alert("이미 신고된 쿠키야!");
+      }
+    });
   };
 
   const time = selectID[0].created_at;
@@ -60,16 +53,7 @@ function ReadMessage() {
     let nowMinutes = localDate.getMinutes().toString();
     if (nowMinutes.length === 1) nowMinutes = "0" + nowMinutes;
 
-    let changeDate =
-      localDate.getFullYear() +
-      "-" +
-      nowMonth +
-      "-" +
-      nowDate +
-      " " +
-      nowHours +
-      ":" +
-      nowMinutes;
+    let changeDate = localDate.getFullYear() + "-" + nowMonth + "-" + nowDate + " " + nowHours + ":" + nowMinutes;
     return changeDate;
   }
 
