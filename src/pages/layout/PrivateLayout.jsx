@@ -26,6 +26,10 @@ function PrivateLayout() {
   const axiosInstance = useRecoilValue(privateAxios);
 
   useEffect(() => {
+    setInit(true);
+  }, []);
+
+  useEffect(() => {
     if (init && currentroom) {
       client.current = new W3CWebSocket(
         process.env.REACT_APP_WS_URL + currentroom + "/"
@@ -41,7 +45,7 @@ function PrivateLayout() {
             const data = JSON.parse(e.data);
             console.log(data);
             axiosInstance
-              .patch(`api/msg/receiver/alarm`, { message_id: data.msg_id })
+              .get(`api/msg/receiver/alarm?message_id=${msg}`)
               .then((result) => {
                 const { status } = result;
                 if (status === 200) {
@@ -56,6 +60,7 @@ function PrivateLayout() {
       }
       if (isSending === true) {
         client.current.onopen = function () {
+          console.log("WebSocket Client Connected");
           client.current.send(
             JSON.stringify({
               type: "chat_message",
@@ -72,11 +77,7 @@ function PrivateLayout() {
   }, [init, currentroom]);
 
   useEffect(() => {
-    setInit(true);
-  }, []);
-
-  useEffect(() => {
-    if (init && !accessToken) {
+    if (!accessToken) {
       console.log("access token 재발급");
       axios
         .post(`/api/auth/access`, {})
@@ -91,7 +92,7 @@ function PrivateLayout() {
           return navigate("/");
         });
     }
-  }, [accessToken]);
+  }, []);
 
   return init ? (
     <>

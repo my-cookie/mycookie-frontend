@@ -24,6 +24,7 @@ function Router() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Login />} />
+        <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
         <Route path="/nickname" element={<Nickname />} />
         <Route path="/select" element={<SelectCookie />} />
       </Route>
@@ -31,10 +32,7 @@ function Router() {
       <Route element={<PrivateLayout />}>
         <Route path="/mymessage" element={<Mymessage />} />
         <Route path="/readmessage" element={<SenderReadMessage />} />
-        <Route
-          path="/receiver_read_message"
-          element={<ReceiverReadMessage />}
-        />
+        <Route path="/receiver_read_message" element={<ReceiverReadMessage />} />
         <Route path="/sendmessage" element={<SendMessage />} />
         <Route path="/searchcookie" element={<SearchCookie />} />
         <Route path="/friendselect" element={<FriendSelectCookie />} />
@@ -44,7 +42,6 @@ function Router() {
         <Route path="/loadingmsg" element={<LoadingMsg />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/feedback" element={<Feedback />} />
-        <Route path="/oauth/callback/kakao" element={<KakaoLogin />} />
       </Route>
     </Routes>
   );
