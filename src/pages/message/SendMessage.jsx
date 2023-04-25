@@ -2,12 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import {
-  anonymousAtom,
-  contentAtom,
-  receiverAtom,
-  senderAtom
-} from "../../utils/atom";
+import { anonymousAtom, contentAtom, receiverAtom, senderAtom } from "../../utils/atom";
 
 function SendMessage() {
   const receiverNickname = useRecoilValue(receiverAtom);
@@ -33,7 +28,7 @@ function SendMessage() {
     <SendMessageContainer>
       <div className="contents_container">
         <div className="send_title">
-          <SendTitle>사랑을 담아</SendTitle>
+          <SendTitle>마음을 담아</SendTitle>
           <SendTitle>쿠키를 구워봐!</SendTitle>
         </div>
         <div className="send_letter">
@@ -43,27 +38,14 @@ function SendMessage() {
               에게
             </ToBox>
             <TextBox>
-              <ReadMessageText
-                placeholder="친구에게 보낼 쿠키를 작성해봐!"
-                onChange={(e) => handleSetValue(e)}
-              ></ReadMessageText>
+              <ReadMessageText placeholder="친구에게 보낼 쿠키를 작성해봐!" onChange={(e) => handleSetValue(e)}></ReadMessageText>
             </TextBox>
-            <FromBox>
-              {is_anonymous == true ? (
-                <p>익명 보냄</p>
-              ) : (
-                <FromRead>{senderName} 보냄</FromRead>
-              )}
-            </FromBox>
+            <FromBox>{is_anonymous == true ? <p>익명 보냄</p> : <FromRead>{senderName} 보냄</FromRead>}</FromBox>
           </div>
         </div>
         <div className="send_btn">
           <CheckBox>
-            <SendInput
-              type="checkbox"
-              checked={is_anonymous}
-              onChange={(e) => checkHandler(e)}
-            />
+            <SendInput type="checkbox" checked={is_anonymous} onChange={(e) => checkHandler(e)} />
             <SendCheck>익명으로 보내기</SendCheck>
           </CheckBox>
           <SendBtn type="submit" onClick={cookieSend}>

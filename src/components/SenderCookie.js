@@ -22,22 +22,6 @@ function SenderCookie() {
     handleSenderDataChange();
   }, [handleSenderDataChange]);
 
-  // const sendDataChange = useCallback(() => {
-  //   axiosInstance
-  //     .post(`api/msg/read`, { message_id: postReadDate[0].id })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setIsRead(true);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   sendDataChange();
-  // }, [sendDataChange]);
-
   const sendHandler = (e) => {
     const select = newSender.filter((newSender) => newSender.id == e.target.id);
     setPostReadData(select);
@@ -60,20 +44,9 @@ function SenderCookie() {
             {newSender &&
               newSender.map((newSender) => {
                 return (
-                  <Button
-                    key={newSender.id}
-                    id={newSender.id}
-                    onClick={sendHandler}
-                  >
-                    <img
-                      src={newSender.flavor.img}
-                      id={newSender.id}
-                      alt="img"
-                      width={50}
-                    />
-                    <p className="sender_nickname">
-                      {newSender.sender.nickname}
-                    </p>
+                  <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                    <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                    <p className="sender_nickname">{newSender.sender.nickname}</p>
                   </Button>
                 );
               })}
@@ -83,20 +56,9 @@ function SenderCookie() {
               newSender.map((newSender) => {
                 if (isRead == true) {
                   return (
-                    <Button
-                      key={newSender.id}
-                      id={newSender.id}
-                      onClick={sendHandler}
-                    >
-                      <img
-                        src={newSender.flavor.img}
-                        id={newSender.id}
-                        alt="img"
-                        width={50}
-                      />
-                      <p className="sender_nickname">
-                        {newSender.sender.nickname}
-                      </p>
+                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                      <p className="sender_nickname">{newSender.sender.nickname}</p>
                     </Button>
                   );
                 }
@@ -107,20 +69,9 @@ function SenderCookie() {
               newSender.map((newSender) => {
                 if (isRead == false) {
                   return (
-                    <Button
-                      key={newSender.id}
-                      id={newSender.id}
-                      onClick={sendHandler}
-                    >
-                      <img
-                        src={newSender.flavor.img}
-                        id={newSender.id}
-                        alt="img"
-                        width={50}
-                      />
-                      <p className="sender_nickname">
-                        {newSender.sender.nickname}
-                      </p>
+                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                      <p className="sender_nickname">{newSender.sender.nickname}</p>
                     </Button>
                   );
                 }

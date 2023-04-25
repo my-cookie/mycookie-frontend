@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios, sendmsgAtom } from "../../utils/atom";
+import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 function PrivateLayout() {
@@ -14,6 +14,7 @@ function PrivateLayout() {
   const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
   const [isSending, setIsSending] = useRecoilState(sendingAtom);
   const [msg, setMsg] = useRecoilState(sendmsgAtom);
+  const [newMessage, setNewMessage] = useRecoilState(receiveMsgStatusAtom);
 
   const client = useRef("");
   const axiosInstance = useRecoilValue(privateAxios);
@@ -36,10 +37,12 @@ function PrivateLayout() {
             const data = JSON.parse(e.data);
             console.log(data);
             axiosInstance
-              .get(`api/msg/receiver/alarm?message_id=${msg}`)
+              .get(`api/msg/receiver/alarm?message_id=${data.msg_id}`)
               .then((result) => {
                 const { status } = result;
                 if (status === 200) {
+                  alert("새로운 쿠키가 도착했어 !");
+                  newMessage ? setNewMessage(false) : setNewMessage(true);
                   console.log(result.data);
                 }
               })

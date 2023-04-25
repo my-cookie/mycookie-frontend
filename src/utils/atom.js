@@ -66,6 +66,11 @@ export const postReceiverIconAtom = atom({
   default: "",
 });
 
+export const receiveMsgStatusAtom = atom({
+  key: "receiveMsgStatusAtom",
+  default: false,
+});
+
 export const privateAxios = selector({
   key: "privateAxios",
   get: async ({ get }) => {
