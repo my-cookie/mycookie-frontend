@@ -197,6 +197,7 @@ const MyMsgContainer = styled.div`
 
   .message_background::-webkit-scrollbar {
     width: 5px;
+    height: 10px;
   }
   .message_background::-webkit-scrollbar-track {
     background-color: transparent;
