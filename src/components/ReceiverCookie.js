@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { postReceiverIconAtom, privateAxios, receiveMsgStatusAtom, roomAtom, readingAtom, sendmsgAtom } from "../utils/atom";
+import { postReceiverIconAtom, privateAxios, receiveMsgStatusAtom, roomAtom, readingAtom, sendmsgAtom, tabIndexAtom } from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -14,6 +14,7 @@ function ReceiverCookie() {
   const [isReading, setIsReading] = useRecoilState(readingAtom);
   const [msg, setMsg] = useRecoilState(sendmsgAtom);
   const navigate = useNavigate();
+  const [tabIndex, setTabIndex] = useRecoilState(tabIndexAtom);
 
   const handleReceiverDataChange = useCallback(() => {
     axiosInstance.get(`api/msg/receiver`).then((res) => {
@@ -28,25 +29,33 @@ function ReceiverCookie() {
   const clickHandler = (e) => {
     const select = newReceiver.filter((newReceiver) => newReceiver.id == e.target.id);
     setReadData(select);
-
-    axiosInstance
-      .post(`api/msg/read`, { message_id: select[0].id })
-      .then((res) => {
-        console.log(res.data);
-        setIsReading(true);
-        setMsg(select[0].id);
-        setCurrentroom(res.data.sender_uuid.split("-").join(""));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (select[0].is_read == false) {
+      axiosInstance
+        .post(`api/msg/read`, { message_id: select[0].id })
+        .then((res) => {
+          console.log(res.data);
+          setIsReading(true);
+          setMsg(select[0].id);
+          setCurrentroom(res.data.sender_uuid.split("-").join(""));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
     console.log(select);
     navigate("/receiver_read_message");
   };
 
   return (
     <MyContainer>
-      <Tabs className="receive_tabs">
+      <Tabs
+        className="receive_tabs"
+        defaultIndex={tabIndex[1]}
+        onSelect={(index) => {
+          console.log(index);
+          setTabIndex([tabIndex[0], index]);
+        }}
+      >
         <div className="receive_tabs_message">
           <TabList className="receive_tab_list">
             <Tab className="receive_tab_all">전체편지</Tab>

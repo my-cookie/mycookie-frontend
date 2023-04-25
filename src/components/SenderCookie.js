@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { postSenderIconAtom, privateAxios, sendMsgStatusAtom } from "../utils/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { postSenderIconAtom, privateAxios, sendMsgStatusAtom, tabIndexAtom } from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -11,7 +11,7 @@ function SenderCookie() {
   const [readMessage, setReadMessage] = useRecoilState(sendMsgStatusAtom);
   const axiosInstance = useRecoilValue(privateAxios);
   const [newSender, setSender] = useState([]);
-  const [isRead, setIsRead] = useState(false);
+  const [tabIndex, setTabIndex] = useRecoilState(tabIndexAtom);
 
   const handleSenderDataChange = useCallback(() => {
     axiosInstance.get(`api/msg/sender`).then((res) => {
@@ -32,7 +32,14 @@ function SenderCookie() {
 
   return (
     <MyContainer>
-      <Tabs className="send_tabs">
+      <Tabs
+        className="send_tabs"
+        defaultIndex={tabIndex[1]}
+        onSelect={(index) => {
+          console.log(index);
+          setTabIndex([tabIndex[0], index]);
+        }}
+      >
         <div className="send_tabs_message">
           <TabList className="send_tab_list">
             <Tab className="send_tab_all">전체편지</Tab>

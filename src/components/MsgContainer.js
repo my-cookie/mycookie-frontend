@@ -1,13 +1,17 @@
 import React from "react";
+import { useRecoilState } from "recoil";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import styled from "styled-components";
 import ReceiverCookie from "./ReceiverCookie";
 import SenderCookie from "./SenderCookie";
+import { tabIndexAtom } from "../utils/atom";
 
 function MsgContainer() {
+  const [tabIndex, setTabIndex] = useRecoilState(tabIndexAtom);
+
   return (
     <MyMsgContainer>
-      <Tabs className="tabs">
+      <Tabs className="tabs" defaultIndex={tabIndex[0]} onSelect={(index) => setTabIndex([index, tabIndex[1]])}>
         <div className="message_select_btn">
           <TabList className="tab_list">
             <div className="tab_list_letter">

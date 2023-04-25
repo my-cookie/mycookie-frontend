@@ -81,6 +81,11 @@ export const sendMsgStatusAtom = atom({
   default: false,
 });
 
+export const tabIndexAtom = atom({
+  key: "tabIndexAtom",
+  default: [0, 0],
+});
+
 export const privateAxios = selector({
   key: "privateAxios",
   get: async ({ get }) => {
