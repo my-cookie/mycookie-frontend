@@ -16,6 +16,7 @@ function ReadMessage() {
       .then((result) => {
         const { status } = result;
         if (status === 200) {
+          //정말 삭제하시겠습니까?
           console.log("메세지 삭제 완료");
           navigate("/mymessage");
         }
@@ -156,7 +157,7 @@ const ReadMessageContainer = styled.div`
 `;
 
 const SelectCookieImg = styled.img`
-  width: 60px;
+  width: 80px;
 `;
 
 const ToBox = styled.div`

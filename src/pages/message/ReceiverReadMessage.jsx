@@ -2,7 +2,11 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import styled from "styled-components";
-import { postReceiverIconAtom, privateAxios, receiveMsgStatusAtom } from "../../utils/atom";
+import {
+  postReceiverIconAtom,
+  privateAxios,
+  receiveMsgStatusAtom
+} from "../../utils/atom";
 
 function ReadMessage() {
   const RselectID = useRecoilValue(postReceiverIconAtom); // 선택한 id
@@ -31,14 +35,16 @@ function ReadMessage() {
   };
 
   const spamMsg = () => {
-    axiosInstance.post(`api/msg/spam`, { message: RselectID[0].id }).then((result) => {
-      const { status } = result;
-      if (status === 201) {
-        alert("신고완료!😡");
-      } else if (status === 406) {
-        alert("이미 신고된 쿠키야!");
-      }
-    });
+    axiosInstance
+      .post(`api/msg/spam`, { message: RselectID[0].id })
+      .then((result) => {
+        const { status } = result;
+        if (status === 201) {
+          alert("신고완료!😡");
+        } else if (status === 406) {
+          alert("이미 신고된 쿠키야!");
+        }
+      });
   };
 
   const time = RselectID[0].created_at;
@@ -58,7 +64,16 @@ function ReadMessage() {
     let nowMinutes = localDate.getMinutes().toString();
     if (nowMinutes.length === 1) nowMinutes = "0" + nowMinutes;
 
-    let changeDate = localDate.getFullYear() + "-" + nowMonth + "-" + nowDate + " " + nowHours + ":" + nowMinutes;
+    let changeDate =
+      localDate.getFullYear() +
+      "-" +
+      nowMonth +
+      "-" +
+      nowDate +
+      " " +
+      nowHours +
+      ":" +
+      nowMinutes;
     return changeDate;
   }
 
@@ -67,7 +82,7 @@ function ReadMessage() {
       <div className="contents_container">
         <MessageBoxDiv>
           <div className="read_cookie">
-            <SelectCookieImg src={RselectID[0].flavor.img} />
+            <SelectCookieImg src={RselectID[0].flavor.img} alt="cookie" />
           </div>
           <div className="read_letter">
             <div className="message_background">
@@ -78,7 +93,11 @@ function ReadMessage() {
                 <ReadMessageText>{RselectID[0].content}</ReadMessageText>
               </TextBox>
               <FromBox>
-                {RselectID[0].is_anonymous == false ? <FromRead>{RselectID[0].sender.nickname}</FromRead> : <FromRead>익명</FromRead>}
+                {RselectID[0].is_anonymous == false ? (
+                  <FromRead>{RselectID[0].sender.nickname}</FromRead>
+                ) : (
+                  <FromRead>익명</FromRead>
+                )}
                 <FromDate>{uTcLocal(time)}</FromDate>
               </FromBox>
             </div>
@@ -148,7 +167,7 @@ const ReadMessageContainer = styled.div`
 `;
 
 const SelectCookieImg = styled.img`
-  width: 60px;
+  width: 80px;
 `;
 
 const ToBox = styled.div`

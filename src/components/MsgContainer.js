@@ -11,12 +11,16 @@ function MsgContainer() {
 
   return (
     <MyMsgContainer>
-      <Tabs className="tabs" defaultIndex={tabIndex[0]} onSelect={(index) => setTabIndex([index, tabIndex[1]])}>
+      <Tabs
+        className="tabs"
+        defaultIndex={tabIndex[0]}
+        onSelect={(index) => setTabIndex([index, tabIndex[1]])}
+      >
         <div className="message_select_btn">
           <TabList className="tab_list">
             <div className="tab_list_letter">
               <Tab className="tab_letter">받은편지</Tab>
-              <Tab className="tab_letter">보낸편지</Tab>
+              <Tab className="tab_letter_send">보낸편지</Tab>
             </div>
           </TabList>
         </div>
@@ -81,7 +85,7 @@ const MyMsgContainer = styled.div`
     width: 75px;
     height: 45px;
     border: 3px solid #7fa3ff;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: #ffffff;
     font-family: "BRBA_B";
     font-size: 0.78rem;
@@ -101,6 +105,39 @@ const MyMsgContainer = styled.div`
       padding-top: 12px;
     }
   }
+
+  .tab_letter:focus {
+    background-color: #7fa3ff;
+  }
+
+  .tab_letter_send {
+    width: 75px;
+    height: 45px;
+    border: 3px solid #7fa3ff;
+    border-radius: 10px;
+    background-color: #ffffff;
+    font-family: "BRBA_B";
+    font-size: 0.78rem;
+    box-sizing: border-box;
+    padding-top: 12px;
+    cursor: pointer;
+    text-align: center;
+    margin: 0 5px;
+    @media (max-width: 1000px) {
+      width: 80px;
+      font-size: 0.8rem;
+      padding-top: 12px;
+    }
+    @media (max-width: 500px) {
+      width: 80px;
+      font-size: 0.9rem;
+      padding-top: 12px;
+    }
+  }
+  .tab_letter_send:focus {
+    background-color: #7fa3ff;
+  }
+
   .tab_all_btn {
     display: flex;
     flex-direction: column;

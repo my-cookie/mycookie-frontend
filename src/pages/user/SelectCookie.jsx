@@ -234,7 +234,7 @@ const SelectTitle = styled.p`
   font-size: 1.4rem;
 `;
 const SelectTip = styled.p`
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   padding-top: 10px;
 `;
 
