@@ -14,7 +14,7 @@ function SearchCookie() {
   const [senderName, setSenderName] = useRecoilState(senderAtom); // 보낸 쿠키
   const [remain, setRemain] = useRecoilState(remainAtom);
   const navigate = useNavigate();
-  const [clicked, unClicked] = useState(false);
+  const [receiverNick, setReceiverNick] = useState(null);
 
   // 검색창에 입력되는 닉네임
   const inputNickname = (e) => {
@@ -35,35 +35,38 @@ function SearchCookie() {
     }
   }, [nickname]);
 
-  // 서버에 저장된 북마크 get
-  const handleGetBookmark = useCallback(() => {
+  useEffect(() => {
+    setBookmarkId(
+      bookmark.map((el) => {
+        return el.target.id;
+      })
+    );
+  }, [bookmark]);
+
+  useEffect(() => {
     axiosInstance.get(`api/bookmark/item`).then((res) => {
       setBookmark(res.data);
     });
   }, []);
 
-  useEffect(() => {
-    handleGetBookmark();
-  }, [handleGetBookmark]);
-
   // 북마크 함
   const AddBookmarkHandler = (e) => {
+    console.log(e.target.id);
     axiosInstance
       .post(`api/bookmark/item`, { target: parseInt(e.target.id) })
       .then((result) => {
-        const { status } = result;
+        const { status, data } = result;
+        console.log(data);
         if (status === 201) {
           console.log(status);
-          setNickname(""); // 작동안함
-          setBookmarkId(parseInt(e.target.id));
-          unClicked(true);
-          handleGetBookmark();
+          setBookmark([...bookmark, data]);
+          setNickname("");
+        } else if (status === 206) {
+          alert("이미 추가된 쿠키야!😉");
         }
       })
       .catch((error) => {
-        if (error.response.status === 206) {
-          alert("이미 추가된 쿠키야!😉");
-        } else if (error.response.status === 400) {
+        if (error.response.status == 400) {
           alert("자기 자신은 추가할 수 없어!");
         }
       });
@@ -77,8 +80,11 @@ function SearchCookie() {
       .then((result) => {
         const { status } = result;
         if (status === 200) {
-          handleGetBookmark();
-          unClicked(false);
+          setBookmark(
+            bookmark.filter((el) => {
+              return el.target.id != e.target.id;
+            })
+          );
         }
       })
       .catch((err) => {
@@ -105,27 +111,25 @@ function SearchCookie() {
       nickname: receiverNickname[0].target.nickname,
     });
     setRemain(e.target.id);
-    unClicked(true);
+
     axiosInstance.post(`api/msg/remain`, { receiver: parseInt(e.target.id) }).then((res) => {
       console.log(res.data);
-      unClicked(true);
+
       setSenderName(res.data.sender_nickname);
       if (res.data.count == 0) {
-        alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
+        alert(`오늘 ${receiverNickname[0].target.nickname}에게 보낼 메세지를 다 사용했어😫`);
       } else {
-        alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
+        alert(`오늘 ${receiverNickname[0].target.nickname}에게 보낼 잔여 메세지가 ${res.data.count}개 남았어!`);
+        setReceiverNick(receiverNickname[0].target.nickname);
       }
     });
   };
 
   // 쿠키 검색할 때 div 클릭 시
   const searchSelect = (e) => {
-    unClicked(true);
-
     let toReceiver = search.filter((el) => {
       return el.id == e.target.id;
     });
-
     setReceiver({
       id: e.target.id,
       nickname: toReceiver[0].nickname,
@@ -135,12 +139,12 @@ function SearchCookie() {
     axiosInstance.post(`api/msg/remain`, { receiver: parseInt(e.target.id) }).then((res) => {
       setSenderName(res.data.sender_nickname);
       if (res.data.count == 0) {
-        unClicked(true);
-
-        alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
-        setNickname(""); // 작동안함
+        alert(`오늘 ${toReceiver[0].nickname}에게 보낼 메세지를 다 사용했어😫`);
+        setNickname("");
       } else {
-        alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
+        alert(`오늘 ${toReceiver[0].nickname}에게 보낼 잔여 메세지가 ${res.data.count}개 남았어!`);
+        setReceiverNick(toReceiver[0].nickname);
+        setNickname(toReceiver[0].nickname);
       }
     });
   };
@@ -159,12 +163,12 @@ function SearchCookie() {
             {search
               ? search.map((search) => {
                   return (
-                    <SearchDiv id={search.id} key={search.id} onClick={searchSelect}>
+                    <SearchDiv id={search.id} key={search.id}>
                       <SearchUl id={search.id} key={search.id}>
-                        <SearchList id={search.id} key={search.id}>
+                        <SearchList id={search.id} key={search.id} onClick={searchSelect}>
                           {search.nickname}
                         </SearchList>
-                        {clicked ? (
+                        {bookmarkId.includes(search.id) ? (
                           <button id={search.id} className="star_btn">
                             ★
                           </button>
@@ -180,32 +184,30 @@ function SearchCookie() {
               : ""}
           </div>
         ) : (
-          ""
+          <div className="bookmark_BG">
+            {bookmark
+              ? bookmark.map((bookmark) => {
+                  return (
+                    <BtnBG className="btn_BG" key={bookmark.target.id} id={bookmark.target.id}>
+                      <BookmarkUl id={bookmark.target.id} key={bookmark.target.id}>
+                        <li className="box_list" id={bookmark.target.id} key={bookmark.target.id} onClick={sendHandler}>
+                          {bookmark.target.nickname}
+                        </li>
+                        <button id={bookmark.target.id} className="star_btn" onClick={DeleteBookmarkHandler}>
+                          ★
+                        </button>
+                      </BookmarkUl>
+                    </BtnBG>
+                  );
+                })
+              : ""}
+          </div>
         )}
 
-        <div className="bookmark_BG">
-          {bookmark
-            ? bookmark.map((bookmark) => {
-                return (
-                  <BtnBG className="btn_BG" key={bookmark.target.id} id={bookmark.target.id} onClick={sendHandler}>
-                    <BookmarkUl id={bookmark.target.id} key={bookmark.target.id}>
-                      <li className="box_list" id={bookmark.target.id} key={bookmark.target.id}>
-                        {bookmark.target.nickname}
-                      </li>
-                      <button id={bookmark.target.id} className="star_btn" onClick={DeleteBookmarkHandler}>
-                        ★
-                      </button>
-                    </BookmarkUl>
-                  </BtnBG>
-                );
-              })
-            : ""}
-        </div>
-
         <div className="search_send">
-          {clicked ? (
+          {receiverNick ? (
             <SearchSend>
-              <p className="strong">'{receiver.nickname}'</p>
+              <p className="strong">'{receiverNick}'</p>
               <p> 에게 보낼까?</p>
             </SearchSend>
           ) : (
@@ -256,10 +258,14 @@ const SearchCookieBox = styled.div`
     align-items: center;
   }
   .box_list {
-    display: flex;
+    display: inline-block;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
     justify-content: space-between;
     align-items: center;
     padding: 0 10px 0 10px;
+    cursor: pointer;
   }
   .search_box {
     width: 100%;
@@ -289,12 +295,16 @@ const SearchCookieBox = styled.div`
   }
 
   .star_btn {
+    width: auto;
+    height: 30px;
+    line-height: 30px;
     background: none;
     border: none;
     color: #7fa3ff;
     font-size: 1.3rem;
     font-weight: 700;
     padding: 0 10px 0 10px;
+    cursor: pointer;
   }
 
   .no_search {
@@ -372,8 +382,14 @@ const SearchUl = styled.ul`
   padding: 0 10px 0 10px;
 `;
 const SearchList = styled.li`
-  box-sizing: border-box;
-  padding: 10px;
+  display: inline-block;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px 0 10px;
+  cursor: pointer;
 `;
 
 const BtnBG = styled.div`
