@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom } from "../../utils/atom";
+import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom, readingAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 function PrivateLayout() {
@@ -13,6 +13,7 @@ function PrivateLayout() {
   const [uuid, setUuid] = useRecoilState(uuidAtom);
   const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
   const [isSending, setIsSending] = useRecoilState(sendingAtom);
+  const [isReading, setIsReading] = useRecoilState(readingAtom);
   const [msg, setMsg] = useRecoilState(sendmsgAtom);
   const [newMessage, setNewMessage] = useRecoilState(receiveMsgStatusAtom);
 
@@ -28,42 +29,62 @@ function PrivateLayout() {
       client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
       console.log("connected");
 
-      if (isSending === false) {
+      if (isSending === false && isReading === false) {
         client.current.onopen = function () {
           console.log("WebSocket Client Connected");
           console.log(currentroom);
           client.current.onmessage = function (e) {
-            console.log("메시지와따", e);
-            const data = JSON.parse(e.data);
-            console.log(data);
-            axiosInstance
-              .get(`api/msg/receiver/alarm?message_id=${data.msg_id}`)
-              .then((result) => {
-                const { status } = result;
-                if (status === 200) {
-                  alert("새로운 쿠키가 도착했어 !");
-                  newMessage ? setNewMessage(false) : setNewMessage(true);
-                  console.log(result.data);
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            if (!e.data.is_read) {
+              const data = JSON.parse(e.data);
+              console.log(data);
+              axiosInstance
+                .get(`api/msg/receiver/alarm?message_id=${data.msg_id}`)
+                .then((result) => {
+                  const { status, data } = result;
+                  if (status === 200) {
+                    alert(`${data.is_anonymous ? "익명" : data.sender.nickname}에게 새로운 쿠키가 도착했어 !`);
+                    newMessage ? setNewMessage(false) : setNewMessage(true);
+                    console.log(result.data);
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            } else {
+              console.log("메시지 읽음");
+              newMessage ? setNewMessage(false) : setNewMessage(true);
+            }
           };
         };
       }
-      if (isSending === true) {
+      if (isSending === true && isReading === false) {
         client.current.onopen = function () {
           console.log("WebSocket Client Connected");
           client.current.send(
             JSON.stringify({
               type: "chat_message",
               msg_id: msg,
-              receiver_uuid: currentroom,
             })
           );
           setCurrentroom(uuid);
           setIsSending(false);
+          setMsg(null);
+        };
+      }
+
+      if (isSending === false && isReading === true) {
+        client.current.onopen = function () {
+          console.log("WebSocket Client Connected");
+          console.log("읽음");
+          client.current.send(
+            JSON.stringify({
+              type: "chat_message",
+              msg_id: msg,
+              is_read: true,
+            })
+          );
+          setCurrentroom(uuid);
+          setIsReading(false);
           setMsg(null);
         };
       }

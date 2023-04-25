@@ -16,6 +16,11 @@ export const sendingAtom = atom({
   default: false,
 });
 
+export const readingAtom = atom({
+  key: "readingAtom",
+  default: false,
+});
+
 export const sendmsgAtom = atom({
   key: "sendmsgAtom",
   default: null,
