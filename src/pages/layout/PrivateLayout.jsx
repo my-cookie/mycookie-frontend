@@ -35,8 +35,8 @@ function PrivateLayout() {
           console.log("WebSocket Client Connected");
           console.log(currentroom);
           client.current.onmessage = function (e) {
-            if (!e.data.is_read) {
-              const data = JSON.parse(e.data);
+            const data = JSON.parse(e.data);
+            if (!data.is_read) {
               console.log(data);
               axiosInstance
                 .get(`api/msg/receiver/alarm?message_id=${data.msg_id}`)
@@ -81,7 +81,7 @@ function PrivateLayout() {
             JSON.stringify({
               type: "chat_message",
               msg_id: msg,
-              is_read: "is_read",
+              is_read: true,
             })
           );
           setCurrentroom(uuid);
