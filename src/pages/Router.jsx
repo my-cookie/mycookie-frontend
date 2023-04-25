@@ -18,6 +18,7 @@ import CompletedMsg from "./message/CompletedMsg";
 import Feedback from "./Feedback";
 import ChangeSelectCookie from "./message/ChangeSelectCookie";
 import ReactGA from "react-ga";
+import MyCookie from "./user/MyCookie";
 
 function Router() {
   const TRACKING_ID = process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID;
@@ -48,6 +49,7 @@ function Router() {
         <Route path="/completed" element={<CompletedMsg />} />
         <Route path="/loadingmsg" element={<LoadingMsg />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mycookie" element={<MyCookie />} />
         <Route path="/feedback" element={<Feedback />} />
       </Route>
     </Routes>

@@ -71,7 +71,7 @@ function MyPage() {
         </div>
         <div className="mypage_btn_box">
           <MypageBtn>
-            <Link to="/changeselect">내 쿠키 변경</Link>
+            <Link to="/mycookie">내 쿠키맛 확인</Link>
           </MypageBtn>
           <MypageBtn>
             <Link to="/mymessage">마이쿠키함</Link>
