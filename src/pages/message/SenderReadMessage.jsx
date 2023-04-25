@@ -33,7 +33,10 @@ function ReadMessage() {
         const { status } = result;
         if (status === 201) {
           alert("신고완료!😡");
-        } else if (status === 406) {
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 406) {
           alert("이미 신고된 쿠키야!");
         }
       });

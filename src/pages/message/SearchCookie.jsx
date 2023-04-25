@@ -58,13 +58,15 @@ function SearchCookie() {
           setBookmarkId(parseInt(e.target.id));
           unClicked(true);
           handleGetBookmark();
-        } else if (status === 206) {
-          alert("이미 추가된 쿠키야!😉");
-        } else if (status === 400) {
-          alert("자기 자신은 추가할 수 없어!");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        if (error.response.status === 206) {
+          alert("이미 추가된 쿠키야!😉");
+        } else if (error.response.status === 400) {
+          alert("자기 자신은 추가할 수 없어!");
+        }
+      });
   };
 
   // 북마크 해제

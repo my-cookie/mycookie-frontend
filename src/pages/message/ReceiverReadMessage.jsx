@@ -25,6 +25,7 @@ function ReadMessage() {
       .then((result) => {
         const { status } = result;
         if (status === 200) {
+          //정말 삭제하시겠습니까?
           console.log("메세지 삭제 완료");
           navigate("/mymessage", { replace: true });
         }
@@ -41,7 +42,10 @@ function ReadMessage() {
         const { status } = result;
         if (status === 201) {
           alert("신고완료!😡");
-        } else if (status === 406) {
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 406) {
           alert("이미 신고된 쿠키야!");
         }
       });

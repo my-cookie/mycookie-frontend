@@ -11,9 +11,6 @@ function CompletedMsg() {
   const [info, setInfo] = useState([]);
   const axiosInstance = useRecoilValue(privateAxios);
 
-  console.log(receiver);
-  console.log(remain);
-  console.log(info);
   useEffect(() => {
     axiosInstance
       .post(`api/msg/remain`, { receiver: parseInt(remain) })
