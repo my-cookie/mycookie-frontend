@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom, readingAtom } from "../../utils/atom";
+import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 function PrivateLayout() {
@@ -16,6 +16,7 @@ function PrivateLayout() {
   const [isReading, setIsReading] = useRecoilState(readingAtom);
   const [msg, setMsg] = useRecoilState(sendmsgAtom);
   const [newMessage, setNewMessage] = useRecoilState(receiveMsgStatusAtom);
+  const [readMessage, setReadMessage] = useRecoilState(sendMsgStatusAtom);
 
   const client = useRef("");
   const axiosInstance = useRecoilValue(privateAxios);
@@ -52,7 +53,7 @@ function PrivateLayout() {
                 });
             } else {
               console.log("메시지 읽음");
-              newMessage ? setNewMessage(false) : setNewMessage(true);
+              newMessage ? setReadMessage(false) : setReadMessage(true);
             }
           };
         };

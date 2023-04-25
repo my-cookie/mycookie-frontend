@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { postSenderIconAtom, privateAxios } from "../utils/atom";
+import { postSenderIconAtom, privateAxios, sendMsgStatusAtom } from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -8,6 +8,7 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 function SenderCookie() {
   const [postReadDate, setPostReadData] = useRecoilState(postSenderIconAtom); // 선택된 쿠키
   const navigate = useNavigate();
+  const [readMessage, setReadMessage] = useRecoilState(sendMsgStatusAtom);
   const axiosInstance = useRecoilValue(privateAxios);
   const [newSender, setSender] = useState([]);
   const [isRead, setIsRead] = useState(false);
@@ -20,7 +21,7 @@ function SenderCookie() {
 
   useEffect(() => {
     handleSenderDataChange();
-  }, [handleSenderDataChange]);
+  }, [handleSenderDataChange, readMessage]);
 
   const sendHandler = (e) => {
     const select = newSender.filter((newSender) => newSender.id == e.target.id);
@@ -44,24 +45,9 @@ function SenderCookie() {
             {newSender &&
               newSender.map((newSender) => {
                 return (
-                  <Button
-                    key={newSender.id}
-                    id={newSender.id}
-                    onClick={sendHandler}
-                  >
-                    <img
-                      src={newSender.flavor.img}
-                      id={newSender.id}
-                      alt="img"
-                      width={50}
-                    />
-                    {newSender.is_anonymous == false ? (
-                      <p className="sender_nickname">
-                        {newSender.receiver.nickname}
-                      </p>
-                    ) : (
-                      <p className="sender_nickname">익명</p>
-                    )}
+                  <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                    <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                    {newSender.is_anonymous == false ? <p className="sender_nickname">{newSender.receiver.nickname}</p> : <p className="sender_nickname">익명</p>}
                   </Button>
                 );
               })}
@@ -71,24 +57,9 @@ function SenderCookie() {
               newSender.map((newSender) => {
                 if (newSender.is_read == true) {
                   return (
-                    <Button
-                      key={newSender.id}
-                      id={newSender.id}
-                      onClick={sendHandler}
-                    >
-                      <img
-                        src={newSender.flavor.img}
-                        id={newSender.id}
-                        alt="img"
-                        width={50}
-                      />
-                      {newSender.is_anonymous == false ? (
-                        <p className="sender_nickname">
-                          {newSender.receiver.nickname}
-                        </p>
-                      ) : (
-                        <p className="sender_nickname">익명</p>
-                      )}
+                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                      {newSender.is_anonymous == false ? <p className="sender_nickname">{newSender.receiver.nickname}</p> : <p className="sender_nickname">익명</p>}
                     </Button>
                   );
                 }
@@ -99,24 +70,9 @@ function SenderCookie() {
               newSender.map((newSender) => {
                 if (newSender.is_read == false) {
                   return (
-                    <Button
-                      key={newSender.id}
-                      id={newSender.id}
-                      onClick={sendHandler}
-                    >
-                      <img
-                        src={newSender.flavor.img}
-                        id={newSender.id}
-                        alt="img"
-                        width={50}
-                      />
-                      {newSender.is_anonymous == false ? (
-                        <p className="sender_nickname">
-                          {newSender.receiver.nickname}
-                        </p>
-                      ) : (
-                        <p className="sender_nickname">익명</p>
-                      )}
+                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                      {newSender.is_anonymous == false ? <p className="sender_nickname">{newSender.receiver.nickname}</p> : <p className="sender_nickname">익명</p>}
                     </Button>
                   );
                 }
