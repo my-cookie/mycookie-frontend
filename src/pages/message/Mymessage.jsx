@@ -73,6 +73,10 @@ const MymessageContainer = styled.div`
     height: 20%;
     display: flex;
     justify-content: center;
+    a {
+      text-decoration: none;
+      color: black;
+    }
   }
 `;
 const MyPageBtn = styled.button`

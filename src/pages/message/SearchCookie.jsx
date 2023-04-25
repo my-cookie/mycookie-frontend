@@ -316,6 +316,10 @@ const SearchCookieBox = styled.div`
     height: 20%;
     display: flex;
     justify-content: center;
+    a {
+      text-decoration: none;
+      color: black;
+    }
   }
 
   .star_btn {

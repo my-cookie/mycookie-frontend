@@ -22,8 +22,19 @@ function ReceiverCookie() {
   }, [handleReceiverDataChange]);
 
   const clickHandler = (e) => {
-    const select = newReceiver.filter((newReceiver) => newReceiver.id == e.target.id);
+    const select = newReceiver.filter(
+      (newReceiver) => newReceiver.id == e.target.id
+    );
     setReadData(select);
+
+    axiosInstance
+      .post(`api/msg/read`, { message_id: select[0].id })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     console.log(select);
     navigate("/receiver_read_message");
   };
@@ -43,9 +54,20 @@ function ReceiverCookie() {
             {newReceiver &&
               newReceiver.map((newReceiver) => {
                 return (
-                  <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
-                    <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
-                    <p className="receiver_nickname">{newReceiver.receiver.nickname}</p>
+                  <Button
+                    key={newReceiver.id}
+                    id={newReceiver.id}
+                    onClick={clickHandler}
+                  >
+                    <img
+                      src={newReceiver.flavor.img}
+                      id={newReceiver.id}
+                      alt="img"
+                      width={50}
+                    />
+                    <p className="receiver_nickname">
+                      {newReceiver.receiver.nickname}
+                    </p>
                   </Button>
                 );
               })}
@@ -55,9 +77,20 @@ function ReceiverCookie() {
               newReceiver.map((newReceiver) => {
                 if (newReceiver.is_read == true) {
                   return (
-                    <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
-                      <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
-                      <p className="receiver_nickname">{newReceiver.receiver.nickname}</p>
+                    <Button
+                      key={newReceiver.id}
+                      id={newReceiver.id}
+                      onClick={clickHandler}
+                    >
+                      <img
+                        src={newReceiver.flavor.img}
+                        id={newReceiver.id}
+                        alt="img"
+                        width={50}
+                      />
+                      <p className="receiver_nickname">
+                        {newReceiver.receiver.nickname}
+                      </p>
                     </Button>
                   );
                 }
@@ -68,9 +101,20 @@ function ReceiverCookie() {
               newReceiver.map((newReceiver) => {
                 if (newReceiver.is_read == false) {
                   return (
-                    <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
-                      <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
-                      <p className="receiver_nickname">{newReceiver.receiver.nickname}</p>
+                    <Button
+                      key={newReceiver.id}
+                      id={newReceiver.id}
+                      onClick={clickHandler}
+                    >
+                      <img
+                        src={newReceiver.flavor.img}
+                        id={newReceiver.id}
+                        alt="img"
+                        width={50}
+                      />
+                      <p className="receiver_nickname">
+                        {newReceiver.receiver.nickname}
+                      </p>
                     </Button>
                   );
                 }
@@ -134,4 +178,8 @@ const MyContainer = styled.div`
 const Button = styled.button`
   background: none;
   border: none;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;

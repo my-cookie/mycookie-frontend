@@ -10,6 +10,7 @@ function SenderCookie() {
   const navigate = useNavigate();
   const axiosInstance = useRecoilValue(privateAxios);
   const [newSender, setSender] = useState([]);
+  const [isRead, setIsRead] = useState(false);
 
   const handleSenderDataChange = useCallback(() => {
     axiosInstance.get(`api/msg/sender`).then((res) => {
@@ -20,6 +21,22 @@ function SenderCookie() {
   useEffect(() => {
     handleSenderDataChange();
   }, [handleSenderDataChange]);
+
+  // const sendDataChange = useCallback(() => {
+  //   axiosInstance
+  //     .post(`api/msg/read`, { message_id: postReadDate[0].id })
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setIsRead(true);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   sendDataChange();
+  // }, [sendDataChange]);
 
   const sendHandler = (e) => {
     const select = newSender.filter((newSender) => newSender.id == e.target.id);
@@ -43,9 +60,20 @@ function SenderCookie() {
             {newSender &&
               newSender.map((newSender) => {
                 return (
-                  <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
-                    <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
-                    <p className="sender_nickname">{newSender.sender.nickname}</p>
+                  <Button
+                    key={newSender.id}
+                    id={newSender.id}
+                    onClick={sendHandler}
+                  >
+                    <img
+                      src={newSender.flavor.img}
+                      id={newSender.id}
+                      alt="img"
+                      width={50}
+                    />
+                    <p className="sender_nickname">
+                      {newSender.sender.nickname}
+                    </p>
                   </Button>
                 );
               })}
@@ -53,11 +81,22 @@ function SenderCookie() {
           <TabPanel>
             {newSender &&
               newSender.map((newSender) => {
-                if (newSender.is_read == true) {
+                if (isRead == true) {
                   return (
-                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
-                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
-                      <p className="sender_nickname">{newSender.sender.nickname}</p>
+                    <Button
+                      key={newSender.id}
+                      id={newSender.id}
+                      onClick={sendHandler}
+                    >
+                      <img
+                        src={newSender.flavor.img}
+                        id={newSender.id}
+                        alt="img"
+                        width={50}
+                      />
+                      <p className="sender_nickname">
+                        {newSender.sender.nickname}
+                      </p>
                     </Button>
                   );
                 }
@@ -66,11 +105,22 @@ function SenderCookie() {
           <TabPanel>
             {newSender &&
               newSender.map((newSender) => {
-                if (newSender.is_read == false) {
+                if (isRead == false) {
                   return (
-                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
-                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
-                      <p className="sender_nickname">{newSender.sender.nickname}</p>
+                    <Button
+                      key={newSender.id}
+                      id={newSender.id}
+                      onClick={sendHandler}
+                    >
+                      <img
+                        src={newSender.flavor.img}
+                        id={newSender.id}
+                        alt="img"
+                        width={50}
+                      />
+                      <p className="sender_nickname">
+                        {newSender.sender.nickname}
+                      </p>
                     </Button>
                   );
                 }
@@ -126,9 +176,17 @@ const MyContainer = styled.div`
     font-family: "BRBA_B";
     font-size: 0.7rem;
   }
+  .send_box_scroll {
+    width: 100%;
+    padding-left: 5px;
+  }
 `;
 
 const Button = styled.button`
   background: none;
   border: none;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;
