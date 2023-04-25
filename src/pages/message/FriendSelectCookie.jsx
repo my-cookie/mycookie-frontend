@@ -70,19 +70,16 @@ function FriendSelectCookie() {
               setMsg(data.msg_id);
               navigate("/loadingmsg");
             }
-          }
-        })
-        .catch((error) => {
-          if (error.response.status === 429) {
+          } else if (status === 429) {
             alert("친구에게 보낼 쿠키를 다 소진했어!😥");
             navigate("/mymessage");
-          } else if (
-            error.response.status === 406 ||
-            error.response.status === 400
-          ) {
+          } else if (status === 406 || status === 400) {
             alert("친구가 쿠키를 받을 수 없는 상태야 ... 🥲");
             navigate("/mymessage");
           }
+        })
+        .catch((error) => {
+          console.log(error);
         });
     }
   };
@@ -161,7 +158,6 @@ export default FriendSelectCookie;
 
 const FriendSelectBox = styled.div`
   height: 100%;
-
   .contents_container {
     position: relative;
     display: flex;
@@ -172,7 +168,6 @@ const FriendSelectBox = styled.div`
     margin: 0 auto;
     padding: 0 40px;
   }
-
   .friend_select_title {
     width: 100%;
     height: 40%;
@@ -181,14 +176,12 @@ const FriendSelectBox = styled.div`
     flex-direction: column;
     align-items: center;
   }
-
   .select_cookie {
     width: 100%;
     height: 80%;
     display: flex;
     justify-content: center;
   }
-
   .select_cookie_back {
     height: 300px;
     border-radius: 40px;
@@ -196,19 +189,16 @@ const FriendSelectBox = styled.div`
     background-color: #f8f8f8;
     padding: 20px;
   }
-
   .cookie_list {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-
   .cookie_img {
     width: 100px;
     border-radius: 10px;
   }
-
   .cookie_btn {
     width: 80px;
     height: 25px;
@@ -223,7 +213,6 @@ const FriendSelectBox = styled.div`
     align-items: center;
     padding-top: 10px;
   }
-
   .cookie_all_btn {
     background: none;
     border: none;
