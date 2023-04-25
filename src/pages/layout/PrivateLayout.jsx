@@ -53,7 +53,7 @@ function PrivateLayout() {
                 });
             } else {
               console.log("메시지 읽음");
-              newMessage ? setReadMessage(false) : setReadMessage(true);
+              readMessage ? setReadMessage(false) : setReadMessage(true);
             }
           };
         };
