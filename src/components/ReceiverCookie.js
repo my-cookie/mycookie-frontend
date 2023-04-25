@@ -52,7 +52,7 @@ function ReceiverCookie() {
           </TabList>
         </div>
         <div className="receive_box">
-          <TabPanel>
+          <TabPanel className="receiver_box_scroll">
             {newReceiver &&
               newReceiver.map((newReceiver) => {
                 return (
@@ -141,6 +141,11 @@ const MyContainer = styled.div`
   .receiver_nickname {
     font-family: "BRBA_B";
     font-size: 0.7rem;
+  }
+
+  .receiver_box_scroll {
+    width: 100%;
+    padding-left: 5px;
   }
 `;
 

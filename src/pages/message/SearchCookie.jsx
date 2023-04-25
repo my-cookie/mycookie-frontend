@@ -108,7 +108,7 @@ function SearchCookie() {
       nickname: receiverNickname[0].target.nickname
     });
     setRemain(e.target.id);
-
+    unClicked(true);
     axiosInstance
       .post(`api/msg/remain`, { receiver: parseInt(e.target.id) })
       .then((res) => {
@@ -125,11 +125,12 @@ function SearchCookie() {
 
   // 쿠키 검색할 때 div 클릭 시
   const searchSelect = (e) => {
-    setNickname(""); // 작동안함
+    unClicked(true);
+
     let toReceiver = search.filter((el) => {
       return el.id == e.target.id;
     });
-    console.log(toReceiver);
+
     setReceiver({
       id: e.target.id,
       nickname: toReceiver[0].nickname
@@ -142,7 +143,9 @@ function SearchCookie() {
         setSenderName(res.data.sender_nickname);
         if (res.data.count == 0) {
           unClicked(true);
+
           alert("오늘 친구에게 보낼 메세지를 다 사용했어😫");
+          setNickname(""); // 작동안함
         } else {
           alert("친구에게 보낼 잔여 메세지가 " + res.data.count + "개 남았어!");
         }
@@ -199,41 +202,40 @@ function SearchCookie() {
         ) : (
           ""
         )}
-        <div>
-          <div className="bookmark_BG">
-            {bookmark
-              ? bookmark.map((bookmark) => {
-                  return (
-                    <div
-                      className="btn_BG"
-                      key={bookmark.target.id}
+
+        <div className="bookmark_BG">
+          {bookmark
+            ? bookmark.map((bookmark) => {
+                return (
+                  <BtnBG
+                    className="btn_BG"
+                    key={bookmark.target.id}
+                    id={bookmark.target.id}
+                    onClick={sendHandler}
+                  >
+                    <BookmarkUl
                       id={bookmark.target.id}
-                      onClick={sendHandler}
+                      key={bookmark.target.id}
                     >
-                      <BookmarkUl
+                      <li
+                        className="box_list"
                         id={bookmark.target.id}
                         key={bookmark.target.id}
                       >
-                        <li
-                          className="box_list"
-                          id={bookmark.target.id}
-                          key={bookmark.target.id}
-                        >
-                          {bookmark.target.nickname}
-                        </li>
-                        <button
-                          id={bookmark.target.id}
-                          className="star_btn"
-                          onClick={DeleteBookmarkHandler}
-                        >
-                          ★
-                        </button>
-                      </BookmarkUl>
-                    </div>
-                  );
-                })
-              : ""}
-          </div>
+                        {bookmark.target.nickname}
+                      </li>
+                      <button
+                        id={bookmark.target.id}
+                        className="star_btn"
+                        onClick={DeleteBookmarkHandler}
+                      >
+                        ★
+                      </button>
+                    </BookmarkUl>
+                  </BtnBG>
+                );
+              })
+            : ""}
         </div>
 
         <div className="search_send">
@@ -300,7 +302,7 @@ const SearchCookieBox = styled.div`
     height: 15%;
     background-color: #fff;
     align-items: center;
-    border-radius: 20px;
+    border-radius: 10px;
     font-size: 1rem;
     list-style: none;
     margin-bottom: 10px;
@@ -331,25 +333,12 @@ const SearchCookieBox = styled.div`
     padding: 0 10px 0 10px;
   }
 
-  .btn_BG {
-    width: 95%;
-    height: 60%;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    @media (min-width: 390px) {
-      width: 93%;
-    }
-  }
-
   .no_search {
     padding: 10px;
   }
 
   .bookmark_BG {
+    width: 100%;
     margin-bottom: 10px;
   }
 
@@ -421,4 +410,16 @@ const SearchUl = styled.ul`
 const SearchList = styled.li`
   box-sizing: border-box;
   padding: 10px;
+`;
+
+const BtnBG = styled.div`
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  box-sizing: border-box;
 `;

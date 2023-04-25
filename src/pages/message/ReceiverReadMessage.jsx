@@ -87,7 +87,11 @@ function ReadMessage() {
                 <ReadMessageText>{RselectID[0].content}</ReadMessageText>
               </TextBox>
               <FromBox>
-                <FromRead>{RselectID[0].sender.nickname}</FromRead>
+                {RselectID[0].is_anonymous == false ? (
+                  <FromRead>{RselectID[0].sender.nickname}</FromRead>
+                ) : (
+                  <FromRead>익명</FromRead>
+                )}
                 <FromDate>{uTcLocal(time)}</FromDate>
               </FromBox>
             </div>

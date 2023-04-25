@@ -54,7 +54,7 @@ function SenderCookie() {
           <TabPanel>
             {newSender &&
               newSender.map((newSender) => {
-                if (isRead == true) {
+                if (newSender.is_read == true) {
                   return (
                     <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
                       <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
@@ -67,7 +67,7 @@ function SenderCookie() {
           <TabPanel>
             {newSender &&
               newSender.map((newSender) => {
-                if (isRead == false) {
+                if (newSender.is_read == false) {
                   return (
                     <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
                       <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
