@@ -1,6 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { postReceiverIconAtom, privateAxios, receiveMsgStatusAtom, roomAtom } from "../utils/atom";
+import {
+  postReceiverIconAtom,
+  privateAxios,
+  receiveMsgStatusAtom,
+  roomAtom
+} from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -25,7 +30,9 @@ function ReceiverCookie() {
   }, [handleReceiverDataChange, newMessage]);
 
   const clickHandler = (e) => {
-    const select = newReceiver.filter((newReceiver) => newReceiver.id == e.target.id);
+    const select = newReceiver.filter(
+      (newReceiver) => newReceiver.id == e.target.id
+    );
     setReadData(select);
 
     axiosInstance
@@ -56,34 +63,79 @@ function ReceiverCookie() {
             {newReceiver &&
               newReceiver.map((newReceiver) => {
                 return (
-                  <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
-                    <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
-                    <p className="receiver_nickname">{newReceiver.receiver.nickname}</p>
+                  <Button
+                    key={newReceiver.id}
+                    id={newReceiver.id}
+                    onClick={clickHandler}
+                  >
+                    <img
+                      src={newReceiver.flavor.img}
+                      id={newReceiver.id}
+                      alt="img"
+                      width={50}
+                    />
+                    {newReceiver.is_anonymous == false ? (
+                      <p className="receiver_nickname">
+                        {newReceiver.sender.nickname}
+                      </p>
+                    ) : (
+                      <p className="receiver_nickname">익명</p>
+                    )}
                   </Button>
                 );
               })}
           </TabPanel>
-          <TabPanel>
+          <TabPanel className="receiver_box_scroll">
             {newReceiver &&
               newReceiver.map((newReceiver) => {
                 if (newReceiver.is_read == true) {
                   return (
-                    <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
-                      <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
-                      <p className="receiver_nickname">{newReceiver.receiver.nickname}</p>
+                    <Button
+                      key={newReceiver.id}
+                      id={newReceiver.id}
+                      onClick={clickHandler}
+                    >
+                      <img
+                        src={newReceiver.flavor.img}
+                        id={newReceiver.id}
+                        alt="img"
+                        width={50}
+                      />
+                      {newReceiver.is_anonymous == false ? (
+                        <p className="receiver_nickname">
+                          {newReceiver.sender.nickname}
+                        </p>
+                      ) : (
+                        <p className="receiver_nickname">익명</p>
+                      )}
                     </Button>
                   );
                 }
               })}
           </TabPanel>
-          <TabPanel>
+          <TabPanel className="receiver_box_scroll">
             {newReceiver &&
               newReceiver.map((newReceiver) => {
                 if (newReceiver.is_read == false) {
                   return (
-                    <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
-                      <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
-                      <p className="receiver_nickname">{newReceiver.receiver.nickname}</p>
+                    <Button
+                      key={newReceiver.id}
+                      id={newReceiver.id}
+                      onClick={clickHandler}
+                    >
+                      <img
+                        src={newReceiver.flavor.img}
+                        id={newReceiver.id}
+                        alt="img"
+                        width={50}
+                      />
+                      {newReceiver.is_anonymous == false ? (
+                        <p className="receiver_nickname">
+                          {newReceiver.sender.nickname}
+                        </p>
+                      ) : (
+                        <p className="receiver_nickname">익명</p>
+                      )}
                     </Button>
                   );
                 }

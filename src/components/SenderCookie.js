@@ -44,34 +44,79 @@ function SenderCookie() {
             {newSender &&
               newSender.map((newSender) => {
                 return (
-                  <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
-                    <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
-                    <p className="sender_nickname">{newSender.sender.nickname}</p>
+                  <Button
+                    key={newSender.id}
+                    id={newSender.id}
+                    onClick={sendHandler}
+                  >
+                    <img
+                      src={newSender.flavor.img}
+                      id={newSender.id}
+                      alt="img"
+                      width={50}
+                    />
+                    {newSender.is_anonymous == false ? (
+                      <p className="sender_nickname">
+                        {newSender.receiver.nickname}
+                      </p>
+                    ) : (
+                      <p className="sender_nickname">익명</p>
+                    )}
                   </Button>
                 );
               })}
           </TabPanel>
-          <TabPanel>
+          <TabPanel className="send_box_scroll">
             {newSender &&
               newSender.map((newSender) => {
                 if (newSender.is_read == true) {
                   return (
-                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
-                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
-                      <p className="sender_nickname">{newSender.sender.nickname}</p>
+                    <Button
+                      key={newSender.id}
+                      id={newSender.id}
+                      onClick={sendHandler}
+                    >
+                      <img
+                        src={newSender.flavor.img}
+                        id={newSender.id}
+                        alt="img"
+                        width={50}
+                      />
+                      {newSender.is_anonymous == false ? (
+                        <p className="sender_nickname">
+                          {newSender.receiver.nickname}
+                        </p>
+                      ) : (
+                        <p className="sender_nickname">익명</p>
+                      )}
                     </Button>
                   );
                 }
               })}
           </TabPanel>
-          <TabPanel>
+          <TabPanel className="send_box_scroll">
             {newSender &&
               newSender.map((newSender) => {
                 if (newSender.is_read == false) {
                   return (
-                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
-                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
-                      <p className="sender_nickname">{newSender.sender.nickname}</p>
+                    <Button
+                      key={newSender.id}
+                      id={newSender.id}
+                      onClick={sendHandler}
+                    >
+                      <img
+                        src={newSender.flavor.img}
+                        id={newSender.id}
+                        alt="img"
+                        width={50}
+                      />
+                      {newSender.is_anonymous == false ? (
+                        <p className="sender_nickname">
+                          {newSender.receiver.nickname}
+                        </p>
+                      ) : (
+                        <p className="sender_nickname">익명</p>
+                      )}
                     </Button>
                   );
                 }
