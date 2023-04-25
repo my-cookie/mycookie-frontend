@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import FriendSelectCookie from "../pages/message/FriendSelectCookie";
 import KakaoLogin from "./KakaoLogin";
@@ -17,9 +17,17 @@ import LoadingMsg from "./loading/LoadingMsg";
 import CompletedMsg from "./message/CompletedMsg";
 import Feedback from "./Feedback";
 import ChangeSelectCookie from "./message/ChangeSelectCookie";
-import LoadingLogin from "./loading/LoadingLogin";
+import ReactGA from "react-ga";
 
 function Router() {
+  const TRACKING_ID = process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID;
+
+  ReactGA.initialize(TRACKING_ID);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+
   return (
     <Routes>
       <Route element={<Layout />}>
@@ -38,7 +46,6 @@ function Router() {
         <Route path="/friendselect" element={<FriendSelectCookie />} />
         <Route path="/changeselect" element={<ChangeSelectCookie />} />
         <Route path="/completed" element={<CompletedMsg />} />
-        {/* <Route path="/loading" element={<LoadingLogin />} /> */}
         <Route path="/loadingmsg" element={<LoadingMsg />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/feedback" element={<Feedback />} />

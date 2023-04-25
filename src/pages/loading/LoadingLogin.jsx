@@ -12,7 +12,12 @@ function LoadingLogin() {
     <LoadingLoginBox>
       <div className="contents_container">
         <div className="loading_img">
-          <img src={loadingCookie} alt="loading" className="cookie_img" />
+          <img
+            src={loadingCookie}
+            alt="loading"
+            className="cookie_img"
+            width={300}
+          />
         </div>
       </div>
     </LoadingLoginBox>
