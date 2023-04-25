@@ -157,12 +157,11 @@ const MyContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
     overflow: scroll;
+    overflow-x: hidden;
   }
-
   .receive_box::-webkit-scrollbar {
     display: none;
   }
-
   .receiver_nickname {
     font-family: "BRBA_B";
     font-size: 0.7rem;

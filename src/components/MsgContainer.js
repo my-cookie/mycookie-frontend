@@ -194,6 +194,17 @@ const MyMsgContainer = styled.div`
       background: #ccc;
     } */
   }
+
+  .message_background::-webkit-scrollbar {
+    width: 5px;
+  }
+  .message_background::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  .message_background::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: yellow;
+  }
   .tab_panel {
     box-sizing: border-box;
     padding: 10px;

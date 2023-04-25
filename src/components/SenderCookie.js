@@ -141,6 +141,12 @@ const MyContainer = styled.div`
   .send_box {
     width: 100%;
     box-sizing: border-box;
+    overflow: scroll;
+    overflow-x: hidden;
+  }
+
+  .send_box::-webkit-scrollbar {
+    display: none;
   }
 
   .sender_nickname {
