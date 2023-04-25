@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import loadingCookie from "../assets/loading_cookie.gif";
 import { useRecoilState } from "recoil";
-import { accessAtom, uuidAtom, roomAtom } from "../utils/atom";
+import { accessAtom, uuidAtom, roomAtom, nicknameAtom } from "../utils/atom";
 import styled from "styled-components";
 
 function KakaoLogin() {
@@ -12,6 +12,7 @@ function KakaoLogin() {
   const [accessToken, setAccessToken] = useRecoilState(accessAtom);
   const [uuid, setUuid] = useRecoilState(uuidAtom);
   const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
+  const [nickname, setNickname] = useRecoilState(nicknameAtom);
 
   const kakaoLoginCode = async () => {
     try {
@@ -20,6 +21,7 @@ function KakaoLogin() {
         console.log(status);
         if (status === 200) {
           setAccessToken(data.tokens.access);
+          setNickname(data.user.nickname);
           setUuid(data.user.uuid.split("-").join(""));
           setCurrentroom(data.user.uuid.split("-").join(""));
           navigate("/mymessage");

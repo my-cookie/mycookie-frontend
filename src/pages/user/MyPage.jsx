@@ -1,27 +1,31 @@
 import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import styled from "styled-components";
-import { privateAxios } from "../../utils/atom";
+import { privateAxios, nicknameAtom } from "../../utils/atom";
 import { Link, useNavigate } from "react-router-dom";
 
 function MyPage() {
   const navigate = useNavigate();
   const axiosInstance = useRecoilValue(privateAxios);
-  const [nickname, setNickname] = useState("");
+  const [tempNickname, setTempNickname] = useState("");
+  const [nickname, setNickname] = useRecoilState(nicknameAtom);
 
   const onChangeNickname = (e) => {
-    setNickname(e.target.value);
+    setTempNickname(e.target.value);
   };
 
   // 닉네임 변경
   const changeNick = () => {
     axiosInstance
-      .patch(`api/auth/nickname/edit`, { nickname: nickname })
+      .patch(`api/auth/nickname/edit`, { nickname: tempNickname })
       .then((result) => {
         const { status } = result;
         console.log(status);
-        if (nickname.length > 7) {
+        if (tempNickname.length > 7) {
           alert("닉네임은 7글자 까지야! 🤭");
+        } else if (status == 200) {
+          setNickname(tempNickname);
+          alert("닉네임 변경 완료 ! 🥳");
         } else if (status === 400) {
           alert("이미 사용중인 닉네임이야! 🫣");
         } else if (status === 406) {
@@ -62,12 +66,7 @@ function MyPage() {
       <div className="contents_container">
         <div className="mypage_title">마이페이지</div>
         <div className="mypage_nick">
-          <NickChangeInput
-            type="text"
-            placeholder="닉네임 바꿀래?"
-            maxlength="7"
-            onChange={onChangeNickname}
-          />
+          <NickChangeInput type="text" placeholder={nickname} maxlength="7" onChange={onChangeNickname} autoFocus />
           <NickChangeBtn onClick={changeNick}>닉네임변경</NickChangeBtn>
         </div>
         <div className="mypage_btn_box">

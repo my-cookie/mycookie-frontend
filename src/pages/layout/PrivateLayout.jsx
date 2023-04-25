@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessAtom, uuidAtom, roomAtom, sendingAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom } from "../../utils/atom";
+import { accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 function PrivateLayout() {
@@ -11,6 +11,7 @@ function PrivateLayout() {
   const [init, setInit] = useState(false);
   const [accessToken, setAccessToken] = useRecoilState(accessAtom);
   const [uuid, setUuid] = useRecoilState(uuidAtom);
+  const [nickname, setNickname] = useRecoilState(nicknameAtom);
   const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
   const [isSending, setIsSending] = useRecoilState(sendingAtom);
   const [isReading, setIsReading] = useRecoilState(readingAtom);
@@ -122,6 +123,7 @@ function PrivateLayout() {
       axiosInstance
         .get(`/api/auth/info/uuid`)
         .then((response) => {
+          setNickname(response.data.nickname);
           setUuid(response.data.uuid.split("-").join(""));
           setCurrentroom(response.data.uuid.split("-").join(""));
           console.log("재요청");
