@@ -76,7 +76,7 @@ function MyPage() {
       <div className="contents_container">
         <div className="mypage_title">마이페이지</div>
         <div className="mypage_nick">
-          <NickChangeInput type="text" placeholder={nickname} maxlength="7" onChange={onChangeNickname} autoFocus />
+          <NickChangeInput type="text" placeholder={nickname} maxlength="7" value={tempNickname} onChange={onChangeNickname} autoFocus />
           <NickChangeBtn onClick={changeNick}>닉네임변경</NickChangeBtn>
         </div>
         <div className="mypage_btn_box">
