@@ -37,57 +37,43 @@ function FriendSelectCookie() {
   }, [flavor]);
 
   const handleClickPlus = (e) => {
-    if (flavor.length === 0) {
-      setFlavors(flavor + `${e.target.id}`);
-    } else {
-      alert("하나만 선택하면 돼!");
-      // setFlavors(flavor + `,${e.target.id}`);
-    }
-  };
-
-  const handleClickMinus = (e) => {
-    if (flavor.length === 1) {
-      setFlavors(flavor.replace(`${e.target.id}`, ""));
-    } else if (flavor.indexOf(e.target.id.toString()) === 0) {
-      setFlavors(flavor.replace(`${e.target.id},`, ""));
-    } else if (flavor.includes(`,${e.target.id}`)) {
-      setFlavors(flavor.replace(`,${e.target.id}`, ""));
-    } else {
-      setFlavors(flavor.replace(`${e.target.id}`, ""));
-    }
+    setFlavors(`${e.target.id}`);
   };
 
   const selectBtn = () => {
     if (flavor.length === 0) {
       alert("친구가 선택한 맛 하나를 골라봐!");
-    }
-    axiosInstance
-      .post(`api/msg/save`, {
-        receiver: parseInt(receiver.id),
-        content,
-        flavor: parseInt(flavor),
-        is_anonymous,
-      })
-      .then((result) => {
-        const { status, data } = result;
-        if (status === 201) {
-          if (data.is_success == false) {
-            alert("친구의 쿠키 맛이 아냐!🤔 다시 선택해봐!");
-          } else {
-            setCurrentroom(data.receiver_uuid.split("-").join(""));
-            setIsSending(true);
-            setMsg(data.msg_id);
-            navigate("/loadingmsg");
+    } else {
+      axiosInstance
+        .post(`api/msg/save`, {
+          receiver: parseInt(receiver.id),
+          content,
+          flavor: parseInt(flavor),
+          is_anonymous,
+        })
+        .then((result) => {
+          const { status, data } = result;
+          if (status === 201) {
+            if (data.is_success == false) {
+              alert("친구의 쿠키 맛이 아냐!🤔 다시 선택해봐!");
+            } else {
+              setCurrentroom(data.receiver_uuid.split("-").join(""));
+              setIsSending(true);
+              setMsg(data.msg_id);
+              navigate("/loadingmsg");
+            }
+          } else if (status === 429) {
+            alert("친구에게 보낼 쿠키를 다 소진했어!😥");
+            navigate("/mymessage");
+          } else if (status === 406 || status === 400) {
+            alert("친구가 쿠키를 받을 수 없는 상태야 ... 🥲");
+            navigate("/mymessage");
           }
-        } else if (status === 429) {
-          alert("친구에게 보낼 쿠키를 다 소진했어!😥");
-        } else if (status === 406 || status === 400) {
-          alert("쿠키를 보낼 수 없어.. 다시 확인해 줄래? 🥲");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -106,7 +92,7 @@ function FriendSelectCookie() {
               {cookie &&
                 cookie?.map((cookie) => {
                   return flavor.includes(`${cookie.id}`) ? (
-                    <button className="cookie_all_btn" onClick={handleClickMinus} id={cookie.id} key={cookie.id}>
+                    <button className="cookie_all_btn" id={cookie.id} key={cookie.id}>
                       <li className="cookie_list" id={cookie.id}>
                         <img style={{ backgroundColor: "orange" }} src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
                         <p className="cookie_btn" id={cookie.id}>

@@ -57,6 +57,11 @@ function PrivateLayout() {
             }
           };
         };
+        client.current.onclose = function () {
+          console.log("webSocketChat closed");
+          client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
+          console.log("connected");
+        };
       }
       if (isSending === true && isReading === false) {
         client.current.onopen = function () {
