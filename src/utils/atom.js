@@ -31,6 +31,11 @@ export const accessAtom = atom({
   default: null,
 });
 
+export const nicknameAtom = atom({
+  key: "nicknameAtom",
+  default: null,
+});
+
 export const remainAtom = atom({
   key: "remainAtom",
   default: "",

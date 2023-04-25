@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import styled from "styled-components";
@@ -11,16 +11,12 @@ function MsgContainer() {
 
   return (
     <MyMsgContainer>
-      <Tabs
-        className="tabs"
-        defaultIndex={tabIndex[0]}
-        onSelect={(index) => setTabIndex([index, tabIndex[1]])}
-      >
+      <Tabs className="tabs" defaultIndex={tabIndex[0]} onSelect={(index) => setTabIndex([index, tabIndex[1]])}>
         <div className="message_select_btn">
           <TabList className="tab_list">
             <div className="tab_list_letter">
-              <Tab className="tab_letter">받은편지</Tab>
-              <Tab className="tab_letter_send">보낸편지</Tab>
+              <Tab className={tabIndex[0] == 0 ? "tab_selected" : "tab_letter"}>받은편지</Tab>
+              <Tab className={tabIndex[0] == 1 ? "tab_selected" : "tab_letter"}>보낸편지</Tab>
             </div>
           </TabList>
         </div>
@@ -106,16 +102,12 @@ const MyMsgContainer = styled.div`
     }
   }
 
-  .tab_letter:focus {
+  .tab_selected {
     background-color: #7fa3ff;
-  }
-
-  .tab_letter_send {
     width: 75px;
     height: 45px;
     border: 3px solid #7fa3ff;
     border-radius: 10px;
-    background-color: #ffffff;
     font-family: "BRBA_B";
     font-size: 0.78rem;
     box-sizing: border-box;
@@ -133,9 +125,6 @@ const MyMsgContainer = styled.div`
       font-size: 0.9rem;
       padding-top: 12px;
     }
-  }
-  .tab_letter_send:focus {
-    background-color: #7fa3ff;
   }
 
   .tab_all_btn {

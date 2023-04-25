@@ -1,11 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  postSenderIconAtom,
-  privateAxios,
-  sendMsgStatusAtom,
-  tabIndexAtom
-} from "../utils/atom";
+import { postSenderIconAtom, privateAxios, sendMsgStatusAtom, tabIndexAtom } from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -41,15 +36,14 @@ function SenderCookie() {
         className="send_tabs"
         defaultIndex={tabIndex[1]}
         onSelect={(index) => {
-          console.log(index);
           setTabIndex([tabIndex[0], index]);
         }}
       >
         <div className="send_tabs_message">
           <TabList className="send_tab_list">
-            <Tab className="send_tab_all">전체편지</Tab>
-            <Tab className="send_tab_all_read">읽은편지</Tab>
-            <Tab className="send_tab_all_unread">안읽은편지</Tab>
+            <Tab className={tabIndex[1] == 0 ? "selected_tab" : "send_tab"}>전체편지</Tab>
+            <Tab className={tabIndex[1] == 1 ? "selected_tab" : "send_tab"}>읽은편지</Tab>
+            <Tab className={tabIndex[1] == 2 ? "selected_tab" : "send_tab"}>안읽은편지</Tab>
           </TabList>
         </div>
         <div className="send_box">
@@ -57,24 +51,9 @@ function SenderCookie() {
             {newSender &&
               newSender.map((newSender) => {
                 return (
-                  <Button
-                    key={newSender.id}
-                    id={newSender.id}
-                    onClick={sendHandler}
-                  >
-                    <img
-                      src={newSender.flavor.img}
-                      id={newSender.id}
-                      alt="img"
-                      width={50}
-                    />
-                    {newSender.is_anonymous == false ? (
-                      <p className="sender_nickname">
-                        {newSender.receiver.nickname}
-                      </p>
-                    ) : (
-                      <p className="sender_nickname">익명</p>
-                    )}
+                  <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                    <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                    {newSender.is_anonymous == false ? <p className="sender_nickname">{newSender.receiver.nickname}</p> : <p className="sender_nickname">익명</p>}
                   </Button>
                 );
               })}
@@ -84,24 +63,9 @@ function SenderCookie() {
               newSender.map((newSender) => {
                 if (newSender.is_read == true) {
                   return (
-                    <Button
-                      key={newSender.id}
-                      id={newSender.id}
-                      onClick={sendHandler}
-                    >
-                      <img
-                        src={newSender.flavor.img}
-                        id={newSender.id}
-                        alt="img"
-                        width={50}
-                      />
-                      {newSender.is_anonymous == false ? (
-                        <p className="sender_nickname">
-                          {newSender.receiver.nickname}
-                        </p>
-                      ) : (
-                        <p className="sender_nickname">익명</p>
-                      )}
+                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                      {newSender.is_anonymous == false ? <p className="sender_nickname">{newSender.receiver.nickname}</p> : <p className="sender_nickname">익명</p>}
                     </Button>
                   );
                 }
@@ -112,24 +76,9 @@ function SenderCookie() {
               newSender.map((newSender) => {
                 if (newSender.is_read == false) {
                   return (
-                    <Button
-                      key={newSender.id}
-                      id={newSender.id}
-                      onClick={sendHandler}
-                    >
-                      <img
-                        src={newSender.flavor.img}
-                        id={newSender.id}
-                        alt="img"
-                        width={50}
-                      />
-                      {newSender.is_anonymous == false ? (
-                        <p className="sender_nickname">
-                          {newSender.receiver.nickname}
-                        </p>
-                      ) : (
-                        <p className="sender_nickname">익명</p>
-                      )}
+                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
+                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
+                      {newSender.is_anonymous == false ? <p className="sender_nickname">{newSender.receiver.nickname}</p> : <p className="sender_nickname">익명</p>}
                     </Button>
                   );
                 }
@@ -162,7 +111,7 @@ const MyContainer = styled.div`
     margin-top: 10px;
     margin-bottom: 10px;
   }
-  .send_tab_all {
+  .send_tab {
     width: 70px;
     height: 40px;
     font-family: "BRBA_B";
@@ -175,11 +124,7 @@ const MyContainer = styled.div`
     text-align: center;
     margin: 0 3px;
   }
-  .send_tab_all:focus {
-    background-color: #7fa3ff;
-    border-radius: 10px;
-  }
-  .send_tab_all_read {
+  .selected_tab {
     width: 70px;
     height: 40px;
     font-family: "BRBA_B";
@@ -191,27 +136,7 @@ const MyContainer = styled.div`
     cursor: pointer;
     text-align: center;
     margin: 0 3px;
-  }
-  .send_tab_all_read:focus {
     background-color: #7fa3ff;
-    border-radius: 10px;
-  }
-  .send_tab_all_unread {
-    width: 70px;
-    height: 40px;
-    font-family: "BRBA_B";
-    font-size: 0.7rem;
-    border: 3px solid #7fa3ff;
-    border-radius: 10px;
-    box-sizing: border-box;
-    padding-top: 11px;
-    cursor: pointer;
-    text-align: center;
-    margin: 0 3px;
-  }
-  .send_tab_all_unread:focus {
-    background-color: #7fa3ff;
-    border-radius: 10px;
   }
   .send_box {
     width: 100%;

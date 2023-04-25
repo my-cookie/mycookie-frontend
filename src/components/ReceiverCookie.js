@@ -1,14 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  postReceiverIconAtom,
-  privateAxios,
-  receiveMsgStatusAtom,
-  roomAtom,
-  readingAtom,
-  sendmsgAtom,
-  tabIndexAtom
-} from "../utils/atom";
+import { postReceiverIconAtom, privateAxios, receiveMsgStatusAtom, roomAtom, readingAtom, sendmsgAtom, tabIndexAtom } from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -35,9 +27,7 @@ function ReceiverCookie() {
   }, [handleReceiverDataChange, newMessage]);
 
   const clickHandler = (e) => {
-    const select = newReceiver.filter(
-      (newReceiver) => newReceiver.id == e.target.id
-    );
+    const select = newReceiver.filter((newReceiver) => newReceiver.id == e.target.id);
     setReadData(select);
     if (select[0].is_read == false) {
       axiosInstance
@@ -62,15 +52,14 @@ function ReceiverCookie() {
         className="receive_tabs"
         defaultIndex={tabIndex[1]}
         onSelect={(index) => {
-          console.log(index);
           setTabIndex([tabIndex[0], index]);
         }}
       >
         <div className="receive_tabs_message">
           <TabList className="receive_tab_list">
-            <Tab className="receive_tab_all">전체편지</Tab>
-            <Tab className="receive_tab_all_read">읽은편지</Tab>
-            <Tab className="receive_tab_all_unread">안읽은편지</Tab>
+            <Tab className={tabIndex[1] == 0 ? "selected_tab" : "receive_tab"}>전체편지</Tab>
+            <Tab className={tabIndex[1] == 1 ? "selected_tab" : "receive_tab"}>읽은편지</Tab>
+            <Tab className={tabIndex[1] == 2 ? "selected_tab" : "receive_tab"}>안읽은편지</Tab>
           </TabList>
         </div>
         <div className="receive_box">
@@ -78,24 +67,9 @@ function ReceiverCookie() {
             {newReceiver &&
               newReceiver.map((newReceiver) => {
                 return (
-                  <Button
-                    key={newReceiver.id}
-                    id={newReceiver.id}
-                    onClick={clickHandler}
-                  >
-                    <img
-                      src={newReceiver.flavor.img}
-                      id={newReceiver.id}
-                      alt="img"
-                      width={50}
-                    />
-                    {newReceiver.is_anonymous == false ? (
-                      <p className="receiver_nickname">
-                        {newReceiver.sender.nickname}
-                      </p>
-                    ) : (
-                      <p className="receiver_nickname">익명</p>
-                    )}
+                  <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
+                    <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
+                    {newReceiver.is_anonymous == false ? <p className="receiver_nickname">{newReceiver.sender.nickname}</p> : <p className="receiver_nickname">익명</p>}
                   </Button>
                 );
               })}
@@ -105,24 +79,9 @@ function ReceiverCookie() {
               newReceiver.map((newReceiver) => {
                 if (newReceiver.is_read == true) {
                   return (
-                    <Button
-                      key={newReceiver.id}
-                      id={newReceiver.id}
-                      onClick={clickHandler}
-                    >
-                      <img
-                        src={newReceiver.flavor.img}
-                        id={newReceiver.id}
-                        alt="img"
-                        width={50}
-                      />
-                      {newReceiver.is_anonymous == false ? (
-                        <p className="receiver_nickname">
-                          {newReceiver.sender.nickname}
-                        </p>
-                      ) : (
-                        <p className="receiver_nickname">익명</p>
-                      )}
+                    <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
+                      <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
+                      {newReceiver.is_anonymous == false ? <p className="receiver_nickname">{newReceiver.sender.nickname}</p> : <p className="receiver_nickname">익명</p>}
                     </Button>
                   );
                 }
@@ -133,24 +92,9 @@ function ReceiverCookie() {
               newReceiver.map((newReceiver) => {
                 if (newReceiver.is_read == false) {
                   return (
-                    <Button
-                      key={newReceiver.id}
-                      id={newReceiver.id}
-                      onClick={clickHandler}
-                    >
-                      <img
-                        src={newReceiver.flavor.img}
-                        id={newReceiver.id}
-                        alt="img"
-                        width={50}
-                      />
-                      {newReceiver.is_anonymous == false ? (
-                        <p className="receiver_nickname">
-                          {newReceiver.sender.nickname}
-                        </p>
-                      ) : (
-                        <p className="receiver_nickname">익명</p>
-                      )}
+                    <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
+                      <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
+                      {newReceiver.is_anonymous == false ? <p className="receiver_nickname">{newReceiver.sender.nickname}</p> : <p className="receiver_nickname">익명</p>}
                     </Button>
                   );
                 }
@@ -181,7 +125,7 @@ const MyContainer = styled.div`
     margin-top: 10px;
     margin-bottom: 10px;
   }
-  .receive_tab_all {
+  .receive_tab {
     width: 70px;
     height: 40px;
     font-family: "BRBA_B";
@@ -194,11 +138,7 @@ const MyContainer = styled.div`
     text-align: center;
     margin: 0 3px;
   }
-  .receive_tab_all:focus {
-    background-color: #7fa3ff;
-    border-radius: 10px;
-  }
-  .receive_tab_all_read {
+  .selected_tab {
     width: 70px;
     height: 40px;
     font-family: "BRBA_B";
@@ -210,27 +150,7 @@ const MyContainer = styled.div`
     cursor: pointer;
     text-align: center;
     margin: 0 3px;
-  }
-  .receive_tab_all_read:focus {
     background-color: #7fa3ff;
-    border-radius: 10px;
-  }
-  .receive_tab_all_unread {
-    width: 70px;
-    height: 40px;
-    font-family: "BRBA_B";
-    font-size: 0.7rem;
-    border: 3px solid #7fa3ff;
-    border-radius: 10px;
-    box-sizing: border-box;
-    padding-top: 11px;
-    cursor: pointer;
-    text-align: center;
-    margin: 0 3px;
-  }
-  .receive_tab_all_unread:focus {
-    background-color: #7fa3ff;
-    border-radius: 10px;
   }
 
   .receive_box {

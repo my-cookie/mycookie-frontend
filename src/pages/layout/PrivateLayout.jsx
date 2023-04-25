@@ -59,7 +59,10 @@ function PrivateLayout() {
         };
         client.current.onclose = function () {
           console.log("webSocketChat closed");
-          client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
+          setTimeout(function () {
+            client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/");
+          }, 100);
+
           console.log("connected");
         };
       }
