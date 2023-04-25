@@ -70,16 +70,19 @@ function FriendSelectCookie() {
               setMsg(data.msg_id);
               navigate("/loadingmsg");
             }
-          } else if (status === 429) {
-            alert("친구에게 보낼 쿠키를 다 소진했어!😥");
-            navigate("/mymessage");
-          } else if (status === 406 || status === 400) {
-            alert("친구가 쿠키를 받을 수 없는 상태야 ... 🥲");
-            navigate("/mymessage");
           }
         })
         .catch((error) => {
-          console.log(error);
+          if (error.response.status === 429) {
+            alert("친구에게 보낼 쿠키를 다 소진했어!😥");
+            navigate("/mymessage");
+          } else if (
+            error.response.status === 406 ||
+            error.response.status === 400
+          ) {
+            alert("친구가 쿠키를 받을 수 없는 상태야 ... 🥲");
+            navigate("/mymessage");
+          }
         });
     }
   };

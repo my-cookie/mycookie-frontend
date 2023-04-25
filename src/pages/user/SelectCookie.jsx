@@ -12,7 +12,6 @@ function SelectCookie() {
   const [uuid, setUuid] = useState("");
   const [nickname, serNickname] = useState("");
   const location = useLocation();
-  // const user_uuid = location.state.user_uuid;
   const [accessToken, setAccessToken] = useRecoilState(accessAtom);
 
   useEffect(() => {
@@ -98,18 +97,39 @@ function SelectCookie() {
               {cookie &&
                 cookie?.map((cookie, index) => {
                   return flavor.includes(`${cookie.id}`) ? (
-                    <button className="cookie_all_btn" onClick={handleClickMinus} id={cookie.id} key={cookie.id}>
+                    <button
+                      className="cookie_all_btn"
+                      onClick={handleClickMinus}
+                      id={cookie.id}
+                      key={cookie.id}
+                    >
                       <li className="cookie_list" id={cookie.id}>
-                        <img style={{ backgroundColor: "orange" }} src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
+                        <img
+                          style={{ backgroundColor: "orange" }}
+                          src={cookie.img}
+                          alt={cookie.name}
+                          id={cookie.id}
+                          className="cookie_img"
+                        />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>
                       </li>
                     </button>
                   ) : (
-                    <button className="cookie_all_btn" id={cookie.id} onClick={handleClickPlus} key={cookie.id}>
+                    <button
+                      className="cookie_all_btn"
+                      id={cookie.id}
+                      onClick={handleClickPlus}
+                      key={cookie.id}
+                    >
                       <li className="cookie_list" id={cookie.id}>
-                        <img src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
+                        <img
+                          src={cookie.img}
+                          alt={cookie.name}
+                          id={cookie.id}
+                          className="cookie_img"
+                        />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>

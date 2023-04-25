@@ -71,11 +71,12 @@ function ChangeSelectCookie() {
         if (status === 201) {
           alert("쿠키맛 변경 완료!");
           navigate("/mypage");
-        } else if (status === 406) {
-          alert("오늘은 쿠키맛 변경을 할 수 없어😣");
         }
       })
       .catch((error) => {
+        if (error.response.status === 406) {
+          alert("오늘은 쿠키맛 변경을 할 수 없어😣");
+        }
         console.log(error);
       });
   };

@@ -15,10 +15,6 @@ function ReadMessage() {
 
   const navigate = useNavigate();
 
-  // const confirmMsg = () => {
-  //   navigate("/mymessage");
-  // };
-
   const deleteMsg = () => {
     axiosInstance
       .patch(`api/msg/receiver/delete`, { message_id: RselectID[0].id })
