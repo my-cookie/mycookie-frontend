@@ -81,7 +81,7 @@ function PrivateLayout() {
             JSON.stringify({
               type: "chat_message",
               msg_id: msg,
-              is_read: true,
+              is_read: "is_read",
             })
           );
           setCurrentroom(uuid);
