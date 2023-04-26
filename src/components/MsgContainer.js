@@ -192,32 +192,11 @@ const MyMsgContainer = styled.div`
     border-radius: 40px;
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
-    overflow-y: scroll;
+    overflow: hidden;
   }
   .message_background::-webkit-scrollbar {
     display: none;
   }
-  .message_background:hover::-webkit-scrollbar {
-    width: 10px;
-  }
-  .message_background:hover::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-  .message_background:hover::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background-color: yellow;
-  }
-  .message_background:focus::-webkit-scrollbar {
-    width: 10px;
-  }
-  .message_background:focus::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-  .message_background:focus::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background-color: yellow;
-  }
-
   .tab_panel {
     box-sizing: border-box;
     padding: 10px;

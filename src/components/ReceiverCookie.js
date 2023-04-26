@@ -1,6 +1,14 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { postReceiverIconAtom, privateAxios, receiveMsgStatusAtom, roomAtom, readingAtom, sendmsgAtom, tabIndexAtom } from "../utils/atom";
+import {
+  postReceiverIconAtom,
+  privateAxios,
+  receiveMsgStatusAtom,
+  roomAtom,
+  readingAtom,
+  sendmsgAtom,
+  tabIndexAtom
+} from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -28,7 +36,9 @@ function ReceiverCookie() {
   }, [handleReceiverDataChange, newMessage]);
 
   const clickHandler = (e) => {
-    const select = newReceiver.filter((newReceiver) => newReceiver.id == e.target.id);
+    const select = newReceiver.filter(
+      (newReceiver) => newReceiver.id == e.target.id
+    );
     setReadData(select);
     if (select[0].is_read == false) {
       axiosInstance
@@ -54,49 +64,102 @@ function ReceiverCookie() {
       >
         <div className="receive_tabs_message">
           <TabList className="receive_tab_list">
-            <Tab className={tabIndex[1] == 0 ? "selected_tab" : "receive_tab"}>전체편지</Tab>
-            <Tab className={tabIndex[1] == 1 ? "selected_tab" : "receive_tab"}>읽은편지</Tab>
-            <Tab className={tabIndex[1] == 2 ? "selected_tab" : "receive_tab"}>안읽은편지</Tab>
+            <Tab className={tabIndex[1] == 0 ? "selected_tab" : "receive_tab"}>
+              전체편지
+            </Tab>
+            <Tab className={tabIndex[1] == 1 ? "selected_tab" : "receive_tab"}>
+              읽은편지
+            </Tab>
+            <Tab className={tabIndex[1] == 2 ? "selected_tab" : "receive_tab"}>
+              안읽은편지
+            </Tab>
           </TabList>
         </div>
         <div className="receive_box">
-          <TabPanel className="receiver_box_scroll">
-            {newReceiver &&
-              newReceiver.map((newReceiver) => {
-                return (
-                  <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
-                    <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
-                    {newReceiver.is_anonymous == false ? <p className="receiver_nickname">{newReceiver.sender.nickname}</p> : <p className="receiver_nickname">익명</p>}
-                  </Button>
-                );
-              })}
-          </TabPanel>
-          <TabPanel className="receiver_box_scroll">
-            {newReceiver &&
-              newReceiver.map((newReceiver) => {
-                if (newReceiver.is_read == true) {
+          <div className="receiver_scroll">
+            <TabPanel className="receiver_box_scroll">
+              {newReceiver &&
+                newReceiver.map((newReceiver) => {
                   return (
-                    <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
-                      <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
-                      {newReceiver.is_anonymous == false ? <p className="receiver_nickname">{newReceiver.sender.nickname}</p> : <p className="receiver_nickname">익명</p>}
+                    <Button
+                      key={newReceiver.id}
+                      id={newReceiver.id}
+                      onClick={clickHandler}
+                    >
+                      <img
+                        src={newReceiver.flavor.img}
+                        id={newReceiver.id}
+                        alt="img"
+                        width={50}
+                      />
+                      {newReceiver.is_anonymous == false ? (
+                        <p className="receiver_nickname">
+                          {newReceiver.sender.nickname}
+                        </p>
+                      ) : (
+                        <p className="receiver_nickname">익명</p>
+                      )}
                     </Button>
                   );
-                }
-              })}
-          </TabPanel>
-          <TabPanel className="receiver_box_scroll">
-            {newReceiver &&
-              newReceiver.map((newReceiver) => {
-                if (newReceiver.is_read == false) {
-                  return (
-                    <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
-                      <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
-                      {newReceiver.is_anonymous == false ? <p className="receiver_nickname">{newReceiver.sender.nickname}</p> : <p className="receiver_nickname">익명</p>}
-                    </Button>
-                  );
-                }
-              })}
-          </TabPanel>
+                })}
+            </TabPanel>
+            <TabPanel className="receiver_box_scroll">
+              {newReceiver &&
+                newReceiver.map((newReceiver) => {
+                  if (newReceiver.is_read == true) {
+                    return (
+                      <Button
+                        key={newReceiver.id}
+                        id={newReceiver.id}
+                        onClick={clickHandler}
+                      >
+                        <img
+                          src={newReceiver.flavor.img}
+                          id={newReceiver.id}
+                          alt="img"
+                          width={50}
+                        />
+                        {newReceiver.is_anonymous == false ? (
+                          <p className="receiver_nickname">
+                            {newReceiver.sender.nickname}
+                          </p>
+                        ) : (
+                          <p className="receiver_nickname">익명</p>
+                        )}
+                      </Button>
+                    );
+                  }
+                })}
+            </TabPanel>
+            <TabPanel className="receiver_box_scroll">
+              {newReceiver &&
+                newReceiver.map((newReceiver) => {
+                  if (newReceiver.is_read == false) {
+                    return (
+                      <Button
+                        key={newReceiver.id}
+                        id={newReceiver.id}
+                        onClick={clickHandler}
+                      >
+                        <img
+                          src={newReceiver.flavor.img}
+                          id={newReceiver.id}
+                          alt="img"
+                          width={50}
+                        />
+                        {newReceiver.is_anonymous == false ? (
+                          <p className="receiver_nickname">
+                            {newReceiver.sender.nickname}
+                          </p>
+                        ) : (
+                          <p className="receiver_nickname">익명</p>
+                        )}
+                      </Button>
+                    );
+                  }
+                })}
+            </TabPanel>
+          </div>
         </div>
       </Tabs>
     </MyContainer>
@@ -113,10 +176,6 @@ const MyContainer = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: row;
-    position: fixed;
-    top: 10;
-    left: 0;
-    right: 0;
   }
   .receive_tab_list {
     width: 100%;
@@ -157,10 +216,7 @@ const MyContainer = styled.div`
 
   .receive_box {
     width: 100%;
-    padding-top: 60px;
     box-sizing: border-box;
-    overflow: scroll;
-    overflow-x: hidden;
   }
   .receive_box::-webkit-scrollbar {
     display: none;
@@ -173,6 +229,14 @@ const MyContainer = styled.div`
   .receiver_box_scroll {
     width: 100%;
     padding-left: 5px;
+    padding-bottom: 10px;
+  }
+
+  .receiver_scroll {
+    width: 100%;
+    height: 200px;
+    overflow: scroll;
+    overflow-x: hidden;
   }
 `;
 

@@ -1,6 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { postSenderIconAtom, privateAxios, sendMsgStatusAtom, tabIndexAtom } from "../utils/atom";
+import {
+  postSenderIconAtom,
+  privateAxios,
+  sendMsgStatusAtom,
+  tabIndexAtom
+} from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -40,49 +45,102 @@ function SenderCookie() {
       >
         <div className="send_tabs_message">
           <TabList className="send_tab_list">
-            <Tab className={tabIndex[1] == 0 ? "selected_tab" : "send_tab"}>전체편지</Tab>
-            <Tab className={tabIndex[1] == 1 ? "selected_tab" : "send_tab"}>읽은편지</Tab>
-            <Tab className={tabIndex[1] == 2 ? "selected_tab" : "send_tab"}>안읽은편지</Tab>
+            <Tab className={tabIndex[1] == 0 ? "selected_tab" : "send_tab"}>
+              전체편지
+            </Tab>
+            <Tab className={tabIndex[1] == 1 ? "selected_tab" : "send_tab"}>
+              읽은편지
+            </Tab>
+            <Tab className={tabIndex[1] == 2 ? "selected_tab" : "send_tab"}>
+              안읽은편지
+            </Tab>
           </TabList>
         </div>
         <div className="send_box">
-          <TabPanel className="send_box_scroll">
-            {newSender &&
-              newSender.map((newSender) => {
-                return (
-                  <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
-                    <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
-                    {newSender.is_anonymous == false ? <p className="sender_nickname">{newSender.receiver.nickname}</p> : <p className="sender_nickname">익명</p>}
-                  </Button>
-                );
-              })}
-          </TabPanel>
-          <TabPanel className="send_box_scroll">
-            {newSender &&
-              newSender.map((newSender) => {
-                if (newSender.is_read == true) {
+          <div className="send_scroll">
+            <TabPanel className="send_box_scroll">
+              {newSender &&
+                newSender.map((newSender) => {
                   return (
-                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
-                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
-                      {newSender.is_anonymous == false ? <p className="sender_nickname">{newSender.receiver.nickname}</p> : <p className="sender_nickname">익명</p>}
+                    <Button
+                      key={newSender.id}
+                      id={newSender.id}
+                      onClick={sendHandler}
+                    >
+                      <img
+                        src={newSender.flavor.img}
+                        id={newSender.id}
+                        alt="img"
+                        width={50}
+                      />
+                      {newSender.is_anonymous == false ? (
+                        <p className="sender_nickname">
+                          {newSender.receiver.nickname}
+                        </p>
+                      ) : (
+                        <p className="sender_nickname">익명</p>
+                      )}
                     </Button>
                   );
-                }
-              })}
-          </TabPanel>
-          <TabPanel className="send_box_scroll">
-            {newSender &&
-              newSender.map((newSender) => {
-                if (newSender.is_read == false) {
-                  return (
-                    <Button key={newSender.id} id={newSender.id} onClick={sendHandler}>
-                      <img src={newSender.flavor.img} id={newSender.id} alt="img" width={50} />
-                      {newSender.is_anonymous == false ? <p className="sender_nickname">{newSender.receiver.nickname}</p> : <p className="sender_nickname">익명</p>}
-                    </Button>
-                  );
-                }
-              })}
-          </TabPanel>
+                })}
+            </TabPanel>
+            <TabPanel className="send_box_scroll">
+              {newSender &&
+                newSender.map((newSender) => {
+                  if (newSender.is_read == true) {
+                    return (
+                      <Button
+                        key={newSender.id}
+                        id={newSender.id}
+                        onClick={sendHandler}
+                      >
+                        <img
+                          src={newSender.flavor.img}
+                          id={newSender.id}
+                          alt="img"
+                          width={50}
+                        />
+                        {newSender.is_anonymous == false ? (
+                          <p className="sender_nickname">
+                            {newSender.receiver.nickname}
+                          </p>
+                        ) : (
+                          <p className="sender_nickname">익명</p>
+                        )}
+                      </Button>
+                    );
+                  }
+                })}
+            </TabPanel>
+            <TabPanel className="send_box_scroll">
+              {newSender &&
+                newSender.map((newSender) => {
+                  if (newSender.is_read == false) {
+                    return (
+                      <Button
+                        key={newSender.id}
+                        id={newSender.id}
+                        onClick={sendHandler}
+                      >
+                        <img
+                          src={newSender.flavor.img}
+                          id={newSender.id}
+                          alt="img"
+                          width={50}
+                        />
+                        {newSender.is_anonymous == false ? (
+                          <p className="sender_nickname">
+                            {newSender.receiver.nickname}
+                          </p>
+                        ) : (
+                          <p className="sender_nickname">익명</p>
+                        )}
+                      </Button>
+                    );
+                  }
+                })}
+            </TabPanel>
+          </div>
         </div>
       </Tabs>
     </MyContainer>
@@ -99,10 +157,6 @@ const MyContainer = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: row;
-    position: fixed;
-    top: 10;
-    left: 0;
-    right: 0;
   }
   .send_tab_list {
     width: 100%;
@@ -110,7 +164,7 @@ const MyContainer = styled.div`
     justify-content: center;
     flex-direction: row;
     padding-top: 10px;
-    margin-bottom: 10px;
+
     height: 50px;
     border-radius: 20px;
   }
@@ -145,9 +199,6 @@ const MyContainer = styled.div`
   .send_box {
     width: 100%;
     box-sizing: border-box;
-    overflow: scroll;
-    overflow-x: hidden;
-    padding-top: 60px;
   }
 
   .send_box::-webkit-scrollbar {
@@ -161,6 +212,13 @@ const MyContainer = styled.div`
   .send_box_scroll {
     width: 100%;
     padding-left: 5px;
+    padding-bottom: 10px;
+  }
+  .send_scroll {
+    width: 100%;
+    height: 200px;
+    overflow: scroll;
+    overflow-x: hidden;
   }
 `;
 
