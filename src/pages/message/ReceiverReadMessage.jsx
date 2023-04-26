@@ -18,7 +18,7 @@ function ReadMessage() {
   const deleteMsg = () => {
     if (window.confirm("정말 삭제할거야 ?")) {
       axiosInstance
-        .patch(`api/msg/sender/delete`, { message_id: RselectID[0].id })
+        .patch(`api/msg/receiver/delete`, { message_id: RselectID[0].id })
         .then((result) => {
           const { status } = result;
           if (status === 200) {
