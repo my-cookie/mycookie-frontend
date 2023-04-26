@@ -15,6 +15,7 @@ function ReceiverCookie() {
   const [msg, setMsg] = useRecoilState(sendmsgAtom);
   const navigate = useNavigate();
   const [tabIndex, setTabIndex] = useRecoilState(tabIndexAtom);
+  const [ScrollActive, setScrollActive] = useState(false);
 
   const handleReceiverDataChange = useCallback(() => {
     axiosInstance.get(`api/msg/receiver`).then((res) => {
@@ -112,6 +113,10 @@ const MyContainer = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: row;
+    position: fixed;
+    top: 10;
+    left: 0;
+    right: 0;
   }
   .receive_tab_list {
     width: 100%;
@@ -133,6 +138,7 @@ const MyContainer = styled.div`
     cursor: pointer;
     text-align: center;
     margin: 0 3px;
+    background-color: #fff;
   }
   .selected_tab {
     width: 70px;
@@ -151,6 +157,7 @@ const MyContainer = styled.div`
 
   .receive_box {
     width: 100%;
+    padding-top: 60px;
     box-sizing: border-box;
     overflow: scroll;
     overflow-x: hidden;

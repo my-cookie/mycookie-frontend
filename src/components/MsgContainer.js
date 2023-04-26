@@ -11,12 +11,20 @@ function MsgContainer() {
 
   return (
     <MyMsgContainer>
-      <Tabs className="tabs" defaultIndex={tabIndex[0]} onSelect={(index) => setTabIndex([index, tabIndex[1]])}>
+      <Tabs
+        className="tabs"
+        defaultIndex={tabIndex[0]}
+        onSelect={(index) => setTabIndex([index, tabIndex[1]])}
+      >
         <div className="message_select_btn">
           <TabList className="tab_list">
             <div className="tab_list_letter">
-              <Tab className={tabIndex[0] == 0 ? "tab_selected" : "tab_letter"}>받은편지</Tab>
-              <Tab className={tabIndex[0] == 1 ? "tab_selected" : "tab_letter"}>보낸편지</Tab>
+              <Tab className={tabIndex[0] == 0 ? "tab_selected" : "tab_letter"}>
+                받은편지
+              </Tab>
+              <Tab className={tabIndex[0] == 1 ? "tab_selected" : "tab_letter"}>
+                보낸편지
+              </Tab>
             </div>
           </TabList>
         </div>
