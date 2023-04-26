@@ -102,6 +102,7 @@ function ReceiverCookie() {
                     </Button>
                   );
                 })}
+              <p>&nbsp;</p>
             </TabPanel>
             <TabPanel className="receiver_box_scroll">
               {newReceiver &&
@@ -130,6 +131,7 @@ function ReceiverCookie() {
                     );
                   }
                 })}
+              <p>&nbsp;</p>
             </TabPanel>
             <TabPanel className="receiver_box_scroll">
               {newReceiver &&
@@ -158,6 +160,7 @@ function ReceiverCookie() {
                     );
                   }
                 })}
+              <p>&nbsp;</p>
             </TabPanel>
           </div>
         </div>
@@ -217,6 +220,7 @@ const MyContainer = styled.div`
   .receive_box {
     width: 100%;
     box-sizing: border-box;
+    padding-left: 5px;
   }
   .receive_box::-webkit-scrollbar {
     display: none;
@@ -228,8 +232,7 @@ const MyContainer = styled.div`
 
   .receiver_box_scroll {
     width: 100%;
-    padding-left: 5px;
-    padding-bottom: 10px;
+    line-height: 13px;
   }
 
   .receiver_scroll {
@@ -237,6 +240,10 @@ const MyContainer = styled.div`
     height: 200px;
     overflow: scroll;
     overflow-x: hidden;
+  }
+
+  .receiver_scroll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
   }
 `;
 

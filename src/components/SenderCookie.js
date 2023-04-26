@@ -83,6 +83,7 @@ function SenderCookie() {
                     </Button>
                   );
                 })}
+              <p>&nbsp;</p>
             </TabPanel>
             <TabPanel className="send_box_scroll">
               {newSender &&
@@ -111,6 +112,7 @@ function SenderCookie() {
                     );
                   }
                 })}
+              <p>&nbsp;</p>
             </TabPanel>
             <TabPanel className="send_box_scroll">
               {newSender &&
@@ -139,6 +141,7 @@ function SenderCookie() {
                     );
                   }
                 })}
+              <p>&nbsp;</p>
             </TabPanel>
           </div>
         </div>
@@ -199,6 +202,7 @@ const MyContainer = styled.div`
   .send_box {
     width: 100%;
     box-sizing: border-box;
+    padding-left: 5px;
   }
 
   .send_box::-webkit-scrollbar {
@@ -211,14 +215,17 @@ const MyContainer = styled.div`
   }
   .send_box_scroll {
     width: 100%;
-    padding-left: 5px;
-    padding-bottom: 10px;
+    border-radius: 20px;
+    line-height: 13px;
   }
   .send_scroll {
     width: 100%;
     height: 200px;
     overflow: scroll;
     overflow-x: hidden;
+  }
+  .send_scroll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
   }
 `;
 
