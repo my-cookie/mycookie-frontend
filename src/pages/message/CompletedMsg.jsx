@@ -12,9 +12,11 @@ function CompletedMsg() {
   const axiosInstance = useRecoilValue(privateAxios);
 
   useEffect(() => {
-    axiosInstance.post(`api/msg/remain`, { receiver: parseInt(remain) }).then((res) => {
-      setInfo(res.data);
-    });
+    axiosInstance
+      .post(`api/msg/remain`, { receiver: parseInt(remain) })
+      .then((res) => {
+        setInfo(res.data);
+      });
   }, []);
 
   return (
@@ -25,8 +27,10 @@ function CompletedMsg() {
           <img src={completedImg} alt="전송완료" width={300} />
         </div>
         <div className="completed_remain">
-          <p>
-            오늘 '{info.receiver_nickname}' 에게 보낼 쿠키는 {info.count}개 남아있어!
+          <p className="completed_p">
+            오늘 '{info.receiver_nickname}' 에게 보낼 쿠키는
+            <br />
+            {info.count}개 남아있어!
           </p>
         </div>
         <div className="completed_btn_box">
@@ -83,6 +87,14 @@ const CompletedMsgBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .completed_p {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 25px;
   }
 `;
 

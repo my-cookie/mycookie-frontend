@@ -42,7 +42,16 @@ function ReadMessage() {
     let nowMinutes = localDate.getMinutes().toString();
     if (nowMinutes.length === 1) nowMinutes = "0" + nowMinutes;
 
-    let changeDate = localDate.getFullYear() + "-" + nowMonth + "-" + nowDate + " " + nowHours + ":" + nowMinutes;
+    let changeDate =
+      localDate.getFullYear() +
+      "-" +
+      nowMonth +
+      "-" +
+      nowDate +
+      " " +
+      nowHours +
+      ":" +
+      nowMinutes;
     return changeDate;
   }
 
@@ -63,7 +72,11 @@ function ReadMessage() {
                   <ReadMessageText>{selectID[0].content}</ReadMessageText>
                 </TextBox>
                 <FromBox>
-                  {selectID[0].is_anonymous == false ? <FromRead>{selectID[0].sender.nickname}</FromRead> : <FromRead>익명</FromRead>}
+                  {selectID[0].is_anonymous == false ? (
+                    <FromRead>{selectID[0].sender.nickname}</FromRead>
+                  ) : (
+                    <FromRead>익명</FromRead>
+                  )}
                   <FromDate>{uTcLocal(time)}</FromDate>
                 </FromBox>
               </div>
@@ -149,7 +162,9 @@ const FromBox = styled.div`
 `;
 
 const ToRead = styled.p``;
-const ReadMessageText = styled.p``;
+const ReadMessageText = styled.p`
+  line-height: 24px;
+`;
 const FromRead = styled.p`
   padding-bottom: 10px;
   font-size: 1rem;
