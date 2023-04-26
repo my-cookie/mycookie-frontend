@@ -41,7 +41,10 @@ function Router() {
       <Route element={<PrivateLayout />}>
         <Route path="/mymessage" element={<Mymessage />} />
         <Route path="/readmessage" element={<SenderReadMessage />} />
-        <Route path="/receiver_read_message" element={<ReceiverReadMessage />} />
+        <Route
+          path="/receiver_read_message"
+          element={<ReceiverReadMessage />}
+        />
         <Route path="/sendmessage" element={<SendMessage />} />
         <Route path="/searchcookie" element={<SearchCookie />} />
         <Route path="/friendselect" element={<FriendSelectCookie />} />

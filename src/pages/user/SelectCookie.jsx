@@ -201,6 +201,9 @@ const SelectCookieBox = styled.div`
   .cookie_img {
     width: 100px;
     border-radius: 10px;
+    @media (max-width: 350px) {
+      width: 100%;
+    }
   }
 
   .cookie_btn {
@@ -216,6 +219,9 @@ const SelectCookieBox = styled.div`
     text-align: center;
     align-items: center;
     padding-top: 10px;
+    @media (max-width: 350px) {
+      width: 100%;
+    }
   }
   .cookie_all_btn {
     background: none;
@@ -255,6 +261,15 @@ const CookieListBox = styled.ul`
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 110px);
+    grid-template-rows: repeat(2, 150px);
+    .cookie_list {
+      width: 100%;
+    }
+  }
+  @media (max-width: 350px) {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
     grid-template-rows: repeat(2, 150px);
     .cookie_list {
       width: 100%;

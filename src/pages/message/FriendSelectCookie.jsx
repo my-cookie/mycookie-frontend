@@ -62,8 +62,11 @@ function FriendSelectCookie() {
         .then((result) => {
           const { status, data } = result;
           if (status === 201) {
+            console.log(data);
             if (data.is_success == false) {
-              alert("친구의 쿠키 맛이 아냐!🤔 다시 선택해봐!");
+              alert(
+                `친구의 쿠키 맛이 아냐!🤔 다시 선택해봐! \n남은 쿠키 수: ${data.remain}`
+              );
             } else {
               setCurrentroom(data.receiver_uuid.split("-").join(""));
               setIsSending(true);

@@ -29,7 +29,11 @@ function Nickname() {
 
     if (nickname.length >= 7) {
       alert("닉네임은 7글자 이하, 숫자, 알파벳, 한글만 사용 가능해! 🤭");
-    } else if (nickname.match(/\s/g) || nickname.match(emoji1) || nickname.match(emoji2)) {
+    } else if (
+      nickname.match(/\s/g) ||
+      nickname.match(emoji1) ||
+      nickname.match(emoji2)
+    ) {
       alert("닉네임에 공백과 특수문자는 사용할 수 없어 ~ 🤭");
     } else {
       axios
@@ -42,7 +46,7 @@ function Nickname() {
             window.location.reload();
           } else if (status === 200) {
             navigate("/select", {
-              state: { user_uuid: uuid, nickname: nickname },
+              state: { user_uuid: uuid, nickname: nickname }
             });
           }
         })
@@ -66,12 +70,17 @@ function Nickname() {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="nickname_input">
-              <NicknameInput type="text" name="nickname" maxlength="7" value={nickname} onChange={handleChange} />
-            </div>
-
-            <div className="nickname_btn">
+              <NicknameInput
+                type="text"
+                name="nickname"
+                maxlength="7"
+                value={nickname}
+                onChange={handleChange}
+              />
               <LikeBtn type="submit">좋아!</LikeBtn>
             </div>
+
+            <div className="nickname_btn"></div>
           </form>
         </div>
       </NicknameContainer>
@@ -125,7 +134,7 @@ const NicknameTextBox = styled.div`
 
 const NicknameInput = styled.input`
   border: none;
-  width: 200px;
+  width: 130px;
   height: 40px;
   font-family: "BRBA_B";
   font-size: 1.2rem;
@@ -133,38 +142,12 @@ const NicknameInput = styled.input`
   border-bottom: 3px solid black;
   outline: none;
   position: relative;
-  /* &:focus {
-    background: #fff386;
-  } */
-`;
-
-const XmarkBtn = styled.button`
-  width: 30px;
-  height: 25px;
-  font-size: 1.2rem;
-  border: none;
-  background-color: #fff386;
-  position: absolute;
-  cursor: pointer;
-  top: 44%;
-  left: 75%;
-  transform: translate(-40%, -70%);
-
-  @media (max-width: 1000px) {
-    top: 44%;
-    left: 66%;
-    transform: translate(-40%, -65%);
-  }
-  @media (max-width: 500px) {
-    top: 45%;
-    left: 70%;
-    transform: translate(-45%, -70%);
-  }
+  margin-right: 10px;
 `;
 
 const LikeBtn = styled.button`
-  width: 150px;
-  height: 50px;
+  width: 70px;
+  height: 45px;
   border: 3px solid #7fa3ff;
   border-radius: 20px;
   background-color: #ffffff;

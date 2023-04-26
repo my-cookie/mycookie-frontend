@@ -2,7 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { anonymousAtom, contentAtom, receiverAtom, senderAtom } from "../../utils/atom";
+import {
+  anonymousAtom,
+  contentAtom,
+  receiverAtom,
+  senderAtom
+} from "../../utils/atom";
 
 function SendMessage() {
   const receiverNickname = useRecoilValue(receiverAtom);
@@ -43,14 +48,31 @@ function SendMessage() {
               에게
             </ToBox>
             <TextBox>
+<<<<<<< Updated upstream
               <ReadMessageText placeholder="친구에게 보낼 쿠키를 작성해봐!" onChange={(e) => handleSetValue(e)} value={content}></ReadMessageText>
+=======
+              <ReadMessageText
+                placeholder="친구에게 보낼 쿠키를 작성해봐!"
+                onChange={(e) => handleSetValue(e)}
+              ></ReadMessageText>
+>>>>>>> Stashed changes
             </TextBox>
-            <FromBox>{is_anonymous == true ? <p>익명 보냄</p> : <FromRead>{senderName} 보냄</FromRead>}</FromBox>
+            <FromBox>
+              {is_anonymous == true ? (
+                <p>익명 보냄</p>
+              ) : (
+                <FromRead>{senderName} 보냄</FromRead>
+              )}
+            </FromBox>
           </div>
         </div>
         <div className="send_btn">
           <CheckBox>
-            <SendInput type="checkbox" checked={is_anonymous} onChange={(e) => checkHandler(e)} />
+            <SendInput
+              type="checkbox"
+              checked={is_anonymous}
+              onChange={(e) => checkHandler(e)}
+            />
             <SendCheck>익명으로 보내기</SendCheck>
           </CheckBox>
           <SendBtn type="submit" onClick={cookieSend}>
@@ -151,6 +173,7 @@ const ReadMessageText = styled.textarea`
   font-size: 1rem;
   line-height: 25px;
   resize: none;
+  outline: none;
 `;
 const FromRead = styled.p`
   font-size: 1rem;
