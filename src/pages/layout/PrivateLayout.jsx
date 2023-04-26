@@ -169,8 +169,10 @@ function PrivateLayout() {
 
   // useEffect를 통해서 바로 불러옴
   useEffect(() => {
-    KakaoLoadOne();
-  }, []);
+    if (accessToken) {
+      KakaoLoadOne();
+    }
+  }, [accessToken]);
 
   return accessToken ? (
     <>
