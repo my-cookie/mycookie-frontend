@@ -3,7 +3,18 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom } from "../../utils/atom";
+import {
+  accessAtom,
+  uuidAtom,
+  roomAtom,
+  sendingAtom,
+  nicknameAtom,
+  privateAxios,
+  sendmsgAtom,
+  receiveMsgStatusAtom,
+  readingAtom,
+  sendMsgStatusAtom
+} from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 function PrivateLayout() {
@@ -28,7 +39,9 @@ function PrivateLayout() {
 
   useEffect(() => {
     if (init && currentroom) {
-      client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
+      client.current = new W3CWebSocket(
+        process.env.REACT_APP_WS_URL + currentroom + "/"
+      ); //gets room_name from the state and connects to the backend server
 
       if (isSending === false && isReading === false) {
         client.current.onopen = function () {
@@ -40,7 +53,11 @@ function PrivateLayout() {
                 .then((result) => {
                   const { status, data } = result;
                   if (status === 200) {
-                    alert(`${data.is_anonymous ? "익명" : data.sender.nickname}에게 새로운 쿠키가 도착했어 !`);
+                    alert(
+                      `${
+                        data.is_anonymous ? "익명" : data.sender.nickname
+                      }에게 새로운 쿠키가 도착했어 !`
+                    );
                     newMessage ? setNewMessage(false) : setNewMessage(true);
                   }
                 })
@@ -52,7 +69,9 @@ function PrivateLayout() {
         };
         client.current.onclose = function () {
           setTimeout(function () {
-            client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/");
+            client.current = new W3CWebSocket(
+              process.env.REACT_APP_WS_URL + currentroom + "/"
+            );
           }, 100);
         };
         client.current.onerror = function () {
@@ -65,7 +84,7 @@ function PrivateLayout() {
           client.current.send(
             JSON.stringify({
               type: "chat_message",
-              msg_id: msg,
+              msg_id: msg
             })
           );
           setCurrentroom(uuid);
@@ -80,7 +99,7 @@ function PrivateLayout() {
             JSON.stringify({
               type: "chat_message",
               msg_id: msg,
-              is_read: true,
+              is_read: true
             })
           );
           setCurrentroom(uuid);
@@ -121,10 +140,33 @@ function PrivateLayout() {
     }
   }, [accessToken]);
 
+  const KakaoLoadOne = () => {
+    let ins = document.createElement("ins");
+    let scr = document.createElement("script");
+
+    ins.className = "kakao_ad_area";
+    ins.style = "display:none; width:100%;";
+    scr.async = "true";
+    scr.type = "text/javascript";
+    scr.src = "//t1.daumcdn.net/kas/static/ba.min.js";
+    ins.setAttribute("data-ad-width", "300");
+    ins.setAttribute("data-ad-height", "50");
+    ins.setAttribute("data-ad-unit", "DAN-YEs1x1UgfqpVWI3m");
+
+    document.querySelector(".adfitOne").appendChild(ins);
+    document.querySelector(".adfitOne").appendChild(scr);
+  };
+
+  // useEffect를 통해서 바로 불러옴
+  useEffect(() => {
+    KakaoLoadOne();
+  }, []);
+
   return accessToken ? (
     <>
       <MainLayout>
         <div className="contents_container">
+          <div className="adfitOne"></div>
           <Outlet />
         </div>
       </MainLayout>

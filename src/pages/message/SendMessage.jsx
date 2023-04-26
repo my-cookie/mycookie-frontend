@@ -108,14 +108,14 @@ const SendMessageContainer = styled.div`
 
   .send_letter {
     width: 100%;
-    height: 60%;
+    height: 50%;
     margin-top: 10px;
     display: flex;
     justify-content: center;
   }
   .message_background {
     width: 100%;
-    height: 350px;
+    height: 300px;
     padding: 20px;
     border-radius: 40px;
     border: 1px solid #a7a7a7;
@@ -123,7 +123,7 @@ const SendMessageContainer = styled.div`
   }
   .send_btn {
     width: 100%;
-    height: 20%;
+    height: 30%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -138,18 +138,18 @@ const SendTitle = styled.p`
 
 const ToBox = styled.div`
   width: 100%;
-  height: 40px;
+  height: 30px;
   display: flex;
   flex-direction: row;
   align-items: center;
 `;
 const TextBox = styled.div`
   width: 100%;
-  height: 290px;
+  height: 250px;
 `;
 const FromBox = styled.div`
   width: 100%;
-  height: 35px;
+
   display: flex;
   justify-content: flex-end;
 `;

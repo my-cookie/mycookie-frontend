@@ -32,7 +32,9 @@ function SelectCookie() {
       })
       .catch((error) => {
         if (error.response.status == 406) {
-          alert(`아직 쿠키맛 변경일로 부터 일주일이 지나지 않았어 ~\n변경가능일 : ${error.response.data.message}`);
+          alert(
+            `아직 쿠키맛 변경일로 부터 일주일이 지나지 않았어 ~\n변경가능일 : ${error.response.data.message}`
+          );
         }
       });
   };
@@ -51,9 +53,19 @@ function SelectCookie() {
               {cookie &&
                 cookie?.map((cookie, index) => {
                   return (
-                    <button className="cookie_all_btn" id={cookie.id} key={cookie.id}>
+                    <button
+                      className="cookie_all_btn"
+                      id={cookie.id}
+                      key={cookie.id}
+                    >
                       <li className="cookie_list" id={cookie.id}>
-                        <img style={{ backgroundColor: "orange" }} src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
+                        <img
+                          style={{ backgroundColor: "orange" }}
+                          src={cookie.img}
+                          alt={cookie.name}
+                          id={cookie.id}
+                          className="cookie_img"
+                        />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>
@@ -101,14 +113,14 @@ const SelectCookieBox = styled.div`
 
   .select_cookie {
     width: 100%;
-    height: 80%;
+    height: 70%;
     display: flex;
     justify-content: center;
   }
 
   .select_cookie_back {
     width: 100%;
-    height: 300px;
+    height: 250px;
     border-radius: 40px;
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
@@ -146,7 +158,7 @@ const SelectCookieBox = styled.div`
   }
   .select_btn {
     width: 100%;
-    height: 30%;
+    height: 40%;
     display: flex;
     justify-content: center;
   }

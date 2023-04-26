@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MsgContainer from "../../components/MsgContainer";
@@ -65,12 +65,12 @@ const MymessageContainer = styled.div`
 
   .message_container {
     width: 100%;
-    height: 50%;
+    height: 60%;
   }
 
   .message_btn {
     width: 100%;
-    height: 20%;
+    height: 30%;
     display: flex;
     justify-content: center;
     a {
@@ -107,7 +107,7 @@ const SendBtn = styled.button`
   border-radius: 15px;
   background-color: #ffffff;
   font-family: "BRBA_B";
-  font-size: 1.2rem;
+  font-size: 1rem;
   cursor: pointer;
   margin-top: 30px;
   a {
