@@ -29,30 +29,23 @@ function Nickname() {
 
     if (nickname.length >= 7) {
       alert("닉네임은 7글자 이하, 숫자, 알파벳, 한글만 사용 가능해! 🤭");
-    } else if (
-      nickname.match(/\s/g) ||
-      nickname.match(emoji1) ||
-      nickname.match(emoji2)
-    ) {
+    } else if (nickname.match(/\s/g) || nickname.match(emoji1) || nickname.match(emoji2)) {
       alert("닉네임에 공백과 특수문자는 사용할 수 없어 ~ 🤭");
     } else {
       axios
         .post(`api/auth/nickname`, { nickname, user_uuid: uuid })
         .then((result) => {
           const { status } = result;
-          console.log(status);
           if (status === 206) {
             alert("이미 사용중인 닉네임 입니다!");
             window.location.reload();
           } else if (status === 200) {
             navigate("/select", {
-              state: { user_uuid: uuid, nickname: nickname }
+              state: { user_uuid: uuid, nickname: nickname },
             });
           }
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((error) => {});
     }
   };
 
@@ -70,13 +63,7 @@ function Nickname() {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="nickname_input">
-              <NicknameInput
-                type="text"
-                name="nickname"
-                maxlength="7"
-                value={nickname}
-                onChange={handleChange}
-              />
+              <NicknameInput type="text" name="nickname" maxlength="7" value={nickname} onChange={handleChange} />
               <LikeBtn type="submit">좋아!</LikeBtn>
             </div>
 

@@ -15,9 +15,7 @@ function SelectCookie() {
       axiosInstance.get(`api/auth/myflavor`).then((res) => {
         setCookie(res.data);
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -25,7 +23,6 @@ function SelectCookie() {
   }, []);
 
   const changeFlavor = () => {
-    console.log("click");
     axiosInstance
       .get(`api/auth/myflavor/edit`)
       .then((result) => {

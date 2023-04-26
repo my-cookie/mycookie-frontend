@@ -18,7 +18,6 @@ function KakaoLogin() {
     try {
       await axios.post(`/api/auth/login`, { code }).then((result) => {
         const { status, data } = result;
-        console.log(status);
         if (status === 200) {
           setAccessToken(data.tokens.access);
           setNickname(data.user.nickname);
@@ -31,9 +30,7 @@ function KakaoLogin() {
           navigate("/");
         }
       });
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     kakaoLoginCode();

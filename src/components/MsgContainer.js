@@ -185,27 +185,21 @@ const MyMsgContainer = styled.div`
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
     overflow-y: scroll;
-    /* &::-webkit-scrollbar {
-      width: 5px;
-      height: 50px;
-    }
-    &::-webkit-scrollbar-thumb {
-      border-radius: 2px;
-      background: #ccc;
-    } */
   }
-
   .message_background::-webkit-scrollbar {
-    width: 5px;
-    height: 10px;
+    display: none;
   }
-  .message_background::-webkit-scrollbar-track {
+  .message_background:hover::-webkit-scrollbar {
+    width: 10px;
+  }
+  .message_background:hover::-webkit-scrollbar-track {
     background-color: transparent;
   }
-  .message_background::-webkit-scrollbar-thumb {
+  .message_background:hover::-webkit-scrollbar-thumb {
     border-radius: 5px;
     background-color: yellow;
   }
+
   .tab_panel {
     box-sizing: border-box;
     padding: 10px;

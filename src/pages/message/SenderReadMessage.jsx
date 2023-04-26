@@ -9,37 +9,20 @@ function ReadMessage() {
   const axiosInstance = useRecoilValue(privateAxios);
   const navigate = useNavigate();
 
-  console.log(selectID);
   const deleteMsg = () => {
-    axiosInstance
-      .patch(`api/msg/sender/delete`, { message_id: selectID[0].id })
-      .then((result) => {
-        const { status } = result;
-        if (status === 200) {
-          //정말 삭제하시겠습니까?
-          console.log("메세지 삭제 완료");
-          navigate("/mymessage");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const spamMsg = () => {
-    axiosInstance
-      .post(`api/msg/spam`, { message: selectID[0].id })
-      .then((result) => {
-        const { status } = result;
-        if (status === 201) {
-          alert("신고완료!😡");
-        }
-      })
-      .catch((error) => {
-        if (error.response.status === 406) {
-          alert("이미 신고된 쿠키야!");
-        }
-      });
+    if (window.confirm("정말 삭제할거야 ?")) {
+      axiosInstance
+        .patch(`api/msg/sender/delete`, { message_id: selectID[0].id })
+        .then((result) => {
+          const { status } = result;
+          if (status === 200) {
+            //정말 삭제하시겠습니까?
+            alert("삭제 완료 !");
+            navigate("/mymessage");
+          }
+        })
+        .catch((err) => {});
+    }
   };
 
   const time = selectID[0].created_at;
@@ -59,16 +42,7 @@ function ReadMessage() {
     let nowMinutes = localDate.getMinutes().toString();
     if (nowMinutes.length === 1) nowMinutes = "0" + nowMinutes;
 
-    let changeDate =
-      localDate.getFullYear() +
-      "-" +
-      nowMonth +
-      "-" +
-      nowDate +
-      " " +
-      nowHours +
-      ":" +
-      nowMinutes;
+    let changeDate = localDate.getFullYear() + "-" + nowMonth + "-" + nowDate + " " + nowHours + ":" + nowMinutes;
     return changeDate;
   }
 
@@ -89,11 +63,7 @@ function ReadMessage() {
                   <ReadMessageText>{selectID[0].content}</ReadMessageText>
                 </TextBox>
                 <FromBox>
-                  {selectID[0].is_anonymous == false ? (
-                    <FromRead>{selectID[0].sender.nickname}</FromRead>
-                  ) : (
-                    <FromRead>익명</FromRead>
-                  )}
+                  {selectID[0].is_anonymous == false ? <FromRead>{selectID[0].sender.nickname}</FromRead> : <FromRead>익명</FromRead>}
                   <FromDate>{uTcLocal(time)}</FromDate>
                 </FromBox>
               </div>
@@ -106,7 +76,6 @@ function ReadMessage() {
             <Link to="/mymessage">확인</Link>
           </CheckBtn>
           <DeleteBtn onClick={deleteMsg}>삭제</DeleteBtn>
-          <CrimeBtn onClick={spamMsg}>신고</CrimeBtn>
         </div>
       </div>
     </ReadMessageContainer>

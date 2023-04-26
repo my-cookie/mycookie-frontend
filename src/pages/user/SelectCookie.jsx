@@ -26,20 +26,13 @@ function SelectCookie() {
   async function getCookie() {
     try {
       const res = await axios.get(`api/flavor/cookies`);
-      console.log(res.data);
       setCookie(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
     getCookie();
   }, []);
-
-  useEffect(() => {
-    console.log(flavor);
-  }, [flavor]);
 
   const handleClickPlus = (e) => {
     if (flavor.length === 0) {
@@ -69,7 +62,6 @@ function SelectCookie() {
       .post(`api/auth/info`, { nickname, flavor, user_uuid: uuid })
       .then((result) => {
         const { status, data } = result;
-        console.log(status);
 
         if (status === 200) {
           setAccessToken(data.tokens.access);
@@ -78,17 +70,15 @@ function SelectCookie() {
           navigate("/");
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   return (
     <SelectCookieBox>
       <div className="contents_container">
         <div className="select_title">
-          <SelectTitle>너는 어떤 맛 쿠키야?</SelectTitle>
-          <SelectTip>tip. 모든 맛을 전부 다 선택해도 괜찮아!</SelectTip>
+          <SelectTitle>너는 어떤 쿠키맛을 좋아해 ~ ?</SelectTitle>
+          <SelectTip>tip. 모든 맛을 선택해도 괜찮아 !</SelectTip>
         </div>
 
         <div className="select_cookie">
@@ -97,39 +87,18 @@ function SelectCookie() {
               {cookie &&
                 cookie?.map((cookie, index) => {
                   return flavor.includes(`${cookie.id}`) ? (
-                    <button
-                      className="cookie_all_btn"
-                      onClick={handleClickMinus}
-                      id={cookie.id}
-                      key={cookie.id}
-                    >
+                    <button className="cookie_all_btn" onClick={handleClickMinus} id={cookie.id} key={cookie.id}>
                       <li className="cookie_list" id={cookie.id}>
-                        <img
-                          style={{ backgroundColor: "orange" }}
-                          src={cookie.img}
-                          alt={cookie.name}
-                          id={cookie.id}
-                          className="cookie_img"
-                        />
+                        <img style={{ backgroundColor: "orange" }} src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>
                       </li>
                     </button>
                   ) : (
-                    <button
-                      className="cookie_all_btn"
-                      id={cookie.id}
-                      onClick={handleClickPlus}
-                      key={cookie.id}
-                    >
+                    <button className="cookie_all_btn" id={cookie.id} onClick={handleClickPlus} key={cookie.id}>
                       <li className="cookie_list" id={cookie.id}>
-                        <img
-                          src={cookie.img}
-                          alt={cookie.name}
-                          id={cookie.id}
-                          className="cookie_img"
-                        />
+                        <img src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>

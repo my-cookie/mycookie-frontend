@@ -28,7 +28,6 @@ function MyPage() {
         .patch(`api/auth/nickname/edit`, { nickname: tempNickname })
         .then((result) => {
           const { status } = result;
-          console.log(status);
           if (status == 200) {
             setNickname(tempNickname);
             setTempNickname("");
@@ -50,25 +49,22 @@ function MyPage() {
     axiosInstance
       .post(`api/auth/logout`)
       .then((res) => {
-        console.log(res.data);
         navigate("/");
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   // 회원탈퇴
   const signoutHandler = () => {
-    axiosInstance
-      .post(`api/auth/signout`)
-      .then((res) => {
-        console.log(res.data);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (window.confirm("정말 떠나는거야 ...?")) {
+      axiosInstance
+        .post(`api/auth/signout`)
+        .then((res) => {
+          alert("모든 정보가 삭제되었어 ~\n다음에 또 놀러와 🥹");
+          navigate("/");
+        })
+        .catch((error) => {});
+    }
   };
 
   return (

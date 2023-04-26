@@ -9,7 +9,7 @@ const selectOptions = [
   { value: "E", label: "오류" },
   { value: "U", label: "불편사항" },
   { value: "R", label: "건의사항" },
-  { value: "C", label: "칭찬" }
+  { value: "C", label: "칭찬" },
 ];
 function Feedback() {
   const axiosInstance = useRecoilValue(privateAxios);
@@ -21,21 +21,17 @@ function Feedback() {
     setContent(e.target.value);
   };
 
-  console.log(selectedValue.value);
   const feedbackHandler = () => {
     axiosInstance
       .post(`api/feedback/item`, {
         title: selectedValue.value,
-        content: content
+        content: content,
       })
       .then((res) => {
-        console.log(res.data);
         alert("접수 완료!🤗");
         navigate("/mypage");
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   return (
@@ -43,20 +39,12 @@ function Feedback() {
       <div className="contents_container">
         <div className="feedback">문의하기</div>
         <div className="select_box">
-          <StyledSelect
-            className="selectItem"
-            onChange={setSelectedValue}
-            options={selectOptions}
-            defaultValue={selectOptions[0]}
-          />
+          <StyledSelect className="selectItem" onChange={setSelectedValue} options={selectOptions} defaultValue={selectOptions[0]} />
         </div>
 
         <div className="feedback_content">
           <div className="message_background">
-            <ContentInput
-              placeholder="문의할 내용을 작성해줘!"
-              onChange={changeContent}
-            />
+            <ContentInput placeholder="문의할 내용을 작성해줘!" onChange={changeContent} />
           </div>
         </div>
         <div className="feedback_btn">

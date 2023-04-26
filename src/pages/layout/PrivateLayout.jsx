@@ -29,16 +29,12 @@ function PrivateLayout() {
   useEffect(() => {
     if (init && currentroom) {
       client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
-      console.log("connected");
 
       if (isSending === false && isReading === false) {
         client.current.onopen = function () {
-          console.log("WebSocket Client Connected");
-          console.log(currentroom);
           client.current.onmessage = function (e) {
             const data = JSON.parse(e.data);
             if (!data.is_read) {
-              console.log(data);
               axiosInstance
                 .get(`api/msg/receiver/alarm?message_id=${data.msg_id}`)
                 .then((result) => {
@@ -46,30 +42,26 @@ function PrivateLayout() {
                   if (status === 200) {
                     alert(`${data.is_anonymous ? "익명" : data.sender.nickname}에게 새로운 쿠키가 도착했어 !`);
                     newMessage ? setNewMessage(false) : setNewMessage(true);
-                    console.log(result.data);
                   }
                 })
-                .catch((err) => {
-                  console.log(err);
-                });
+                .catch((err) => {});
             } else {
-              console.log("메시지 읽음");
               readMessage ? setReadMessage(false) : setReadMessage(true);
             }
           };
         };
         client.current.onclose = function () {
-          console.log("webSocketChat closed");
           setTimeout(function () {
             client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/");
           }, 100);
-
-          console.log("connected");
+        };
+        client.current.onerror = function () {
+          navigate("/");
+          alert("네트워크 오류 ! 다시 접속해줘 🥹");
         };
       }
       if (isSending === true && isReading === false) {
         client.current.onopen = function () {
-          console.log("WebSocket Client Connected");
           client.current.send(
             JSON.stringify({
               type: "chat_message",
@@ -84,8 +76,6 @@ function PrivateLayout() {
 
       if (isSending === false && isReading === true) {
         client.current.onopen = function () {
-          console.log("WebSocket Client Connected");
-          console.log("읽음");
           client.current.send(
             JSON.stringify({
               type: "chat_message",
@@ -103,7 +93,6 @@ function PrivateLayout() {
 
   useEffect(() => {
     if (!accessToken) {
-      console.log("access token 재발급");
       axios
         .post(`/api/auth/access`, {})
         .then((response) => {
@@ -111,7 +100,6 @@ function PrivateLayout() {
         })
 
         .catch((err) => {
-          console.log(err);
           return navigate("/");
         });
     }
@@ -119,18 +107,15 @@ function PrivateLayout() {
 
   useEffect(() => {
     if (accessToken) {
-      console.log("uuid 받기");
       axiosInstance
         .get(`/api/auth/info/uuid`)
         .then((response) => {
           setNickname(response.data.nickname);
           setUuid(response.data.uuid.split("-").join(""));
           setCurrentroom(response.data.uuid.split("-").join(""));
-          console.log("재요청");
         })
 
         .catch((err) => {
-          console.log(err);
           return navigate("/");
         });
     }

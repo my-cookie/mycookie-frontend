@@ -29,9 +29,7 @@ function SearchCookie() {
         .then((res) => {
           setSearch(res.data);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   }, [nickname]);
 
@@ -51,14 +49,11 @@ function SearchCookie() {
 
   // 북마크 함
   const AddBookmarkHandler = (e) => {
-    console.log(e.target.id);
     axiosInstance
       .post(`api/bookmark/item`, { target: parseInt(e.target.id) })
       .then((result) => {
         const { status, data } = result;
-        console.log(data);
         if (status === 201) {
-          console.log(status);
           setBookmark([...bookmark, data]);
           setNickname("");
         } else if (status === 206) {
@@ -74,7 +69,6 @@ function SearchCookie() {
 
   // 북마크 해제
   const DeleteBookmarkHandler = (e) => {
-    console.log(typeof e.target.id);
     axiosInstance
       .delete(`api/bookmark/item`, { data: { target: parseInt(e.target.id) } })
       .then((result) => {
@@ -87,9 +81,7 @@ function SearchCookie() {
           );
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   // 좋아! 버튼
@@ -113,8 +105,6 @@ function SearchCookie() {
     setRemain(e.target.id);
 
     axiosInstance.post(`api/msg/remain`, { receiver: parseInt(e.target.id) }).then((res) => {
-      console.log(res.data);
-
       setSenderName(res.data.sender_nickname);
       if (res.data.count == 0) {
         alert(`오늘 ${receiverNickname[0].target.nickname}에게 보낼 메세지를 다 사용했어😫`);

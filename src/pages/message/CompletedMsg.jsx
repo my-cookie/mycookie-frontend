@@ -12,12 +12,9 @@ function CompletedMsg() {
   const axiosInstance = useRecoilValue(privateAxios);
 
   useEffect(() => {
-    axiosInstance
-      .post(`api/msg/remain`, { receiver: parseInt(remain) })
-      .then((res) => {
-        console.log(res.data);
-        setInfo(res.data);
-      });
+    axiosInstance.post(`api/msg/remain`, { receiver: parseInt(remain) }).then((res) => {
+      setInfo(res.data);
+    });
   }, []);
 
   return (
@@ -29,8 +26,7 @@ function CompletedMsg() {
         </div>
         <div className="completed_remain">
           <p>
-            오늘 '{info.receiver_nickname}' 에게 보낼 쿠키는 {info.count}개
-            남아있어!
+            오늘 '{info.receiver_nickname}' 에게 보낼 쿠키는 {info.count}개 남아있어!
           </p>
         </div>
         <div className="completed_btn_box">
