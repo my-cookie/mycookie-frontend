@@ -25,7 +25,7 @@ function PrivateLayout() {
   window.addEventListener(
     "focus",
     function () {
-      if (currentroom) {
+      if (init && currentroom) {
         client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/");
       }
     },
