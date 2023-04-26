@@ -36,7 +36,9 @@ function PrivateLayout() {
   window.addEventListener(
     "focus",
     function () {
-      client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/");
+      client.current = new W3CWebSocket(
+        process.env.REACT_APP_WS_URL + currentroom + "/"
+      );
     },
     false
   );
@@ -53,7 +55,6 @@ function PrivateLayout() {
 
       if (isSending === false && isReading === false) {
         client.current.onopen = function () {
-          console.log("소켓접속");
           client.current.onmessage = function (e) {
             const data = JSON.parse(e.data);
             if (!data.is_read) {
@@ -77,7 +78,6 @@ function PrivateLayout() {
           };
         };
         client.current.onclose = function () {
-          console.log("소켓끊김");
           setTimeout(function () {
             client.current = new W3CWebSocket(
               process.env.REACT_APP_WS_URL + currentroom + "/"
@@ -85,7 +85,6 @@ function PrivateLayout() {
           }, 100);
         };
         client.current.onerror = function (error) {
-          console.log(error);
           navigate("/");
           alert("네트워크 오류 ! 다시 접속해줘 🥹");
         };

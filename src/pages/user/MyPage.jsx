@@ -129,20 +129,12 @@ const MyPageBox = styled.div`
     display: flex;
     justify-content: center;
     font-size: 1.5rem;
-    /* @media (min-width: 390px) {
-      height: 10%;
-      align-items: center;
-    } */
   }
   .mypage_nick {
     width: 100%;
     height: 20%;
     display: flex;
     justify-content: center;
-    /* @media (min-width: 390px) {
-      height: 35%;
-      align-items: center;
-    } */
   }
 
   .mypage_btn_box {

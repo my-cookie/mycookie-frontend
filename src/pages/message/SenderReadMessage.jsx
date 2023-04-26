@@ -120,22 +120,22 @@ const ReadMessageContainer = styled.div`
 
   .read_letter {
     width: 100%;
-    height: 60%;
+    height: 30%;
     margin-top: 10px;
     display: flex;
     justify-content: center;
   }
   .message_background {
     width: 100%;
-    height: 350px;
+    height: 280px;
     padding: 20px;
     border-radius: 40px;
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
-    overflow-y: auto;
   }
   .read_btn {
     width: 100%;
+    height: 30%;
     display: flex;
     justify-content: center;
   }
@@ -151,11 +151,10 @@ const ToBox = styled.div`
 `;
 const TextBox = styled.div`
   width: 100%;
-  height: 290px;
+  height: 200px;
 `;
 const FromBox = styled.div`
   width: 100%;
-  height: 35px;
   display: flex;
   justify-content: flex-end;
   flex-direction: column;
@@ -191,7 +190,7 @@ const CheckBtn = styled.button`
   font-family: "BRBA_B";
   font-size: 0.8rem;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 20px;
   margin-right: 10px;
   a {
     text-decoration: none;
@@ -209,21 +208,21 @@ const DeleteBtn = styled.button`
   font-family: "BRBA_B";
   font-size: 0.8rem;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 20px;
   margin-right: 10px;
 `;
 
-const CrimeBtn = styled.button`
-  width: 70px;
-  height: 40px;
-  border: 3px solid #7fa3ff;
-  border-radius: 15px;
-  background-color: #ffffff;
-  font-family: "BRBA_B";
-  font-size: 0.8rem;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-right: 10px;
-`;
+// const CrimeBtn = styled.button`
+//   width: 70px;
+//   height: 40px;
+//   border: 3px solid #7fa3ff;
+//   border-radius: 15px;
+//   background-color: #ffffff;
+//   font-family: "BRBA_B";
+//   font-size: 0.8rem;
+//   cursor: pointer;
+//   margin-top: 20px;
+//   margin-right: 10px;
+// `;
 
 const MessageBox = styled.div``;
