@@ -27,8 +27,8 @@ function Nickname() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (nickname.length >= 7) {
-      alert("닉네임은 7글자 이하, 숫자, 알파벳, 한글만 사용 가능해! 🤭");
+    if (nickname.length >= 6) {
+      alert("닉네임은 6글자 이하, 숫자, 알파벳, 한글만 사용 가능해! 🤭");
     } else if (nickname.match(/\s/g) || nickname.match(emoji1) || nickname.match(emoji2)) {
       alert("닉네임에 공백과 특수문자는 사용할 수 없어 ~ 🤭");
     } else {
@@ -63,7 +63,7 @@ function Nickname() {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="nickname_input">
-              <NicknameInput type="text" name="nickname" maxlength="7" value={nickname} onChange={handleChange} />
+              <NicknameInput type="text" name="nickname" maxlength="6" value={nickname} onChange={handleChange} />
               <LikeBtn type="submit">좋아!</LikeBtn>
             </div>
 
