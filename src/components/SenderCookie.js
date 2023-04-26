@@ -94,21 +94,25 @@ export default SenderCookie;
 const MyContainer = styled.div`
   width: 100%;
 
-  .send_tabs {
-  }
   .send_tabs_message {
     width: 100%;
     display: flex;
     justify-content: center;
     flex-direction: row;
+    position: fixed;
+    top: 10;
+    left: 0;
+    right: 0;
   }
   .send_tab_list {
     width: 100%;
     display: flex;
     justify-content: center;
     flex-direction: row;
-    margin-top: 10px;
+    padding-top: 10px;
     margin-bottom: 10px;
+    height: 50px;
+    border-radius: 20px;
   }
   .send_tab {
     width: 70px;
@@ -122,6 +126,7 @@ const MyContainer = styled.div`
     cursor: pointer;
     text-align: center;
     margin: 0 3px;
+    background-color: #fff;
   }
   .selected_tab {
     width: 70px;
@@ -142,6 +147,7 @@ const MyContainer = styled.div`
     box-sizing: border-box;
     overflow: scroll;
     overflow-x: hidden;
+    padding-top: 60px;
   }
 
   .send_box::-webkit-scrollbar {
