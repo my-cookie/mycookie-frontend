@@ -27,7 +27,7 @@ function Nickname() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (nickname.length >= 6) {
+    if (nickname.length > 6) {
       alert("닉네임은 6글자 이하, 숫자, 알파벳, 한글만 사용 가능해! 🤭");
     } else if (nickname.match(/\s/g) || nickname.match(emoji1) || nickname.match(emoji2)) {
       alert("닉네임에 공백과 특수문자는 사용할 수 없어 ~ 🤭");
