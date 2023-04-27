@@ -108,15 +108,22 @@ function SearchCookie() {
     });
     setRemain(e.target.id);
 
-    axiosInstance.post(`api/msg/remain`, { receiver: parseInt(e.target.id) }).then((res) => {
-      setSenderName(res.data.sender_nickname);
-      if (res.data.count == 0) {
-        alert(`오늘 ${receiverNickname[0].target.nickname}에게 보낼 메세지를 다 사용했어😫`);
-      } else {
-        alert(`오늘 ${receiverNickname[0].target.nickname}에게 보낼 잔여 메세지가 ${res.data.count}개 남았어!`);
-        setReceiverNick(receiverNickname[0].target.nickname);
-      }
-    });
+    axiosInstance
+      .post(`api/msg/remain`, { receiver: parseInt(e.target.id) })
+      .then((res) => {
+        setSenderName(res.data.sender_nickname);
+        if (res.data.count == 0) {
+          alert(`오늘 ${receiverNickname[0].target.nickname}에게 보낼 메세지를 다 사용했어😫`);
+        } else {
+          alert(`오늘 ${receiverNickname[0].target.nickname}에게 보낼 잔여 메세지가 ${res.data.count}개 남았어!`);
+          setReceiverNick(receiverNickname[0].target.nickname);
+        }
+      })
+      .catch((error) => {
+        if (error.response.status == 404) {
+          alert("친구가 탈퇴했나봐 ...\n즐겨찾기는 자동으로 삭제 될거야 🥲(24시간 이내)");
+        }
+      });
   };
 
   // 쿠키 검색할 때 div 클릭 시

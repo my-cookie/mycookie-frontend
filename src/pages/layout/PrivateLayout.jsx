@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom } from "../../utils/atom";
+import { accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom, receiveMessageAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -17,8 +17,9 @@ function PrivateLayout() {
   const [isSending, setIsSending] = useRecoilState(sendingAtom);
   const [isReading, setIsReading] = useRecoilState(readingAtom);
   const [msg, setMsg] = useRecoilState(sendmsgAtom);
-  const [newMessage, setNewMessage] = useRecoilState(receiveMsgStatusAtom);
+  // const [newMessage, setNewMessage] = useRecoilState(receiveMsgStatusAtom);
   const [readMessage, setReadMessage] = useRecoilState(sendMsgStatusAtom);
+  const [newReceiver, setNewReceiver] = useRecoilState(receiveMessageAtom);
 
   const client = useRef("");
   const axiosInstance = useRecoilValue(privateAxios);
@@ -62,8 +63,10 @@ function PrivateLayout() {
                 .then((result) => {
                   const { status, data } = result;
                   if (status === 200) {
+                    setNewReceiver((newReceiver) => [data, ...newReceiver]);
                     data.is_anonymous ? notify("익명") : notify(data.sender.nickname);
-                    newMessage ? setNewMessage(false) : setNewMessage(true);
+
+                    // newMessage ? setNewMessage(false) : setNewMessage(true);
                   }
                 })
                 .catch((err) => {});

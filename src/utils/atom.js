@@ -91,6 +91,11 @@ export const tabIndexAtom = atom({
   default: [0, 0],
 });
 
+export const receiveMessageAtom = atom({
+  key: "receiveMessageAtom",
+  default: [],
+});
+
 export const privateAxios = selector({
   key: "privateAxios",
   get: async ({ get }) => {
