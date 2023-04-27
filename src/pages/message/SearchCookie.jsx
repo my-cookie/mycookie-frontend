@@ -1,12 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import {
-  privateAxios,
-  receiverAtom,
-  remainAtom,
-  senderAtom
-} from "../../utils/atom";
+import { privateAxios, receiverAtom, remainAtom, senderAtom } from "../../utils/atom";
 import { useNavigate } from "react-router-dom";
 
 function SearchCookie() {
@@ -86,7 +81,11 @@ function SearchCookie() {
           );
         }
       })
-      .catch((err) => {});
+      .catch((error) => {
+        if (error.response.status == 404) {
+          alert("친구가 탈퇴했나봐 ...\n즐겨찾기는 자동으로 삭제 될거야 🥲(24시간 이내)");
+        }
+      });
   };
 
   // 좋아! 버튼
@@ -105,25 +104,19 @@ function SearchCookie() {
     });
     setReceiver({
       id: e.target.id,
-      nickname: receiverNickname[0].target.nickname
+      nickname: receiverNickname[0].target.nickname,
     });
     setRemain(e.target.id);
 
-    axiosInstance
-      .post(`api/msg/remain`, { receiver: parseInt(e.target.id) })
-      .then((res) => {
-        setSenderName(res.data.sender_nickname);
-        if (res.data.count == 0) {
-          alert(
-            `오늘 ${receiverNickname[0].target.nickname}에게 보낼 메세지를 다 사용했어😫`
-          );
-        } else {
-          alert(
-            `오늘 ${receiverNickname[0].target.nickname}에게 보낼 잔여 메세지가 ${res.data.count}개 남았어!`
-          );
-          setReceiverNick(receiverNickname[0].target.nickname);
-        }
-      });
+    axiosInstance.post(`api/msg/remain`, { receiver: parseInt(e.target.id) }).then((res) => {
+      setSenderName(res.data.sender_nickname);
+      if (res.data.count == 0) {
+        alert(`오늘 ${receiverNickname[0].target.nickname}에게 보낼 메세지를 다 사용했어😫`);
+      } else {
+        alert(`오늘 ${receiverNickname[0].target.nickname}에게 보낼 잔여 메세지가 ${res.data.count}개 남았어!`);
+        setReceiverNick(receiverNickname[0].target.nickname);
+      }
+    });
   };
 
   // 쿠키 검색할 때 div 클릭 시
@@ -133,27 +126,21 @@ function SearchCookie() {
     });
     setReceiver({
       id: e.target.id,
-      nickname: toReceiver[0].nickname
+      nickname: toReceiver[0].nickname,
     });
     setRemain(e.target.id);
 
-    axiosInstance
-      .post(`api/msg/remain`, { receiver: parseInt(e.target.id) })
-      .then((res) => {
-        setSenderName(res.data.sender_nickname);
-        if (res.data.count == 0) {
-          alert(
-            `오늘 ${toReceiver[0].nickname}에게 보낼 메세지를 다 사용했어😫`
-          );
-          setNickname("");
-        } else {
-          alert(
-            `오늘 ${toReceiver[0].nickname}에게 보낼 잔여 메세지가 ${res.data.count}개 남았어!`
-          );
-          setReceiverNick(toReceiver[0].nickname);
-          setNickname(toReceiver[0].nickname);
-        }
-      });
+    axiosInstance.post(`api/msg/remain`, { receiver: parseInt(e.target.id) }).then((res) => {
+      setSenderName(res.data.sender_nickname);
+      if (res.data.count == 0) {
+        alert(`오늘 ${toReceiver[0].nickname}에게 보낼 메세지를 다 사용했어😫`);
+        setNickname("");
+      } else {
+        alert(`오늘 ${toReceiver[0].nickname}에게 보낼 잔여 메세지가 ${res.data.count}개 남았어!`);
+        setReceiverNick(toReceiver[0].nickname);
+        setNickname(toReceiver[0].nickname);
+      }
+    });
   };
 
   return (
@@ -163,13 +150,7 @@ function SearchCookie() {
           <SearchTitle>쿠키 찾기</SearchTitle>
         </div>
         <div className="search_input">
-          <SearchInput
-            type="text"
-            placeholder="친구를 찾아봐!"
-            maxlength="7"
-            onChange={inputNickname}
-            value={nickname}
-          />
+          <SearchInput type="text" placeholder="친구를 찾아봐!" maxlength="7" onChange={inputNickname} value={nickname} />
         </div>
         {nickname.length > 0 ? (
           <div className="search_box">
@@ -178,11 +159,7 @@ function SearchCookie() {
                   return (
                     <SearchDiv id={search.id} key={search.id}>
                       <SearchUl id={search.id} key={search.id}>
-                        <SearchList
-                          id={search.id}
-                          key={search.id}
-                          onClick={searchSelect}
-                        >
+                        <SearchList id={search.id} key={search.id} onClick={searchSelect}>
                           {search.nickname}
                         </SearchList>
                         {bookmarkId.includes(search.id) ? (
@@ -190,11 +167,7 @@ function SearchCookie() {
                             ★
                           </button>
                         ) : (
-                          <button
-                            id={search.id}
-                            className="star_btn"
-                            onClick={AddBookmarkHandler}
-                          >
+                          <button id={search.id} className="star_btn" onClick={AddBookmarkHandler}>
                             ☆
                           </button>
                         )}
@@ -209,28 +182,12 @@ function SearchCookie() {
             {bookmark
               ? bookmark.map((bookmark) => {
                   return (
-                    <BtnBG
-                      className="btn_BG"
-                      key={bookmark.target.id}
-                      id={bookmark.target.id}
-                    >
-                      <BookmarkUl
-                        id={bookmark.target.id}
-                        key={bookmark.target.id}
-                      >
-                        <li
-                          className="box_list"
-                          id={bookmark.target.id}
-                          key={bookmark.target.id}
-                          onClick={sendHandler}
-                        >
+                    <BtnBG className="btn_BG" key={bookmark.target.id} id={bookmark.target.id}>
+                      <BookmarkUl id={bookmark.target.id} key={bookmark.target.id}>
+                        <li className="box_list" id={bookmark.target.id} key={bookmark.target.id} onClick={sendHandler}>
                           {bookmark.target.nickname}
                         </li>
-                        <button
-                          id={bookmark.target.id}
-                          className="star_btn"
-                          onClick={DeleteBookmarkHandler}
-                        >
+                        <button id={bookmark.target.id} className="star_btn" onClick={DeleteBookmarkHandler}>
                           ★
                         </button>
                       </BookmarkUl>
