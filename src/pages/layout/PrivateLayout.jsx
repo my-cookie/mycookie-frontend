@@ -22,21 +22,21 @@ function PrivateLayout() {
   const client = useRef("");
   const axiosInstance = useRecoilValue(privateAxios);
 
-  window.addEventListener(
-    "focus",
-    function () {
-      setTimeout(() => {
-        if (!accessToken) {
-          // eslint-disable-next-line no-restricted-globals
-          location.reload();
-        }
-      }, 6000);
-      // if (currentroom) {
-      //   client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
-      // }
-    },
-    false
-  );
+  // window.addEventListener(
+  //   "focus",
+  //   function () {
+  //     setTimeout(() => {
+  //       if (!accessToken) {
+  //         // eslint-disable-next-line no-restricted-globals
+  //         location.reload();
+  //       }
+  //     }, 6000);
+  //     // if (currentroom) {
+  //     //   client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
+  //     // }
+  //   },
+  //   false
+  // );
 
   useEffect(() => {
     setInit(true);
