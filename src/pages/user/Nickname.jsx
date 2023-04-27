@@ -29,7 +29,11 @@ function Nickname() {
 
     if (nickname.length > 6) {
       alert("닉네임은 6글자 이하, 숫자, 알파벳, 한글만 사용 가능해! 🤭");
-    } else if (nickname.match(/\s/g) || nickname.match(emoji1) || nickname.match(emoji2)) {
+    } else if (
+      nickname.match(/\s/g) ||
+      nickname.match(emoji1) ||
+      nickname.match(emoji2)
+    ) {
       alert("닉네임에 공백과 특수문자는 사용할 수 없어 ~ 🤭");
     } else {
       axios
@@ -41,7 +45,7 @@ function Nickname() {
             window.location.reload();
           } else if (status === 200) {
             navigate("/select", {
-              state: { user_uuid: uuid, nickname: nickname },
+              state: { user_uuid: uuid, nickname: nickname }
             });
           }
         })
@@ -61,14 +65,21 @@ function Nickname() {
               <p>여기에 너의 이름을 알려줘!</p>
             </NicknameTextBox>
           </div>
-          <form onSubmit={handleSubmit}>
-            <div className="nickname_input">
-              <NicknameInput type="text" name="nickname" maxlength="6" value={nickname} onChange={handleChange} />
-              <LikeBtn type="submit">좋아!</LikeBtn>
-            </div>
 
-            <div className="nickname_btn"></div>
-          </form>
+          <div className="nickname_input">
+            <NicknameInput
+              type="text"
+              name="nickname"
+              maxlength="6"
+              value={nickname}
+              onChange={handleChange}
+            />
+            <LikeBtn type="button" onClick={handleSubmit}>
+              좋아!
+            </LikeBtn>
+
+            {/* <div className="nickname_btn"></div> */}
+          </div>
         </div>
       </NicknameContainer>
     </>
@@ -98,7 +109,9 @@ const NicknameContainer = styled.div`
   .nickname_input {
     display: flex;
     justify-content: center;
+    width: 100%;
     height: 250px;
+    margin: 0 auto;
   }
 
   .nickname_btn {
@@ -125,11 +138,12 @@ const NicknameInput = styled.input`
   height: 40px;
   font-family: "BRBA_B";
   font-size: 1.2rem;
-  background-color: #fff386;
+
   border-bottom: 3px solid black;
   outline: none;
   position: relative;
   margin-right: 10px;
+  background-color: transparent;
 `;
 
 const LikeBtn = styled.button`

@@ -87,18 +87,39 @@ function SelectCookie() {
               {cookie &&
                 cookie?.map((cookie, index) => {
                   return flavor.includes(`${cookie.id}`) ? (
-                    <button className="cookie_all_btn" onClick={handleClickMinus} id={cookie.id} key={cookie.id}>
+                    <button
+                      className="cookie_all_btn"
+                      onClick={handleClickMinus}
+                      id={cookie.id}
+                      key={cookie.id}
+                    >
                       <li className="cookie_list" id={cookie.id}>
-                        <img style={{ backgroundColor: "orange" }} src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
+                        <img
+                          style={{ backgroundColor: "orange" }}
+                          src={cookie.img}
+                          alt={cookie.name}
+                          id={cookie.id}
+                          className="cookie_img"
+                        />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>
                       </li>
                     </button>
                   ) : (
-                    <button className="cookie_all_btn" id={cookie.id} onClick={handleClickPlus} key={cookie.id}>
+                    <button
+                      className="cookie_all_btn"
+                      id={cookie.id}
+                      onClick={handleClickPlus}
+                      key={cookie.id}
+                    >
                       <li className="cookie_list" id={cookie.id}>
-                        <img src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
+                        <img
+                          src={cookie.img}
+                          alt={cookie.name}
+                          id={cookie.id}
+                          className="cookie_img"
+                        />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>
@@ -173,6 +194,9 @@ const SelectCookieBox = styled.div`
     @media (max-width: 350px) {
       width: 100%;
     }
+    @media (max-width: 370px) {
+      width: 90%;
+    }
   }
 
   .cookie_btn {
@@ -189,6 +213,9 @@ const SelectCookieBox = styled.div`
     align-items: center;
     padding-top: 10px;
     @media (max-width: 350px) {
+      width: 100%;
+    }
+    @media (max-width: 370px) {
       width: 100%;
     }
   }
@@ -237,6 +264,15 @@ const CookieListBox = styled.ul`
   }
   @media (max-width: 350px) {
     width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(2, 150px);
+    .cookie_list {
+      width: 100%;
+    }
+  }
+  @media (max-width: 370px) {
+    width: 90%;
     display: grid;
     grid-template-columns: repeat(3, 80px);
     grid-template-rows: repeat(2, 150px);
