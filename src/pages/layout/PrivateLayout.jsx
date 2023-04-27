@@ -27,6 +27,8 @@ function PrivateLayout() {
     function () {
       if (accessToken && currentroom) {
         client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
+      } else if (init && !accessToken) {
+        navigate("/");
       }
     },
     false
