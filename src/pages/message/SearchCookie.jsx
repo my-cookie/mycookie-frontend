@@ -174,7 +174,7 @@ function SearchCookie() {
                           {search.nickname}
                         </SearchList>
                         {bookmarkId.includes(search.id) ? (
-                          <button id={search.id} className="star_btn">
+                          <button id={search.id} className="star_btn" onClick={DeleteBookmarkHandler}>
                             ★
                           </button>
                         ) : (
