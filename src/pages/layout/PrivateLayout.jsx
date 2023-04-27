@@ -25,9 +25,15 @@ function PrivateLayout() {
   window.addEventListener(
     "focus",
     function () {
-      if (accessToken) {
-        client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
-      }
+      setTimeout(() => {
+        if (!accessToken) {
+          // eslint-disable-next-line no-restricted-globals
+          location.reload();
+        }
+      }, 3000);
+      // if (currentroom) {
+      //   client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
+      // }
     },
     false
   );
