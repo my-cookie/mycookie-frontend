@@ -73,13 +73,9 @@ function SenderCookie() {
                         alt="img"
                         width={50}
                       />
-                      {newSender.is_anonymous == false ? (
-                        <p className="sender_nickname">
-                          {newSender.receiver.nickname}
-                        </p>
-                      ) : (
-                        <p className="sender_nickname">익명</p>
-                      )}
+                      <p className="sender_nickname">
+                        {newSender.receiver.nickname}
+                      </p>
                     </Button>
                   );
                 })}
@@ -101,13 +97,9 @@ function SenderCookie() {
                           alt="img"
                           width={50}
                         />
-                        {newSender.is_anonymous == false ? (
-                          <p className="sender_nickname">
-                            {newSender.receiver.nickname}
-                          </p>
-                        ) : (
-                          <p className="sender_nickname">익명</p>
-                        )}
+                        <p className="sender_nickname">
+                          {newSender.receiver.nickname}
+                        </p>
                       </Button>
                     );
                   }
@@ -130,13 +122,9 @@ function SenderCookie() {
                           alt="img"
                           width={50}
                         />
-                        {newSender.is_anonymous == false ? (
-                          <p className="sender_nickname">
-                            {newSender.receiver.nickname}
-                          </p>
-                        ) : (
-                          <p className="sender_nickname">익명</p>
-                        )}
+                        <p className="sender_nickname">
+                          {newSender.receiver.nickname}
+                        </p>
                       </Button>
                     );
                   }

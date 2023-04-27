@@ -54,6 +54,7 @@ function Router() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/mycookie" element={<MyCookie />} />
         <Route path="/feedback" element={<Feedback />} />
+        {/* <Route path='*' component={NotFound} /> */}
       </Route>
     </Routes>
   );

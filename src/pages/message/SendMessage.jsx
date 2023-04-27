@@ -72,7 +72,7 @@ function SendMessage() {
             />
             <SendCheck>익명으로 보내기</SendCheck>
           </CheckBox>
-          <SendBtn type="submit" onClick={cookieSend}>
+          <SendBtn type="button" onClick={cookieSend}>
             쿠키 보내기!
           </SendBtn>
         </div>
