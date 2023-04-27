@@ -72,11 +72,11 @@ function PrivateLayout() {
             }
           };
         };
-        // client.current.onclose = function () {
-        //   setTimeout(function () {
-        //     client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/");
-        //   }, 100);
-        // };
+        client.current.onclose = function () {
+          setTimeout(function () {
+            client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/");
+          }, 100);
+        };
         client.current.onerror = function (error) {
           navigate("/");
           alert("네트워크 오류 ! 다시 접속해줘 🥹");
