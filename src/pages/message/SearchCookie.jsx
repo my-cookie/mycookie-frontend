@@ -121,6 +121,7 @@ function SearchCookie() {
       })
       .catch((error) => {
         if (error.response.status == 404) {
+          setReceiver(null);
           alert("친구가 탈퇴했나봐 ...\n즐겨찾기는 자동으로 삭제 될거야 🥲(24시간 이내)");
         }
       });
