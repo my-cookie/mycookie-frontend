@@ -271,10 +271,15 @@ const SearchCookieBox = styled.div`
     list-style: none;
     margin-bottom: 10px;
     display: flex;
-    @media (min-width: 390px) {
-      height: 10%;
-    }
+    flex-direction: column;
+    padding: 5px;
+    box-sizing: border-box;
+    overflow: scroll;
   }
+  .search_box::-webkit-scrollbar {
+    display: none;
+  }
+
   .search_btn {
     width: 100%;
     height: 30%;
@@ -366,12 +371,15 @@ const BookmarkUl = styled.ul`
 
 const SearchDiv = styled.div`
   width: 100%;
+  display: flex;
 `;
 const SearchUl = styled.ul`
+  width: 100%;
   display: flex;
   justify-content: space-between;
+  justify-content: space-between;
   box-sizing: border-box;
-  padding: 0 10px 0 10px;
+  padding: 5px;
 `;
 const SearchList = styled.li`
   display: inline-block;
