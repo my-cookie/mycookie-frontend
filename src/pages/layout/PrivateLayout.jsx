@@ -25,8 +25,11 @@ function PrivateLayout() {
   window.addEventListener(
     "focus",
     function () {
-      // eslint-disable-next-line no-restricted-globals
-      location.reload();
+      if (init && currentroom && accessToken) {
+        client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/");
+      } else {
+        navigate("/");
+      }
     },
     false
   );
