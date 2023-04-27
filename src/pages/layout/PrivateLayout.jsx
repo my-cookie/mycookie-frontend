@@ -25,7 +25,7 @@ function PrivateLayout() {
   window.addEventListener(
     "focus",
     function () {
-      if (!init || !currentroom || !accessToken) {
+      if (!accessToken) {
         // eslint-disable-next-line no-restricted-globals
         location.reload();
       }
