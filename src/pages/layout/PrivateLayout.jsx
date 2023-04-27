@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import toast, { Toaster } from "react-hot-toast";
 
 function PrivateLayout() {
   const navigate = useNavigate();
@@ -38,6 +39,11 @@ function PrivateLayout() {
   //   false
   // );
 
+  const notify = (sender) =>
+    toast(`${sender}(으)로 부터 쿠키 도착`, {
+      icon: "💌",
+    });
+
   useEffect(() => {
     setInit(true);
   }, []);
@@ -56,7 +62,7 @@ function PrivateLayout() {
                 .then((result) => {
                   const { status, data } = result;
                   if (status === 200) {
-                    alert(`${data.is_anonymous ? "익명" : data.sender.nickname}에게 새로운 쿠키가 도착했어 !`);
+                    data.is_anonymous ? notify("익명") : notify(data.sender.nickname);
                     newMessage ? setNewMessage(false) : setNewMessage(true);
                   }
                 })
@@ -166,6 +172,7 @@ function PrivateLayout() {
       <MainLayout>
         <div className="contents_container">
           <div className="adfitOne"></div>
+          <Toaster position="top-center" reverseOrder={false} />
           <Outlet />
         </div>
       </MainLayout>
