@@ -153,6 +153,6 @@ const LikeBtn = styled.button`
   border-radius: 20px;
   background-color: #ffffff;
   font-family: "BRBA_B";
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
 `;
