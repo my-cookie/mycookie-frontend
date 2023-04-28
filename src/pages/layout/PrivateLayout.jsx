@@ -25,16 +25,16 @@ function PrivateLayout() {
   const axiosInstance = useRecoilValue(privateAxios);
   const [current, setCurrent] = useRecoilState(currentUserAtom);
 
-  window.addEventListener(
-    "focus",
-    function () {
-      if (accessToken && currentroom && client.current.readyState === client.current.CLOSED) {
-        // console.log("재연결");
-        client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
-      }
-    },
-    false
-  );
+  // window.addEventListener(
+  //   "focus",
+  //   function () {
+  //     if (accessToken && currentroom && client.current.readyState === client.current.CLOSED) {
+  //       // console.log("재연결");
+  //       client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
+  //     }
+  //   },
+  //   false
+  // );
 
   useEffect(() => {
     if (accessToken) {
@@ -55,6 +55,10 @@ function PrivateLayout() {
           .then((res) => {
             setCurrent(res.data);
             // console.log("계속");
+            if (currentroom && client.current.readyState === client.current.CLOSED) {
+              // console.log("재연결");
+              client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
+            }
           })
           .catch((err) => {
             navigate("/");
