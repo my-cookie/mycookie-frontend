@@ -3,11 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { postSenderIconAtom, privateAxios } from "../../utils/atom";
+import toast, { Toaster } from "react-hot-toast";
 
 function ReadMessage() {
   const selectID = useRecoilValue(postSenderIconAtom);
   const axiosInstance = useRecoilValue(privateAxios);
   const navigate = useNavigate();
+
+  const notify = (message) =>
+    toast(`${message}`, {
+      icon: "🍪",
+    });
 
   const deleteMsg = () => {
     if (window.confirm("정말 삭제할거야 ?")) {
@@ -17,7 +23,7 @@ function ReadMessage() {
           const { status } = result;
           if (status === 200) {
             //정말 삭제하시겠습니까?
-            alert("삭제 완료 !");
+            notify("삭제 완료 !");
             navigate("/mymessage");
           }
         })
@@ -42,16 +48,7 @@ function ReadMessage() {
     let nowMinutes = localDate.getMinutes().toString();
     if (nowMinutes.length === 1) nowMinutes = "0" + nowMinutes;
 
-    let changeDate =
-      localDate.getFullYear() +
-      "-" +
-      nowMonth +
-      "-" +
-      nowDate +
-      " " +
-      nowHours +
-      ":" +
-      nowMinutes;
+    let changeDate = localDate.getFullYear() + "-" + nowMonth + "-" + nowDate + " " + nowHours + ":" + nowMinutes;
     return changeDate;
   }
 
@@ -72,11 +69,7 @@ function ReadMessage() {
                   <ReadMessageText>{selectID[0].content}</ReadMessageText>
                 </TextBox>
                 <FromBox>
-                  {selectID[0].is_anonymous == false ? (
-                    <FromRead>{selectID[0].sender.nickname}</FromRead>
-                  ) : (
-                    <FromRead>익명</FromRead>
-                  )}
+                  {selectID[0].is_anonymous == false ? <FromRead>{selectID[0].sender.nickname}</FromRead> : <FromRead>익명</FromRead>}
                   <FromDate>{uTcLocal(time)}</FromDate>
                 </FromBox>
               </div>

@@ -3,12 +3,18 @@ import { useRecoilValue, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { privateAxios, nicknameAtom } from "../../utils/atom";
 import { Link, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 function MyPage() {
   const navigate = useNavigate();
   const axiosInstance = useRecoilValue(privateAxios);
   const [tempNickname, setTempNickname] = useState("");
   const [nickname, setNickname] = useRecoilState(nicknameAtom);
+
+  const notify = (message) =>
+    toast(`${message}`, {
+      icon: "🍪",
+    });
 
   const onChangeNickname = (e) => {
     setTempNickname(e.target.value);
@@ -20,13 +26,9 @@ function MyPage() {
   // 닉네임 변경
   const changeNick = () => {
     if (tempNickname.length > 6) {
-      alert("닉네임은 6글자 이하, 숫자, 알파벳, 한글만 사용 가능해! 🤭");
-    } else if (
-      tempNickname.match(/\s/g) ||
-      tempNickname.match(emoji1) ||
-      tempNickname.match(emoji2)
-    ) {
-      alert("닉네임에 공백과 특수문자는 사용할 수 없어 ~ 🤭");
+      notify("닉네임은 6글자 이하, 숫자, 알파벳, 한글만 사용 가능해! 🤭");
+    } else if (tempNickname.match(/\s/g) || tempNickname.match(emoji1) || tempNickname.match(emoji2)) {
+      notify("닉네임에 공백과 특수문자는 사용할 수 없어 ~ 🤭");
     } else {
       axiosInstance
         .patch(`api/auth/nickname/edit`, { nickname: tempNickname })
@@ -35,14 +37,14 @@ function MyPage() {
           if (status == 200) {
             setNickname(tempNickname);
             setTempNickname("");
-            alert("닉네임 변경 완료 ! 🥳");
+            notify("닉네임 변경 완료 ! 🥳");
           }
         })
         .catch((error) => {
           if (error.response.status === 400) {
-            alert("이미 사용중인 닉네임이야! 🫣");
+            notify("이미 사용중인 닉네임이야! 🫣");
           } else if (error.response.status === 406) {
-            alert("닉네임 변경 횟수를 모두 사용했어! 😭");
+            notify("닉네임 변경 횟수를 모두 사용했어! 😭");
           }
         });
     }
@@ -64,7 +66,7 @@ function MyPage() {
       axiosInstance
         .post(`api/auth/signout`)
         .then((res) => {
-          alert("모든 정보가 삭제되었어 ~\n다음에 또 놀러와 🥹");
+          notify("모든 정보가 삭제되었어 ~\n다음에 또 놀러와 🥹");
           navigate("/");
         })
         .catch((error) => {});
@@ -76,14 +78,7 @@ function MyPage() {
       <div className="contents_container">
         <div className="mypage_title">마이페이지</div>
         <div className="mypage_nick">
-          <NickChangeInput
-            type="text"
-            placeholder={nickname}
-            maxlength="6"
-            value={tempNickname}
-            onChange={onChangeNickname}
-            autoFocus
-          />
+          <NickChangeInput type="text" placeholder={nickname} maxlength="6" value={tempNickname} onChange={onChangeNickname} autoFocus />
           <NickChangeBtn onClick={changeNick}>닉네임변경</NickChangeBtn>
         </div>
         <div className="mypage_btn_box">

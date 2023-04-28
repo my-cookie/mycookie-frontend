@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { accessAtom } from "../../utils/atom";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 function SelectCookie() {
   const navigate = useNavigate();
@@ -13,6 +14,11 @@ function SelectCookie() {
   const [nickname, serNickname] = useState("");
   const location = useLocation();
   const [accessToken, setAccessToken] = useRecoilState(accessAtom);
+
+  const notify = (message) =>
+    toast(`${message}`, {
+      icon: "🍪",
+    });
 
   useEffect(() => {
     try {
@@ -56,7 +62,7 @@ function SelectCookie() {
 
   const selectBtn = () => {
     if (flavor.length === 0) {
-      alert("1개 이상은 선택해야해 ~");
+      notify("1개 이상은 선택해야해 ~");
     }
     axios
       .post(`api/auth/info`, { nickname, flavor, user_uuid: uuid })
@@ -87,39 +93,18 @@ function SelectCookie() {
               {cookie &&
                 cookie?.map((cookie, index) => {
                   return flavor.includes(`${cookie.id}`) ? (
-                    <button
-                      className="cookie_all_btn"
-                      onClick={handleClickMinus}
-                      id={cookie.id}
-                      key={cookie.id}
-                    >
+                    <button className="cookie_all_btn" onClick={handleClickMinus} id={cookie.id} key={cookie.id}>
                       <li className="cookie_list" id={cookie.id}>
-                        <img
-                          style={{ backgroundColor: "orange" }}
-                          src={cookie.img}
-                          alt={cookie.name}
-                          id={cookie.id}
-                          className="cookie_img"
-                        />
+                        <img style={{ backgroundColor: "orange" }} src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>
                       </li>
                     </button>
                   ) : (
-                    <button
-                      className="cookie_all_btn"
-                      id={cookie.id}
-                      onClick={handleClickPlus}
-                      key={cookie.id}
-                    >
+                    <button className="cookie_all_btn" id={cookie.id} onClick={handleClickPlus} key={cookie.id}>
                       <li className="cookie_list" id={cookie.id}>
-                        <img
-                          src={cookie.img}
-                          alt={cookie.name}
-                          id={cookie.id}
-                          className="cookie_img"
-                        />
+                        <img src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>

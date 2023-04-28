@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import completedImg from "../../assets/completed_cookie.png";
@@ -10,12 +11,16 @@ function CompletedMsg() {
   const [remain, setRemain] = useRecoilState(remainAtom); // 앞에서 클릭한 id
   const [info, setInfo] = useState([]);
   const axiosInstance = useRecoilValue(privateAxios);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axiosInstance
       .post(`api/msg/remain`, { receiver: parseInt(remain) })
       .then((res) => {
         setInfo(res.data);
+      })
+      .catch(() => {
+        navigate("/");
       });
   }, []);
 

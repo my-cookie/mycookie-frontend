@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import { privateAxios } from "../../utils/atom";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 function SelectCookie() {
   const navigate = useNavigate();
@@ -17,6 +18,11 @@ function SelectCookie() {
       });
     } catch (error) {}
   }
+
+  const notify = (message) =>
+    toast(`${message}`, {
+      icon: "🍪",
+    });
 
   useEffect(() => {
     getCookie();
@@ -32,9 +38,7 @@ function SelectCookie() {
       })
       .catch((error) => {
         if (error.response.status == 406) {
-          alert(
-            `아직 쿠키맛 변경일로 부터 일주일이 지나지 않았어 ~\n변경가능일 : ${error.response.data.message}`
-          );
+          notify(`아직 쿠키맛 변경일로 부터 일주일이 지나지 않았어 ~\n변경가능일 : ${error.response.data.message}`);
         }
       });
   };
@@ -53,19 +57,9 @@ function SelectCookie() {
               {cookie &&
                 cookie?.map((cookie, index) => {
                   return (
-                    <button
-                      className="cookie_all_btn"
-                      id={cookie.id}
-                      key={cookie.id}
-                    >
+                    <button className="cookie_all_btn" id={cookie.id} key={cookie.id}>
                       <li className="cookie_list" id={cookie.id}>
-                        <img
-                          style={{ backgroundColor: "orange" }}
-                          src={cookie.img}
-                          alt={cookie.name}
-                          id={cookie.id}
-                          className="cookie_img"
-                        />
+                        <img style={{ backgroundColor: "orange" }} src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>

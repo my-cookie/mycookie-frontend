@@ -2,23 +2,15 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
-import {
-  anonymousAtom,
-  contentAtom,
-  privateAxios,
-  receiverAtom,
-  sendingAtom,
-  roomAtom,
-  sendmsgAtom
-} from "../../utils/atom";
+import { anonymousAtom, contentAtom, privateAxios, receiverAtom, sendingAtom, roomAtom, sendmsgAtom } from "../../utils/atom";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 function FriendSelectCookie() {
   const navigate = useNavigate();
-  const receiver = useRecoilValue(receiverAtom);
+  const [receiver, setReceiver] = useRecoilState(receiverAtom);
   const [content, setContent] = useRecoilState(contentAtom);
   const is_anonymous = useRecoilValue(anonymousAtom);
-
   const [cookie, setCookie] = useState([]);
   const [flavor, setFlavors] = useState("");
   const axiosInstance = useRecoilValue(privateAxios);
@@ -33,6 +25,11 @@ function FriendSelectCookie() {
     } catch (error) {}
   }
 
+  const notify = (message) =>
+    toast(`${message}`, {
+      icon: "🍪",
+    });
+
   useEffect(() => {
     getCookie();
   }, []);
@@ -43,32 +40,30 @@ function FriendSelectCookie() {
 
   const selectBtn = () => {
     if (flavor.length === 0) {
-      alert("친구가 좋아하는 쿠키맛을 골라줘 ~");
+      notify(`${receiver.nickname}(이)가 좋아하는 쿠키맛을 골라줘 ~`);
     } else {
       axiosInstance
         .post(`api/msg/save`, {
           receiver: parseInt(receiver.id),
           content,
           flavor: parseInt(flavor),
-          is_anonymous
+          is_anonymous,
         })
         .then((result) => {
           const { status, data } = result;
           if (status === 201) {
             if (data.is_success == false) {
               if (data.remain > 0) {
-                alert(
-                  `전송 실패 : 친구가 좋아하는 쿠키 맛이 아니야 😢\n한번 더 도전해 볼까!\n남은 기회 : ${data.remain}`
-                );
+                notify(`전송 실패 : ${receiver.nickname}(이)가 좋아하는 쿠키 맛이 아니야 😢\n한번 더 도전해 볼까!\n남은 기회 : ${data.remain}`);
               } else {
                 setContent("");
                 navigate("/mymessage");
-                alert(
-                  "친구에게 보낼 쿠키를 다 소진했어!😥\n아쉽지만 메시지함으로 이동할게 !"
-                );
+                notify(`${receiver.nickname}(이)가에게 보낼 쿠키를 다 소진했어!😥\n아쉽지만 메시지함으로 이동할게 !`);
+                setReceiver("");
               }
             } else {
               setContent("");
+              setReceiver("");
               setCurrentroom(data.receiver_uuid.split("-").join(""));
               setIsSending(true);
               setMsg(data.msg_id);
@@ -79,15 +74,13 @@ function FriendSelectCookie() {
         .catch((error) => {
           setContent("");
           if (error.response.status === 429) {
+            notify(`${receiver.nickname}에게 보낼 쿠키를 다 소진했어!😥`);
             navigate("/mymessage");
-            alert("친구에게 보낼 쿠키를 다 소진했어!😥");
-          } else if (
-            error.response.status === 406 ||
-            error.response.status === 400
-          ) {
+          } else if (error.response.status === 406 || error.response.status === 400) {
+            notify("친구가 쿠키를 받을 수 없는 상태야 ... 🥲");
             navigate("/mymessage");
-            alert("친구가 쿠키를 받을 수 없는 상태야 ... 🥲");
           }
+          setReceiver("");
         });
     }
   };
@@ -96,12 +89,10 @@ function FriendSelectCookie() {
     <FriendSelectBox>
       <div className="contents_container">
         <div className="friend_select_title">
-          <FriendSelectTitle>친구가 좋아하는</FriendSelectTitle>
+          <FriendSelectTitle>{receiver.nickname}(이)가 좋아하는</FriendSelectTitle>
           <FriendSelectTitle>쿠키맛은 뭘까?</FriendSelectTitle>
 
-          <FriendSelectTip>
-            hint. 친구가 좋아하는 쿠키맛으로만 보낼 수 있어!
-          </FriendSelectTip>
+          <FriendSelectTip>hint. 상대방이 좋아하는 쿠키맛으로만 보낼 수 있어!</FriendSelectTip>
         </div>
 
         <div className="select_cookie">
@@ -110,38 +101,18 @@ function FriendSelectCookie() {
               {cookie &&
                 cookie?.map((cookie) => {
                   return flavor.includes(`${cookie.id}`) ? (
-                    <button
-                      className="cookie_all_btn"
-                      id={cookie.id}
-                      key={cookie.id}
-                    >
+                    <button className="cookie_all_btn" id={cookie.id} key={cookie.id}>
                       <li className="cookie_list" id={cookie.id}>
-                        <img
-                          style={{ backgroundColor: "orange" }}
-                          src={cookie.img}
-                          alt={cookie.name}
-                          id={cookie.id}
-                          className="cookie_img"
-                        />
+                        <img style={{ backgroundColor: "orange" }} src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>
                       </li>
                     </button>
                   ) : (
-                    <button
-                      className="cookie_all_btn"
-                      id={cookie.id}
-                      onClick={handleClickPlus}
-                      key={cookie.id}
-                    >
+                    <button className="cookie_all_btn" id={cookie.id} onClick={handleClickPlus} key={cookie.id}>
                       <li className="cookie_list" id={cookie.id}>
-                        <img
-                          src={cookie.img}
-                          alt={cookie.name}
-                          id={cookie.id}
-                          className="cookie_img"
-                        />
+                        <img src={cookie.img} alt={cookie.name} id={cookie.id} className="cookie_img" />
                         <p className="cookie_btn" id={cookie.id}>
                           {cookie.name}
                         </p>

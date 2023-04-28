@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { anonymousAtom, contentAtom, privateAxios, receiverAtom } from "../../utils/atom";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 function ChangeSelectCookie() {
   const navigate = useNavigate();
@@ -46,9 +47,14 @@ function ChangeSelectCookie() {
     }
   };
 
+  const notify = (message) =>
+    toast(`${message}`, {
+      icon: "🍪",
+    });
+
   const selectBtn = () => {
     if (flavor.length === 0) {
-      alert("1개 이상은 선택해야해! ");
+      notify("1개 이상은 선택해야해! ");
     }
     axiosInstance
       .post(`/api/auth/myflavor/edit`, {
@@ -57,13 +63,13 @@ function ChangeSelectCookie() {
       .then((result) => {
         const { status } = result;
         if (status === 201) {
-          alert("쿠키맛 변경 완료!");
+          notify("쿠키맛 변경 완료!");
           navigate("/mypage");
         }
       })
       .catch((error) => {
         if (error.response.status === 406) {
-          alert(`오늘은 쿠키맛 변경을 할 수 없어😣\n변경 가능일 : ${error.response.data.message}`);
+          notify(`오늘은 쿠키맛 변경을 할 수 없어😣\n변경 가능일 : ${error.response.data.message}`);
         }
       });
   };

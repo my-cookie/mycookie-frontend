@@ -9,40 +9,14 @@ import LoadingLogin from "../loading/LoadingLogin";
 function Mymessage() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const axiosInstance = useRecoilValue(privateAxios);
-  const [current, setCurrent] = useRecoilState(currentUserAtom);
+  const current = useRecoilValue(currentUserAtom);
+
+  // const axiosInstance = useRecoilValue(privateAxios);
+  // const [current, setCurrent] = useRecoilState(currentUserAtom);
 
   const currentHandler = (e) => {
     setOpen((open) => !open);
   };
-
-  useEffect(() => {
-    // if (!current) {
-    //   setTimeout(function () {
-    //     axiosInstance
-    //       .get(`api/auth/siteinfo/realtime`)
-    //       .then((res) => {
-    //         console.log(res.data);
-    //         setCurrent(res.data);
-    //       })
-    //       .catch((err) => {
-    //         navigate("/");
-    //       });
-    //   }, 700);
-    // } else {
-    setInterval(function () {
-      axiosInstance
-        .get(`api/auth/siteinfo/realtime`)
-        .then((res) => {
-          console.log(res.data);
-          setCurrent(res.data);
-        })
-        .catch((err) => {
-          navigate("/");
-        });
-    }, 1000);
-    // }
-  }, []);
 
   const sendCookieBtn = () => {
     navigate("/searchcookie");

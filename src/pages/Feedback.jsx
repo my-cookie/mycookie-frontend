@@ -4,18 +4,24 @@ import styled from "styled-components";
 import { privateAxios } from "../utils/atom";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 const selectOptions = [
   { value: "E", label: "오류" },
   { value: "U", label: "불편사항" },
   { value: "R", label: "건의사항" },
-  { value: "C", label: "칭찬" }
+  { value: "C", label: "칭찬" },
 ];
 function Feedback() {
   const axiosInstance = useRecoilValue(privateAxios);
   const [content, setContent] = useState("");
   const [selectedValue, setSelectedValue] = useState(selectOptions[0]);
   const navigate = useNavigate();
+
+  const notify = (message) =>
+    toast(`${message}`, {
+      icon: "🍪",
+    });
 
   const changeContent = (e) => {
     setContent(e.target.value);
@@ -25,10 +31,10 @@ function Feedback() {
     axiosInstance
       .post(`api/feedback/item`, {
         title: selectedValue.value,
-        content: content
+        content: content,
       })
       .then((res) => {
-        alert("접수 완료!🤗");
+        notify("접수 완료!🤗");
         navigate("/mypage");
       })
       .catch((error) => {});
@@ -39,20 +45,12 @@ function Feedback() {
       <div className="contents_container">
         <div className="feedback">문의하기</div>
         <div className="select_box">
-          <StyledSelect
-            className="selectItem"
-            onChange={setSelectedValue}
-            options={selectOptions}
-            defaultValue={selectOptions[0]}
-          />
+          <StyledSelect className="selectItem" onChange={setSelectedValue} options={selectOptions} defaultValue={selectOptions[0]} />
         </div>
 
         <div className="feedback_content">
           <div className="message_background">
-            <ContentInput
-              placeholder="문의할 내용을 작성해줘!"
-              onChange={changeContent}
-            />
+            <ContentInput placeholder="문의할 내용을 작성해줘!" onChange={changeContent} />
           </div>
         </div>
         <div className="feedback_btn">

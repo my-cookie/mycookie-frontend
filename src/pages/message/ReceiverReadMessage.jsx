@@ -2,11 +2,8 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import styled from "styled-components";
-import {
-  postReceiverIconAtom,
-  privateAxios,
-  receiveMsgStatusAtom
-} from "../../utils/atom";
+import { postReceiverIconAtom, privateAxios, receiveMsgStatusAtom } from "../../utils/atom";
+import toast, { Toaster } from "react-hot-toast";
 
 function ReadMessage() {
   const RselectID = useRecoilValue(postReceiverIconAtom); // 선택한 id
@@ -14,6 +11,11 @@ function ReadMessage() {
   const [newMessage, setNewMessage] = useRecoilState(receiveMsgStatusAtom);
 
   const navigate = useNavigate();
+
+  const notify = (message) =>
+    toast(`${message}`, {
+      icon: "🍪",
+    });
 
   const deleteMsg = () => {
     if (window.confirm("정말 삭제할거야 ?")) {
@@ -23,7 +25,7 @@ function ReadMessage() {
           const { status } = result;
           if (status === 200) {
             //정말 삭제하시겠습니까?
-            alert("삭제 완료 !");
+            notify("삭제 완료 !");
             navigate("/mymessage");
           }
         })
@@ -38,12 +40,12 @@ function ReadMessage() {
         .then((result) => {
           const { status } = result;
           if (status === 201) {
-            alert("신고되었어 !\n우리가 확인하고 처리할게 !");
+            notify("신고되었어 !\n우리가 확인하고 처리할게 !");
           }
         })
         .catch((error) => {
           if (error.response.status === 406) {
-            alert("이미 신고되었어 ! 조금만 기다려 ~");
+            notify("이미 신고되었어 ! 조금만 기다려 ~");
           }
         });
     }
@@ -66,16 +68,7 @@ function ReadMessage() {
     let nowMinutes = localDate.getMinutes().toString();
     if (nowMinutes.length === 1) nowMinutes = "0" + nowMinutes;
 
-    let changeDate =
-      localDate.getFullYear() +
-      "-" +
-      nowMonth +
-      "-" +
-      nowDate +
-      " " +
-      nowHours +
-      ":" +
-      nowMinutes;
+    let changeDate = localDate.getFullYear() + "-" + nowMonth + "-" + nowDate + " " + nowHours + ":" + nowMinutes;
     return changeDate;
   }
 
@@ -95,11 +88,7 @@ function ReadMessage() {
                 <ReadMessageText>{RselectID[0].content}</ReadMessageText>
               </TextBox>
               <FromBox>
-                {RselectID[0].is_anonymous == false ? (
-                  <FromRead>{RselectID[0].sender.nickname}</FromRead>
-                ) : (
-                  <FromRead>익명</FromRead>
-                )}
+                {RselectID[0].is_anonymous == false ? <FromRead>{RselectID[0].sender.nickname}</FromRead> : <FromRead>익명</FromRead>}
                 <FromDate>{uTcLocal(time)}</FromDate>
               </FromBox>
             </div>

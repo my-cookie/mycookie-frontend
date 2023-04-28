@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom, receiveMessageAtom } from "../../utils/atom";
+import { accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, currentUserAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom, receiveMessageAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -21,24 +21,47 @@ function PrivateLayout() {
   const [readMessage, setReadMessage] = useRecoilState(sendMsgStatusAtom);
   const [newReceiver, setNewReceiver] = useRecoilState(receiveMessageAtom);
 
-  const client = useRef("");
+  const client = useRef(null);
   const axiosInstance = useRecoilValue(privateAxios);
+  const [current, setCurrent] = useRecoilState(currentUserAtom);
 
-  // window.addEventListener(
-  //   "focus",
-  //   function () {
-  //     setTimeout(() => {
-  //       if (!accessToken) {
-  //         // eslint-disable-next-line no-restricted-globals
-  //         location.reload();
-  //       }
-  //     }, 6000);
-  //     // if (currentroom) {
-  //     //   client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
-  //     // }
-  //   },
-  //   false
-  // );
+  window.addEventListener(
+    "focus",
+    function () {
+      if (accessToken && currentroom && client.current.readyState === client.current.CLOSED) {
+        console.log("재연결");
+        client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
+      }
+    },
+    false
+  );
+
+  useEffect(() => {
+    if (accessToken) {
+      setTimeout(function () {
+        axiosInstance
+          .get(`api/auth/siteinfo/realtime`)
+          .then((res) => {
+            setCurrent(res.data);
+          })
+          .catch((err) => {
+            navigate("/");
+          });
+      }, 1000);
+
+      setInterval(function () {
+        axiosInstance
+          .get(`api/auth/siteinfo/realtime`)
+          .then((res) => {
+            setCurrent(res.data);
+            console.log("계속");
+          })
+          .catch((err) => {
+            navigate("/");
+          });
+      }, 3000);
+    }
+  }, [accessToken]);
 
   const notify = (sender) =>
     toast(`${sender}(으)로 부터 쿠키 도착`, {
@@ -93,6 +116,7 @@ function PrivateLayout() {
               msg_id: msg,
             })
           );
+
           setCurrentroom(uuid);
           setIsSending(false);
           setMsg(null);
@@ -108,6 +132,7 @@ function PrivateLayout() {
               is_read: true,
             })
           );
+
           setCurrentroom(uuid);
           setIsReading(false);
           setMsg(null);
