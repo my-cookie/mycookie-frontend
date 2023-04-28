@@ -62,7 +62,7 @@ function PrivateLayout() {
                 .get(`api/msg/receiver/alarm?message_id=${data.msg_id}`)
                 .then((result) => {
                   const { status, data } = result;
-                  if (status === 200) {
+                  if (status === 200 && !newReceiver.includes(data)) {
                     setNewReceiver((newReceiver) => [data, ...newReceiver]);
                     data.is_anonymous ? notify("익명") : notify(data.sender.nickname);
 
