@@ -19,11 +19,27 @@ function Mymessage() {
 
   useEffect(() => {
     setTimeout(function () {
-      axiosInstance.get(`api/auth/siteinfo/realtime`).then((res) => {
-        console.log(res.data);
-        setCurrent(res.data);
-        setInit(true);
-      });
+      axiosInstance
+        .get(`api/auth/siteinfo/realtime`)
+        .then((res) => {
+          console.log(res.data);
+          setCurrent(res.data);
+          setInit(true);
+        })
+        .catch((err) => {
+          navigate("/");
+        });
+      setInterval(function () {
+        axiosInstance
+          .get(`api/auth/siteinfo/realtime`)
+          .then((res) => {
+            console.log(res.data);
+            setCurrent(res.data);
+          })
+          .catch((err) => {
+            navigate("/");
+          });
+      }, 6000);
     }, 1000);
   }, []);
 
@@ -38,15 +54,16 @@ function Mymessage() {
           <div className="current">
             <CurrentUser>
               <EmojiBox>
-                <Emoji>🟢</Emoji>접속자{" "}
-                {current ? current.number.realtime_user : 0}
+                <Emoji>🟢</Emoji>접속자 {current ? current.number.realtime_user : 0}
                 <CurrentUserBtn onClick={currentHandler}>확인</CurrentUserBtn>
               </EmojiBox>
               {open ? (
                 <CurrentUserBox>
-                  {current?.nicknames.map((current) => {
-                    return <li key={current.id}>{current.nickname}</li>;
-                  })}
+                  <div className="scroll_inner">
+                    {current?.nicknames.map((current) => {
+                      return <li key={current.id}>{current.nickname}</li>;
+                    })}
+                  </div>
                 </CurrentUserBox>
               ) : (
                 ""
@@ -180,7 +197,7 @@ const Emoji = styled.p`
 `;
 
 const CurrentUserBox = styled.div`
-  width: 80px;
+  width: auto;
   height: auto;
   max-height: 100px;
   border-radius: 10px;
@@ -191,9 +208,14 @@ const CurrentUserBox = styled.div`
   font-size: 0.8rem;
   z-index: 99;
   position: absolute;
-  text-align: center;
+  // text-align: center;
   margin-left: 10px;
-  line-height: 18px;
+  line-height: 22px;
+  overflow: scroll;
+  overflow-x: hidden;
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `;
 
 const CurrentUserBtn = styled.button`
