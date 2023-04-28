@@ -37,9 +37,10 @@ function KakaoLogin() {
   }, []);
 
   return (
-    <KakaoLoading>
-      <img src={loadingCookie} alt="loading" width={300} />
-    </KakaoLoading>
+    <></>
+    // <KakaoLoading>
+    //   <img src={loadingCookie} alt="loading" width={300} />
+    // </KakaoLoading>
   );
 }
 

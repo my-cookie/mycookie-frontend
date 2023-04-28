@@ -1,23 +1,66 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MsgContainer from "../../components/MsgContainer";
+import { useRecoilValue } from "recoil";
+import { privateAxios } from "../../utils/atom";
+import LoadingLogin from "../loading/LoadingLogin";
 
 function Mymessage() {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const axiosInstance = useRecoilValue(privateAxios);
+  const [current, setCurrent] = useState([]);
+  const [init, setInit] = useState(false);
+
+  const currentHandler = (e) => {
+    setOpen((open) => !open);
+  };
+
+  useEffect(() => {
+    setTimeout(function () {
+      axiosInstance.get(`api/auth/siteinfo/realtime`).then((res) => {
+        console.log(res.data);
+        setCurrent(res.data);
+        setInit(true);
+      });
+    }, 1000);
+  }, []);
 
   const sendCookieBtn = () => {
     navigate("/searchcookie");
   };
 
-  return (
+  return init ? (
     <MymessageContainer>
       <div className="contents_container">
-        <div className="go_mypage">
-          <MyPageBtn type="button">
-            <Link to="/mypage">내정보</Link>
-          </MyPageBtn>
+        <div className="header_box">
+          <div className="current">
+            <CurrentUser>
+              <EmojiBox>
+                <CurrentUserBtn onClick={currentHandler}>
+                  <Emoji>🟢</Emoji>현재 접속자 수{" "}
+                  {current ? current.number.realtime_user : 0}
+                </CurrentUserBtn>
+              </EmojiBox>
+              {open ? (
+                <CurrentUserBox>
+                  {current?.nicknames.map((current) => {
+                    return <li key={current.id}>{current.nickname}</li>;
+                  })}
+                </CurrentUserBox>
+              ) : (
+                ""
+              )}
+            </CurrentUser>
+          </div>
+          <div className="go_mypage">
+            <MyPageBtn type="button">
+              <Link to="/mypage">내정보</Link>
+            </MyPageBtn>
+          </div>
         </div>
+
         <div className="message_title">
           <MessageTitle>나의 쿠키함</MessageTitle>
         </div>
@@ -32,6 +75,8 @@ function Mymessage() {
         </div>
       </div>
     </MymessageContainer>
+  ) : (
+    <LoadingLogin />
   );
 }
 
@@ -50,12 +95,17 @@ const MymessageContainer = styled.div`
     margin: 0 auto;
     padding: 0 40px;
   }
-
-  .go_mypage {
+  .header_box {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
   }
+  .go_mypage {
+  }
+  .current {
+  }
+
   .message_title {
     width: 100%;
     height: 10%;
@@ -114,4 +164,45 @@ const SendBtn = styled.button`
     text-decoration: none;
     color: black;
   }
+`;
+
+const CurrentUser = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const EmojiBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+`;
+
+const Emoji = styled.p`
+  font-size: 0.6rem;
+  margin-right: 5px;
+`;
+
+const CurrentUserBox = styled.div`
+  width: 80px;
+  height: auto;
+  max-height: 100px;
+  border-radius: 10px;
+  margin-top: 25px;
+  background-color: #fff;
+  list-style: none;
+  padding: 10px;
+  font-size: 0.8rem;
+  z-index: 99;
+  position: absolute;
+  text-align: center;
+  margin-left: 10px;
+`;
+
+const CurrentUserBtn = styled.button`
+  display: flex;
+  flex-direction: row;
+  background: none;
+  border: none;
+  font-family: "BRBA_B";
 `;
