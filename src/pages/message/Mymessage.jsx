@@ -17,31 +17,31 @@ function Mymessage() {
   };
 
   useEffect(() => {
-    if (!current) {
-      setTimeout(function () {
-        axiosInstance
-          .get(`api/auth/siteinfo/realtime`)
-          .then((res) => {
-            console.log(res.data);
-            setCurrent(res.data);
-          })
-          .catch((err) => {
-            navigate("/");
-          });
-      }, 700);
-    } else {
-      setInterval(function () {
-        axiosInstance
-          .get(`api/auth/siteinfo/realtime`)
-          .then((res) => {
-            console.log(res.data);
-            setCurrent(res.data);
-          })
-          .catch((err) => {
-            navigate("/");
-          });
-      }, 2000);
-    }
+    // if (!current) {
+    //   setTimeout(function () {
+    //     axiosInstance
+    //       .get(`api/auth/siteinfo/realtime`)
+    //       .then((res) => {
+    //         console.log(res.data);
+    //         setCurrent(res.data);
+    //       })
+    //       .catch((err) => {
+    //         navigate("/");
+    //       });
+    //   }, 700);
+    // } else {
+    setInterval(function () {
+      axiosInstance
+        .get(`api/auth/siteinfo/realtime`)
+        .then((res) => {
+          console.log(res.data);
+          setCurrent(res.data);
+        })
+        .catch((err) => {
+          navigate("/");
+        });
+    }, 1000);
+    // }
   }, []);
 
   const sendCookieBtn = () => {
