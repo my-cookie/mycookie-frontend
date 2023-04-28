@@ -96,6 +96,11 @@ export const receiveMessageAtom = atom({
   default: [],
 });
 
+export const currentUserAtom = atom({
+  key: "currentUserAtom",
+  default: null,
+});
+
 export const privateAxios = selector({
   key: "privateAxios",
   get: async ({ get }) => {

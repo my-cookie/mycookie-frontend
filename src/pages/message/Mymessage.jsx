@@ -2,33 +2,34 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MsgContainer from "../../components/MsgContainer";
-import { useRecoilValue } from "recoil";
-import { privateAxios } from "../../utils/atom";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { privateAxios, currentUserAtom } from "../../utils/atom";
 import LoadingLogin from "../loading/LoadingLogin";
 
 function Mymessage() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const axiosInstance = useRecoilValue(privateAxios);
-  const [current, setCurrent] = useState([]);
-  const [init, setInit] = useState(false);
+  const [current, setCurrent] = useRecoilState(currentUserAtom);
 
   const currentHandler = (e) => {
     setOpen((open) => !open);
   };
 
   useEffect(() => {
-    setTimeout(function () {
-      axiosInstance
-        .get(`api/auth/siteinfo/realtime`)
-        .then((res) => {
-          console.log(res.data);
-          setCurrent(res.data);
-          setInit(true);
-        })
-        .catch((err) => {
-          navigate("/");
-        });
+    if (!current) {
+      setTimeout(function () {
+        axiosInstance
+          .get(`api/auth/siteinfo/realtime`)
+          .then((res) => {
+            console.log(res.data);
+            setCurrent(res.data);
+          })
+          .catch((err) => {
+            navigate("/");
+          });
+      }, 700);
+    } else {
       setInterval(function () {
         axiosInstance
           .get(`api/auth/siteinfo/realtime`)
@@ -39,15 +40,15 @@ function Mymessage() {
           .catch((err) => {
             navigate("/");
           });
-      }, 6000);
-    }, 1000);
+      }, 2000);
+    }
   }, []);
 
   const sendCookieBtn = () => {
     navigate("/searchcookie");
   };
 
-  return init ? (
+  return current ? (
     <MymessageContainer>
       <div className="contents_container">
         <div className="header_box">
@@ -55,7 +56,7 @@ function Mymessage() {
             <CurrentUser>
               <EmojiBox>
                 <Emoji>🟢</Emoji>접속자 {current ? current.number.realtime_user : 0}
-                <CurrentUserBtn onClick={currentHandler}>확인</CurrentUserBtn>
+                <CurrentUserBtn onClick={currentHandler}>누구?</CurrentUserBtn>
               </EmojiBox>
               {open ? (
                 <CurrentUserBox>
