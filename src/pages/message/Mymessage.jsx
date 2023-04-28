@@ -58,11 +58,11 @@ function Mymessage() {
 
         <div className="message_container">
           <MsgContainer />
-        </div>
-        <div className="message_btn">
-          <SendBtn type="button" onClick={sendCookieBtn}>
-            쿠키 보내러 가기
-          </SendBtn>
+          <div className="message_btn">
+            <SendBtn type="button" onClick={sendCookieBtn}>
+              쿠키 보내러 가기
+            </SendBtn>
+          </div>
         </div>
       </div>
     </MymessageContainer>
@@ -80,15 +80,18 @@ const MymessageContainer = styled.div`
     position: relative;
     display: flex;
     flex-flow: column;
-    justify-content: center;
+    // justify-content: center;
     height: 100%;
     font-family: "BRBA_B";
     margin: 0 auto;
     padding: 0 40px;
   }
+
   .header_box {
-    width: 100%;
     display: flex;
+    width: 100%;
+    height: 13%;
+    flex-flow: row nowrap;
     justify-content: space-between;
     align-items: center;
   }
@@ -102,12 +105,12 @@ const MymessageContainer = styled.div`
 
   .message_container {
     width: 100%;
-    height: 60%;
+    height: 70%;
   }
 
   .message_btn {
     width: 100%;
-    height: 30%;
+    height: auto;
     display: flex;
     justify-content: center;
     a {
