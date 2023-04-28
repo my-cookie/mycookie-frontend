@@ -199,6 +199,6 @@ const MyMsgContainer = styled.div`
   }
   .tab_panel {
     box-sizing: border-box;
-    padding: 10px;
+    padding-top: 10px;
   }
 `;

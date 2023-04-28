@@ -162,7 +162,6 @@ const MyContainer = styled.div`
   .receive_box {
     width: 100%;
     box-sizing: border-box;
-    padding-left: 5px;
   }
   .receive_box::-webkit-scrollbar {
     display: none;
@@ -174,7 +173,9 @@ const MyContainer = styled.div`
 
   .receiver_box_scroll {
     width: 100%;
-    line-height: 13px;
+    line-height: 90px;
+    display: flex;
+    flex-wrap: wrap;
   }
 
   .receiver_scroll {
@@ -190,6 +191,8 @@ const MyContainer = styled.div`
 `;
 
 const Button = styled.button`
+  width: 67px;
+  height: 69px;
   background: none;
   border: none;
   a {

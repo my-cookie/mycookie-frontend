@@ -190,7 +190,6 @@ const MyContainer = styled.div`
   .send_box {
     width: 100%;
     box-sizing: border-box;
-    padding-left: 5px;
   }
 
   .send_box::-webkit-scrollbar {
@@ -203,8 +202,9 @@ const MyContainer = styled.div`
   }
   .send_box_scroll {
     width: 100%;
-    border-radius: 20px;
-    line-height: 13px;
+    line-height: 90px;
+    display: flex;
+    flex-wrap: wrap;
   }
   .send_scroll {
     width: 100%;
@@ -218,6 +218,8 @@ const MyContainer = styled.div`
 `;
 
 const Button = styled.button`
+  width: 67px;
+  height: 69px;
   background: none;
   border: none;
   a {
