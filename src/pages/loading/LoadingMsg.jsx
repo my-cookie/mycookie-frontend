@@ -1,14 +1,24 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { receiverAtom } from "../../utils/atom";
 import loadingCookie from "../../assets/cookie.gif";
+import { useRecoilState } from "recoil";
 
 function LoadingMsg() {
   const navigate = useNavigate();
+  const [receiver, setReceiver] = useRecoilState(receiverAtom);
+
   useEffect(() => {
-    setTimeout(() => {
-      navigate("/completed");
-    }, 3000);
+    if (receiver == "") {
+      navigate("/mymessage");
+    } else {
+      setTimeout(() => {
+        setReceiver("");
+
+        navigate("/completed");
+      }, 3000);
+    }
   }, []);
   return (
     <LoadingMsgBox>

@@ -32,6 +32,9 @@ function FriendSelectCookie() {
 
   useEffect(() => {
     getCookie();
+    if (receiver == "") {
+      navigate("/mymessage");
+    }
   }, []);
 
   const handleClickPlus = (e) => {
@@ -63,7 +66,6 @@ function FriendSelectCookie() {
               }
             } else {
               setContent("");
-              setReceiver("");
               setCurrentroom(data.receiver_uuid.split("-").join(""));
               setIsSending(true);
               setMsg(data.msg_id);

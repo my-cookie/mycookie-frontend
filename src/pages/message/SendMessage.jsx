@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
@@ -34,6 +34,12 @@ function SendMessage() {
       navigate("/friendselect");
     }
   };
+
+  useEffect(() => {
+    if (receiverNickname == "") {
+      navigate("/mymessage");
+    }
+  }, []);
 
   return (
     <SendMessageContainer>
@@ -74,10 +80,10 @@ const SendMessageContainer = styled.div`
   height: 100%;
 
   .contents_container {
-    position: relative;
     display: flex;
+    position: relative;
     flex-flow: column;
-    justify-content: center;
+    // justify-content: center;
     height: 100%;
     font-family: "BRBA_B";
     margin: 0 auto;
@@ -86,6 +92,7 @@ const SendMessageContainer = styled.div`
 
   .send_title {
     width: 100%;
+    height: 15%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -94,10 +101,10 @@ const SendMessageContainer = styled.div`
   }
 
   .send_letter {
-    width: 100%;
-    height: 50%;
-    margin-top: 10px;
     display: flex;
+    width: 100%;
+    height: 370px;
+    margin-top: 10px;
     justify-content: center;
   }
   .message_background {
@@ -110,9 +117,9 @@ const SendMessageContainer = styled.div`
   }
   .send_btn {
     width: 100%;
-    height: 30%;
+    height: 15%;
     display: flex;
-    justify-content: center;
+    // justify-content: center;
     flex-direction: column;
     align-items: center;
   }
@@ -136,7 +143,6 @@ const TextBox = styled.div`
 `;
 const FromBox = styled.div`
   width: 100%;
-
   display: flex;
   justify-content: flex-end;
 `;

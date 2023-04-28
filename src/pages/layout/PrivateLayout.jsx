@@ -24,6 +24,7 @@ function PrivateLayout() {
   const client = useRef(null);
   const axiosInstance = useRecoilValue(privateAxios);
   const [current, setCurrent] = useRecoilState(currentUserAtom);
+  const [temp, setTemp] = useState([]);
 
   // window.addEventListener(
   //   "focus",
@@ -89,7 +90,8 @@ function PrivateLayout() {
                 .get(`api/msg/receiver/alarm?message_id=${data.msg_id}`)
                 .then((result) => {
                   const { status, data } = result;
-                  if (status === 200 && !newReceiver.includes(data)) {
+                  if (status === 200 && !temp.includes(data)) {
+                    setTemp((temp) => [data, ...temp]);
                     setNewReceiver((newReceiver) => [data, ...newReceiver]);
                     data.is_anonymous ? notify("익명") : notify(data.sender.nickname);
 
