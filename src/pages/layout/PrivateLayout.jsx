@@ -29,7 +29,7 @@ function PrivateLayout() {
     "focus",
     function () {
       if (accessToken && currentroom && client.current.readyState === client.current.CLOSED) {
-        console.log("재연결");
+        // console.log("재연결");
         client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
       }
     },
@@ -54,7 +54,7 @@ function PrivateLayout() {
           .get(`api/auth/siteinfo/realtime`)
           .then((res) => {
             setCurrent(res.data);
-            console.log("계속");
+            // console.log("계속");
           })
           .catch((err) => {
             navigate("/");
@@ -105,7 +105,6 @@ function PrivateLayout() {
         };
         client.current.onerror = function (error) {
           navigate("/");
-          alert("네트워크 오류 ! 다시 접속해줘 🥹");
         };
       }
       if (isSending === true && isReading === false) {
