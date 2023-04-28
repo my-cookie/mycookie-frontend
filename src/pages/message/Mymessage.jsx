@@ -38,10 +38,9 @@ function Mymessage() {
           <div className="current">
             <CurrentUser>
               <EmojiBox>
-                <CurrentUserBtn onClick={currentHandler}>
-                  <Emoji>🟢</Emoji>현재 접속자 수{" "}
-                  {current ? current.number.realtime_user : 0}
-                </CurrentUserBtn>
+                <Emoji>🟢</Emoji>접속자{" "}
+                {current ? current.number.realtime_user : 0}
+                <CurrentUserBtn onClick={currentHandler}>확인</CurrentUserBtn>
               </EmojiBox>
               {open ? (
                 <CurrentUserBox>
@@ -100,10 +99,6 @@ const MymessageContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  .go_mypage {
-  }
-  .current {
   }
 
   .message_title {
@@ -173,9 +168,10 @@ const CurrentUser = styled.div`
 
 const EmojiBox = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   position: relative;
+  font-size: 0.9rem;
 `;
 
 const Emoji = styled.p`
@@ -188,7 +184,7 @@ const CurrentUserBox = styled.div`
   height: auto;
   max-height: 100px;
   border-radius: 10px;
-  margin-top: 25px;
+  margin-top: 30px;
   background-color: #fff;
   list-style: none;
   padding: 10px;
@@ -197,12 +193,19 @@ const CurrentUserBox = styled.div`
   position: absolute;
   text-align: center;
   margin-left: 10px;
+  line-height: 18px;
 `;
 
 const CurrentUserBtn = styled.button`
   display: flex;
   flex-direction: row;
   background: none;
-  border: none;
+  border: 2px solid #7fa3ff;
+  background-color: #fff;
+  padding: 4px;
+  border-radius: 10px;
   font-family: "BRBA_B";
+  margin-left: 5px;
+  font-size: 0.7rem;
+  cursor: pointer;
 `;
