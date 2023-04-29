@@ -3,7 +3,22 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { currentUserNicknameAtom, accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, currentUserAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom, receiveMessageAtom } from "../../utils/atom";
+import {
+  sendMessageAtom,
+  currentUserNicknameAtom,
+  accessAtom,
+  uuidAtom,
+  roomAtom,
+  sendingAtom,
+  nicknameAtom,
+  privateAxios,
+  sendmsgAtom,
+  currentUserAtom,
+  receiveMsgStatusAtom,
+  readingAtom,
+  sendMsgStatusAtom,
+  receiveMessageAtom,
+} from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -20,6 +35,7 @@ function PrivateLayout() {
   // const [newMessage, setNewMessage] = useRecoilState(receiveMsgStatusAtom);
   const [readMessage, setReadMessage] = useRecoilState(sendMsgStatusAtom);
   const [newReceiver, setNewReceiver] = useRecoilState(receiveMessageAtom);
+  const [sendMessage, setSendMessage] = useRecoilState(sendMessageAtom);
 
   const client = useRef(null);
   const axiosInstance = useRecoilValue(privateAxios);
@@ -140,7 +156,12 @@ function PrivateLayout() {
                 })
                 .catch((err) => {});
             } else {
-              readMessage ? setReadMessage(false) : setReadMessage(true);
+              setSendMessage(
+                sendMessage.filter((el) => {
+                  return el != data;
+                })
+              );
+              // readMessage ? setReadMessage(false) : setReadMessage(true);
             }
           };
         };
