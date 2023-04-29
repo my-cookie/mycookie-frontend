@@ -157,8 +157,10 @@ function PrivateLayout() {
                 .catch((err) => {});
             } else {
               setSendMessage(
-                sendMessage.filter((el) => {
-                  return el != data;
+                sendMessage.map((el) => {
+                  if (el == data) {
+                    return (data.is_read = true);
+                  }
                 })
               );
               // readMessage ? setReadMessage(false) : setReadMessage(true);
