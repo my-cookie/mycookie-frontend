@@ -218,6 +218,13 @@ function PrivateLayout() {
   useEffect(() => {
     if (accessToken) {
       axiosInstance
+        .get(`api/auth/websocket`)
+        .then((res) => {})
+        .catch((err) => {
+          navigate("/");
+        });
+
+      axiosInstance
         .get(`/api/auth/info/uuid`)
         .then((response) => {
           setNickname(response.data.nickname);
