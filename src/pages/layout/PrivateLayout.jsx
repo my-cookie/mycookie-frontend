@@ -9,7 +9,6 @@ import toast, { Toaster } from "react-hot-toast";
 
 function PrivateLayout() {
   const navigate = useNavigate();
-  const [init, setInit] = useState(false);
   const [accessToken, setAccessToken] = useRecoilState(accessAtom);
   const [uuid, setUuid] = useRecoilState(uuidAtom);
   const [nickname, setNickname] = useRecoilState(nicknameAtom);
@@ -23,7 +22,6 @@ function PrivateLayout() {
   const axiosInstance = useRecoilValue(privateAxios);
   const [current, setCurrent] = useRecoilState(currentUserAtom);
   const [currentNickname, setCurrentNickname] = useRecoilState(currentUserNicknameAtom);
-  const [temp, setTemp] = useState([]);
 
   // window.addEventListener(
   //   "focus",
@@ -35,6 +33,10 @@ function PrivateLayout() {
   //   },
   //   false
   // );
+  const notify = (sender) =>
+    toast(`${sender}(으)로 부터 쿠키 도착`, {
+      icon: "💌",
+    });
 
   useEffect(() => {
     if (accessToken) {
@@ -101,23 +103,8 @@ function PrivateLayout() {
     }
   }, [accessToken]);
 
-  const notify = (sender) =>
-    toast(`${sender}(으)로 부터 쿠키 도착`, {
-      icon: "💌",
-    });
-
   useEffect(() => {
-    setInit(true);
-  }, []);
-
-  useEffect(() => {
-    if (temp.length > 0 && !newReceiver.includes(temp[0])) {
-      setNewReceiver((newReceiver) => [temp[0], ...newReceiver]);
-    }
-  }, [temp]);
-
-  useEffect(() => {
-    if (init && currentroom) {
+    if (currentroom) {
       client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
 
       if (isSending === false && isReading === false) {
@@ -129,8 +116,8 @@ function PrivateLayout() {
                 .get(`api/msg/receiver/alarm?message_id=${data.msg_id}`)
                 .then((result) => {
                   const { status, data } = result;
-                  if (status === 200 && !temp.includes(data)) {
-                    setTemp((temp) => [data, ...temp]);
+                  if (status === 200 && !newReceiver.includes(data)) {
+                    setNewReceiver((newReceiver) => [data, ...newReceiver]);
                     data.is_anonymous ? notify("익명") : notify(data.sender.nickname);
                   }
                 })
@@ -170,17 +157,11 @@ function PrivateLayout() {
 
           axiosInstance
             .get(`api/msg/receiver/alarm?message_id=${msg}`)
-            .then((res) => setSendMessage((sendMessage) => [res.data, ...sendMessage]))
+            .then((res) => {
+              setSendMessage((sendMessage) => [res.data, ...sendMessage]);
+              setMsg(null);
+            })
             .catch((err) => navigate("/"));
-
-          setMsg(null);
-
-          axiosInstance
-            .get(`api/auth/websocket`)
-            .then((res) => {})
-            .catch((err) => {
-              navigate("/");
-            });
         };
       }
 
@@ -197,17 +178,10 @@ function PrivateLayout() {
           setCurrentroom(uuid);
           setIsReading(false);
           setMsg(null);
-
-          axiosInstance
-            .get(`api/auth/websocket`)
-            .then((res) => {})
-            .catch((err) => {
-              navigate("/");
-            });
         };
       }
     }
-  }, [init, currentroom]);
+  }, [currentroom]);
 
   useEffect(() => {
     if (!accessToken) {
