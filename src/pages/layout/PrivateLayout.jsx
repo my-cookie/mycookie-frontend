@@ -113,9 +113,8 @@ function PrivateLayout() {
   }, []);
 
   useEffect(() => {
-    if (temp.length == 1 && !newReceiver.includes(temp[0])) {
+    if (temp.length > 0 && !newReceiver.includes(temp[0])) {
       setNewReceiver((newReceiver) => [temp[0], ...newReceiver]);
-      setTemp([]);
     }
   }, [temp]);
 
@@ -133,7 +132,7 @@ function PrivateLayout() {
                 .then((result) => {
                   const { status, data } = result;
                   if (status === 200 && !temp.includes(data)) {
-                    setTemp([data]);
+                    setTemp((temp) => [data, ...temp]);
                     data.is_anonymous ? notify("익명") : notify(data.sender.nickname);
 
                     // newMessage ? setNewMessage(false) : setNewMessage(true);
