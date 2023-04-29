@@ -3,13 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MsgContainer from "../../components/MsgContainer";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { privateAxios, currentUserAtom } from "../../utils/atom";
+import { currentUserAtom, currentUserNicknameAtom } from "../../utils/atom";
 import LoadingLogin from "../loading/LoadingLogin";
 
 function Mymessage() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const current = useRecoilValue(currentUserAtom);
+  const currentNickname = useRecoilValue(currentUserNicknameAtom);
 
   // const axiosInstance = useRecoilValue(privateAxios);
   // const [current, setCurrent] = useRecoilState(currentUserAtom);
@@ -29,14 +30,14 @@ function Mymessage() {
           <div className="current">
             <CurrentUser>
               <EmojiBox>
-                <Emoji>🟢</Emoji>접속자 {current ? current.number.realtime_user : 0}
+                <Emoji>🟢</Emoji>접속자 {currentNickname.length}
                 <CurrentUserBtn onClick={currentHandler}>누구?</CurrentUserBtn>
               </EmojiBox>
               {open ? (
                 <CurrentUserBox>
                   <div className="scroll_inner">
-                    {current?.nicknames.map((current) => {
-                      return <li key={current.id}>{current.nickname}</li>;
+                    {currentNickname.map((nickname, idx) => {
+                      return <li key={idx}>{nickname}</li>;
                     })}
                   </div>
                 </CurrentUserBox>
@@ -105,7 +106,7 @@ const MymessageContainer = styled.div`
 
   .message_container {
     width: 100%;
-    height: 70%;
+    height: 77%;
   }
 
   .message_btn {

@@ -101,6 +101,11 @@ export const currentUserAtom = atom({
   default: null,
 });
 
+export const currentUserNicknameAtom = atom({
+  key: "currentUserNicknameAtom",
+  default: [],
+});
+
 export const privateAxios = selector({
   key: "privateAxios",
   get: async ({ get }) => {

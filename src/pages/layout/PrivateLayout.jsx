@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, currentUserAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom, receiveMessageAtom } from "../../utils/atom";
+import { currentUserNicknameAtom, accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, currentUserAtom, receiveMsgStatusAtom, readingAtom, sendMsgStatusAtom, receiveMessageAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -24,6 +24,7 @@ function PrivateLayout() {
   const client = useRef(null);
   const axiosInstance = useRecoilValue(privateAxios);
   const [current, setCurrent] = useRecoilState(currentUserAtom);
+  const [currentNickname, setCurrentNickname] = useRecoilState(currentUserNicknameAtom);
   const [temp, setTemp] = useState([]);
 
   // window.addEventListener(
@@ -43,7 +44,12 @@ function PrivateLayout() {
         axiosInstance
           .get(`api/auth/siteinfo/realtime`)
           .then((res) => {
-            setCurrent(res.data);
+            setCurrent(res.data.number.realtime_user);
+            setCurrentNickname(
+              res.data.nicknames.map((el) => {
+                return el.nickname;
+              })
+            );
           })
           .catch((err) => {
             navigate("/");
@@ -54,10 +60,39 @@ function PrivateLayout() {
         axiosInstance
           .get(`api/auth/siteinfo/realtime`)
           .then((res) => {
-            setCurrent(res.data);
-            // console.log("계속");
+            if (
+              currentroom &&
+              !res.data.nicknames
+                .map((el) => {
+                  return el.nickname;
+                })
+                .includes(nickname)
+            ) {
+              setCurrentNickname([
+                ...res.data.nicknames.map((el) => {
+                  return el.nickname;
+                }),
+                nickname,
+              ]);
+              setCurrent(res.data.number.realtime_user + 1);
+            } else {
+              setCurrent(res.data.number.realtime_user);
+              setCurrentNickname(
+                res.data.nicknames.map((el) => {
+                  return el.nickname;
+                })
+              );
+              // console.log("계속");
+            }
+
             if (currentroom && client.current.readyState === client.current.CLOSED) {
               // console.log("재연결");
+              axiosInstance
+                .get(`api/auth/websocket`)
+                .then((res) => {})
+                .catch((err) => {
+                  navigate("/");
+                });
               client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
             }
           })
@@ -78,6 +113,13 @@ function PrivateLayout() {
   }, []);
 
   useEffect(() => {
+    if (temp.length == 1 && !newReceiver.includes(temp[0])) {
+      setNewReceiver((newReceiver) => [temp[0], ...newReceiver]);
+      setTemp([]);
+    }
+  }, [temp]);
+
+  useEffect(() => {
     if (init && currentroom) {
       client.current = new W3CWebSocket(process.env.REACT_APP_WS_URL + currentroom + "/"); //gets room_name from the state and connects to the backend server
 
@@ -91,8 +133,7 @@ function PrivateLayout() {
                 .then((result) => {
                   const { status, data } = result;
                   if (status === 200 && !temp.includes(data)) {
-                    setTemp((temp) => [data, ...temp]);
-                    setNewReceiver((newReceiver) => [data, ...newReceiver]);
+                    setTemp([data]);
                     data.is_anonymous ? notify("익명") : notify(data.sender.nickname);
 
                     // newMessage ? setNewMessage(false) : setNewMessage(true);

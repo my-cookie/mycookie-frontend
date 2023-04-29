@@ -60,7 +60,7 @@ function SearchCookie() {
       .then((result) => {
         const { status, data } = result;
         if (status === 201) {
-          setBookmark([...bookmark, data]);
+          setBookmark((bookmark) => [data, ...bookmark]);
           setNickname("");
         } else if (status === 206) {
           notify("이미 추가된 쿠키야!😉");
