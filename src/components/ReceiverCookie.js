@@ -21,7 +21,7 @@ function ReceiverCookie() {
     setReadData(select);
     if (select[0].is_read == false) {
       axiosInstance
-        .post(`api/msg/read`, { message_id: e.target.id })
+        .post(`api/msg/read`, { message_id: select[0].id })
         .then((res) => {
           setIsReading(true);
           setMsg(e.target.id);
