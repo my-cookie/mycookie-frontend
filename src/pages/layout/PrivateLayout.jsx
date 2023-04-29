@@ -166,6 +166,13 @@ function PrivateLayout() {
           setCurrentroom(uuid);
           setIsSending(false);
           setMsg(null);
+
+          axiosInstance
+            .get(`api/auth/websocket`)
+            .then((res) => {})
+            .catch((err) => {
+              navigate("/");
+            });
         };
       }
 
@@ -182,6 +189,13 @@ function PrivateLayout() {
           setCurrentroom(uuid);
           setIsReading(false);
           setMsg(null);
+
+          axiosInstance
+            .get(`api/auth/websocket`)
+            .then((res) => {})
+            .catch((err) => {
+              navigate("/");
+            });
         };
       }
     }
