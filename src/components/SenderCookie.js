@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { postSenderIconAtom, privateAxios, sendMsgStatusAtom, tabIndexAtom, sendMessageAtom } from "../utils/atom";
+import React from "react";
+import { useRecoilState } from "recoil";
+import { postSenderIconAtom, tabIndexAtom, sendMessageAtom } from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -8,23 +8,8 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 function SenderCookie() {
   const [postReadDate, setPostReadData] = useRecoilState(postSenderIconAtom); // 선택된 쿠키
   const navigate = useNavigate();
-  // const [readMessage, setReadMessage] = useRecoilState(sendMsgStatusAtom);
-  const axiosInstance = useRecoilValue(privateAxios);
-  // const [sendMessage, setSender] = useState([]);
   const [tabIndex, setTabIndex] = useRecoilState(tabIndexAtom);
   const [sendMessage, setSendMessage] = useRecoilState(sendMessageAtom);
-
-  // const handleSenderDataChange = useCallback(() => {
-  //   axiosInstance.get(`api/msg/sender`).then((res) => {
-  //     setSendMessage(res.data);
-  //   });
-  // }, []);
-
-  useEffect(() => {
-    axiosInstance.get(`api/msg/sender`).then((res) => {
-      setSendMessage(res.data);
-    });
-  }, []);
 
   const sendHandler = (e) => {
     const select = sendMessage.filter((sendMessage) => sendMessage.id == e.target.id);

@@ -1,14 +1,14 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import styled from "styled-components";
-import { postReceiverIconAtom, privateAxios, receiveMsgStatusAtom } from "../../utils/atom";
+import { postReceiverIconAtom, privateAxios, receiveMessageAtom } from "../../utils/atom";
 import toast, { Toaster } from "react-hot-toast";
 
 function ReadMessage() {
   const RselectID = useRecoilValue(postReceiverIconAtom); // 선택한 id
   const axiosInstance = useRecoilValue(privateAxios);
-  const [newMessage, setNewMessage] = useRecoilState(receiveMsgStatusAtom);
+  const [newReceiver, setNewReceiver] = useRecoilState(receiveMessageAtom);
 
   const navigate = useNavigate();
 
@@ -25,6 +25,7 @@ function ReadMessage() {
           const { status } = result;
           if (status === 200) {
             //정말 삭제하시겠습니까?
+            setNewReceiver(newReceiver.filter((el) => el.id != RselectID[0].id));
             notify("삭제 완료 !");
             navigate("/mymessage");
           }
@@ -98,7 +99,7 @@ function ReadMessage() {
         <div className="read_btn">
           <CheckBtn
             onClick={() => {
-              newMessage ? setNewMessage(false) : setNewMessage(true);
+              // newMessage ? setNewMessage(false) : setNewMessage(true);
               navigate("/mymessage");
             }}
           >

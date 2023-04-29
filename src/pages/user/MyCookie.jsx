@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import { privateAxios } from "../../utils/atom";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 function SelectCookie() {
   const navigate = useNavigate();

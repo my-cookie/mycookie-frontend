@@ -3,22 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  sendMessageAtom,
-  currentUserNicknameAtom,
-  accessAtom,
-  uuidAtom,
-  roomAtom,
-  sendingAtom,
-  nicknameAtom,
-  privateAxios,
-  sendmsgAtom,
-  currentUserAtom,
-  receiveMsgStatusAtom,
-  readingAtom,
-  sendMsgStatusAtom,
-  receiveMessageAtom,
-} from "../../utils/atom";
+import { sendMessageAtom, currentUserNicknameAtom, accessAtom, uuidAtom, roomAtom, sendingAtom, nicknameAtom, privateAxios, sendmsgAtom, currentUserAtom, readingAtom, receiveMessageAtom } from "../../utils/atom";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -32,11 +17,8 @@ function PrivateLayout() {
   const [isSending, setIsSending] = useRecoilState(sendingAtom);
   const [isReading, setIsReading] = useRecoilState(readingAtom);
   const [msg, setMsg] = useRecoilState(sendmsgAtom);
-  // const [newMessage, setNewMessage] = useRecoilState(receiveMsgStatusAtom);
-  const [readMessage, setReadMessage] = useRecoilState(sendMsgStatusAtom);
   const [newReceiver, setNewReceiver] = useRecoilState(receiveMessageAtom);
   const [sendMessage, setSendMessage] = useRecoilState(sendMessageAtom);
-
   const client = useRef(null);
   const axiosInstance = useRecoilValue(privateAxios);
   const [current, setCurrent] = useRecoilState(currentUserAtom);
@@ -150,8 +132,6 @@ function PrivateLayout() {
                   if (status === 200 && !temp.includes(data)) {
                     setTemp((temp) => [data, ...temp]);
                     data.is_anonymous ? notify("익명") : notify(data.sender.nickname);
-
-                    // newMessage ? setNewMessage(false) : setNewMessage(true);
                   }
                 })
                 .catch((err) => {});
@@ -159,11 +139,12 @@ function PrivateLayout() {
               setSendMessage(
                 sendMessage.map((el) => {
                   if (el == data) {
-                    return (data.is_read = true);
+                    return { ...el, is_read: true };
+                  } else {
+                    return el;
                   }
                 })
               );
-              // readMessage ? setReadMessage(false) : setReadMessage(true);
             }
           };
         };
@@ -184,9 +165,14 @@ function PrivateLayout() {
               msg_id: msg,
             })
           );
-
           setCurrentroom(uuid);
           setIsSending(false);
+
+          axiosInstance
+            .get(`api/msg/receiver/alarm?message_id=${msg}`)
+            .then((res) => setSendMessage((sendMessage) => [res.data, ...sendMessage]))
+            .catch((err) => navigate("/"));
+
           setMsg(null);
 
           axiosInstance
@@ -253,10 +239,16 @@ function PrivateLayout() {
           setUuid(response.data.uuid.split("-").join(""));
           setCurrentroom(response.data.uuid.split("-").join(""));
         })
-
         .catch((err) => {
           return navigate("/");
         });
+
+      axiosInstance.get(`api/msg/receiver`).then((res) => {
+        setNewReceiver(res.data);
+      });
+      axiosInstance.get(`api/msg/sender`).then((res) => {
+        setSendMessage(res.data);
+      });
     }
   }, [accessToken]);
 

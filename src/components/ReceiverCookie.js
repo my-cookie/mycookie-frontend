@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { postReceiverIconAtom, privateAxios, receiveMsgStatusAtom, roomAtom, readingAtom, sendmsgAtom, tabIndexAtom, receiveMessageAtom } from "../utils/atom";
+import { sendMessageAtom, postReceiverIconAtom, privateAxios, receiveMsgStatusAtom, roomAtom, readingAtom, sendmsgAtom, tabIndexAtom, receiveMessageAtom } from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -9,37 +9,32 @@ function ReceiverCookie() {
   const [readData, setReadData] = useRecoilState(postReceiverIconAtom);
   const axiosInstance = useRecoilValue(privateAxios);
   const [newReceiver, setNewReceiver] = useRecoilState(receiveMessageAtom);
-  // const [newMessage, setNewMessage] = useRecoilState(receiveMsgStatusAtom);
   const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
   const [isReading, setIsReading] = useRecoilState(readingAtom);
   const [msg, setMsg] = useRecoilState(sendmsgAtom);
   const navigate = useNavigate();
   const [tabIndex, setTabIndex] = useRecoilState(tabIndexAtom);
-  // const [message, setMessage] = useRecoilState(receiveMessageAtom);
-  // const [ScrollActive, setScrollActive] = useState(false);
-
-  // const handleReceiverDataChange = useCallback(() => {
-  //   axiosInstance.get(`api/msg/receiver`).then((res) => {
-  //     setNewReceiver(res.data);
-  //   });
-  // }, []);
-
-  useEffect(() => {
-    axiosInstance.get(`api/msg/receiver`).then((res) => {
-      setNewReceiver(res.data);
-    });
-  }, []);
+  const [sendMessage, setSendMessage] = useRecoilState(sendMessageAtom);
 
   const clickHandler = (e) => {
     const select = newReceiver.filter((newReceiver) => newReceiver.id == e.target.id);
     setReadData(select);
     if (select[0].is_read == false) {
       axiosInstance
-        .post(`api/msg/read`, { message_id: select[0].id })
+        .post(`api/msg/read`, { message_id: e.target.id })
         .then((res) => {
           setIsReading(true);
-          setMsg(select[0].id);
+          setMsg(e.target.id);
           setCurrentroom(res.data.sender_uuid.split("-").join(""));
+          setNewReceiver(
+            newReceiver.map((el) => {
+              if (el.id == e.target.id) {
+                return { ...el, is_read: true };
+              } else {
+                return el;
+              }
+            })
+          );
         })
         .catch((err) => {});
     }

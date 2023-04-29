@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { accessAtom } from "../../utils/atom";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 function SelectCookie() {
   const navigate = useNavigate();

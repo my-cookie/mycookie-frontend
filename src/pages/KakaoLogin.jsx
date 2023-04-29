@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import loadingCookie from "../assets/loading_cookie.gif";
 import { useRecoilState } from "recoil";
 import { accessAtom, uuidAtom, roomAtom, nicknameAtom } from "../utils/atom";
 import styled from "styled-components";

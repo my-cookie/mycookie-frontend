@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MsgContainer from "../../components/MsgContainer";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { currentUserAtom, currentUserNicknameAtom } from "../../utils/atom";
 import LoadingLogin from "../loading/LoadingLogin";
 
@@ -11,9 +11,6 @@ function Mymessage() {
   const [open, setOpen] = useState(false);
   const current = useRecoilValue(currentUserAtom);
   const currentNickname = useRecoilValue(currentUserNicknameAtom);
-
-  // const axiosInstance = useRecoilValue(privateAxios);
-  // const [current, setCurrent] = useRecoilState(currentUserAtom);
 
   const currentHandler = (e) => {
     setOpen((open) => !open);

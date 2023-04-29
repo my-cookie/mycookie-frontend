@@ -3,7 +3,7 @@ import { useRecoilValue, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { privateAxios, nicknameAtom } from "../../utils/atom";
 import { Link, useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 function MyPage() {
   const navigate = useNavigate();

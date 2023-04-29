@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { privateAxios } from "../utils/atom";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const selectOptions = [
   { value: "E", label: "오류" },

@@ -7,7 +7,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { privateAxios, receiverAtom, remainAtom } from "../../utils/atom";
 
 function CompletedMsg() {
-  const [receiver, setReceiver] = useRecoilState(receiverAtom); // 받은 쿠키
   const [remain, setRemain] = useRecoilState(remainAtom); // 앞에서 클릭한 id
   const [info, setInfo] = useState([]);
   const axiosInstance = useRecoilValue(privateAxios);

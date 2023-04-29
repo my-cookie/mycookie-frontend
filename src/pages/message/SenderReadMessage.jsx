@@ -1,14 +1,15 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import styled from "styled-components";
-import { postSenderIconAtom, privateAxios } from "../../utils/atom";
-import toast, { Toaster } from "react-hot-toast";
+import { postSenderIconAtom, privateAxios, sendMessageAtom } from "../../utils/atom";
+import toast from "react-hot-toast";
 
 function ReadMessage() {
   const selectID = useRecoilValue(postSenderIconAtom);
   const axiosInstance = useRecoilValue(privateAxios);
   const navigate = useNavigate();
+  const [sendMessage, setSendMessage] = useRecoilState(sendMessageAtom);
 
   const notify = (message) =>
     toast(`${message}`, {
@@ -23,6 +24,7 @@ function ReadMessage() {
           const { status } = result;
           if (status === 200) {
             //정말 삭제하시겠습니까?
+            setSendMessage(sendMessage.filter((el) => el.id != selectID[0].id));
             notify("삭제 완료 !");
             navigate("/mymessage");
           }

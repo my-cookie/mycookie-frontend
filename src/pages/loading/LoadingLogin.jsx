@@ -3,21 +3,11 @@ import styled from "styled-components";
 import loadingCookie from "../../assets/loading_cookie.gif";
 
 function LoadingLogin() {
-  useEffect(() => {
-    setTimeout(() => {
-      //   navigate("/completed");
-    }, 3000);
-  }, []);
   return (
     <LoadingLoginBox>
       <div className="contents_container">
         <div className="loading_img">
-          <img
-            src={loadingCookie}
-            alt="loading"
-            className="cookie_img"
-            width={300}
-          />
+          <img src={loadingCookie} alt="loading" className="cookie_img" width={300} />
         </div>
       </div>
     </LoadingLoginBox>

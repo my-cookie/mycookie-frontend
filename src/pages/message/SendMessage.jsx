@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { anonymousAtom, contentAtom, receiverAtom, senderAtom } from "../../utils/atom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 function SendMessage() {
   const receiverNickname = useRecoilValue(receiverAtom);

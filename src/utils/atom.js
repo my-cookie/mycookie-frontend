@@ -76,16 +76,6 @@ export const postReceiverIconAtom = atom({
   default: "",
 });
 
-export const receiveMsgStatusAtom = atom({
-  key: "receiveMsgStatusAtom",
-  default: false,
-});
-
-export const sendMsgStatusAtom = atom({
-  key: "sendMsgStatusAtom",
-  default: false,
-});
-
 export const tabIndexAtom = atom({
   key: "tabIndexAtom",
   default: [0, 0],

@@ -4,13 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { anonymousAtom, contentAtom, privateAxios, receiverAtom } from "../../utils/atom";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 function ChangeSelectCookie() {
   const navigate = useNavigate();
-  const receiver = useRecoilValue(receiverAtom);
-  const content = useRecoilValue(contentAtom);
-  const is_anonymous = useRecoilValue(anonymousAtom);
 
   const [cookie, setCookie] = useState([]);
   const [flavor, setFlavors] = useState([]);

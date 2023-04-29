@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { anonymousAtom, contentAtom, privateAxios, receiverAtom, sendingAtom, roomAtom, sendmsgAtom } from "../../utils/atom";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 function FriendSelectCookie() {
   const navigate = useNavigate();
