@@ -1,6 +1,10 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-import { postSenderIconAtom, tabIndexAtom, sendMessageAtom } from "../utils/atom";
+import {
+  postSenderIconAtom,
+  tabIndexAtom,
+  sendMessageAtom
+} from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -12,7 +16,9 @@ function SenderCookie() {
   const [sendMessage, setSendMessage] = useRecoilState(sendMessageAtom);
 
   const sendHandler = (e) => {
-    const select = sendMessage.filter((sendMessage) => sendMessage.id == e.target.id);
+    const select = sendMessage.filter(
+      (sendMessage) => sendMessage.id == e.target.id
+    );
     setPostReadData(select);
     navigate("/readmessage");
   };
@@ -28,9 +34,15 @@ function SenderCookie() {
       >
         <div className="send_tabs_message">
           <TabList className="send_tab_list">
-            <Tab className={tabIndex[1] == 0 ? "selected_tab" : "send_tab"}>전체편지</Tab>
-            <Tab className={tabIndex[1] == 1 ? "selected_tab" : "send_tab"}>읽은편지</Tab>
-            <Tab className={tabIndex[1] == 2 ? "selected_tab" : "send_tab"}>안읽은편지</Tab>
+            <Tab className={tabIndex[1] == 0 ? "selected_tab" : "send_tab"}>
+              전체편지
+            </Tab>
+            <Tab className={tabIndex[1] == 1 ? "selected_tab" : "send_tab"}>
+              읽은편지
+            </Tab>
+            <Tab className={tabIndex[1] == 2 ? "selected_tab" : "send_tab"}>
+              안읽은편지
+            </Tab>
           </TabList>
         </div>
         <div className="send_box">
@@ -39,9 +51,20 @@ function SenderCookie() {
               {sendMessage &&
                 sendMessage.map((sendMessage) => {
                   return (
-                    <Button key={sendMessage.id} id={sendMessage.id} onClick={sendHandler}>
-                      <img src={sendMessage.flavor.img} id={sendMessage.id} alt="img" width={50} />
-                      <p className="sender_nickname">{sendMessage.receiver.nickname}</p>
+                    <Button
+                      key={sendMessage.id}
+                      id={sendMessage.id}
+                      onClick={sendHandler}
+                    >
+                      <img
+                        src={sendMessage.flavor.img}
+                        id={sendMessage.id}
+                        alt="img"
+                        width={50}
+                      />
+                      <p className="sender_nickname">
+                        {sendMessage.receiver.nickname}
+                      </p>
                     </Button>
                   );
                 })}
@@ -52,9 +75,20 @@ function SenderCookie() {
                 sendMessage.map((sendMessage) => {
                   if (sendMessage.is_read == true) {
                     return (
-                      <Button key={sendMessage.id} id={sendMessage.id} onClick={sendHandler}>
-                        <img src={sendMessage.flavor.img} id={sendMessage.id} alt="img" width={50} />
-                        <p className="sender_nickname">{sendMessage.receiver.nickname}</p>
+                      <Button
+                        key={sendMessage.id}
+                        id={sendMessage.id}
+                        onClick={sendHandler}
+                      >
+                        <img
+                          src={sendMessage.flavor.img}
+                          id={sendMessage.id}
+                          alt="img"
+                          width={50}
+                        />
+                        <p className="sender_nickname">
+                          {sendMessage.receiver.nickname}
+                        </p>
                       </Button>
                     );
                   }
@@ -66,9 +100,20 @@ function SenderCookie() {
                 sendMessage.map((sendMessage) => {
                   if (sendMessage.is_read == false) {
                     return (
-                      <Button key={sendMessage.id} id={sendMessage.id} onClick={sendHandler}>
-                        <img src={sendMessage.flavor.img} id={sendMessage.id} alt="img" width={50} />
-                        <p className="sender_nickname">{sendMessage.receiver.nickname}</p>
+                      <Button
+                        key={sendMessage.id}
+                        id={sendMessage.id}
+                        onClick={sendHandler}
+                      >
+                        <img
+                          src={sendMessage.flavor.img}
+                          id={sendMessage.id}
+                          alt="img"
+                          width={50}
+                        />
+                        <p className="sender_nickname">
+                          {sendMessage.receiver.nickname}
+                        </p>
                       </Button>
                     );
                   }
