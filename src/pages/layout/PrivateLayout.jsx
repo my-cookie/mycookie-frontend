@@ -22,7 +22,7 @@ function PrivateLayout() {
   const axiosInstance = useRecoilValue(privateAxios);
   const [current, setCurrent] = useRecoilState(currentUserAtom);
   const [currentNickname, setCurrentNickname] = useRecoilState(currentUserNicknameAtom);
-  const [temp, setTemp] = useState(null);
+
   // window.addEventListener(
   //   "focus",
   //   function () {
@@ -37,20 +37,6 @@ function PrivateLayout() {
     toast(`${sender}(으)로 부터 쿠키 도착`, {
       icon: "💌",
     });
-
-  useEffect(() => {
-    if (temp) {
-      axiosInstance
-        .get(`api/msg/receiver/alarm?message_id=${temp}`)
-        .then((response) => {
-          if (response.status === 200 && !newReceiver.includes(response.data)) {
-            setNewReceiver((newReceiver) => [response.data, ...newReceiver]);
-            response.data.is_anonymous ? notify("익명") : notify(response.data.sender.nickname);
-          }
-        })
-        .catch((err) => {});
-    }
-  }, [temp]);
 
   useEffect(() => {
     if (accessToken) {
@@ -126,9 +112,15 @@ function PrivateLayout() {
           client.current.onmessage = function (e) {
             const data = JSON.parse(e.data);
             if (!data.is_read) {
-              if (temp != data.msg_id) {
-                setTemp(data.msg_id);
-              }
+              axiosInstance
+                .get(`api/msg/receiver/alarm?message_id=${data.msg_id}`)
+                .then((response) => {
+                  if (response.status === 200 && !newReceiver.includes(response.data)) {
+                    setNewReceiver((newReceiver) => [response.data, ...newReceiver]);
+                    response.data.is_anonymous ? notify("익명") : notify(response.data.sender.nickname);
+                  }
+                })
+                .catch((err) => {});
             } else {
               setSendMessage(
                 sendMessage.map((el) => {
