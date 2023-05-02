@@ -2,7 +2,12 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { anonymousAtom, contentAtom, receiverAtom, senderAtom } from "../../utils/atom";
+import {
+  anonymousAtom,
+  contentAtom,
+  receiverAtom,
+  senderAtom
+} from "../../utils/atom";
 import toast from "react-hot-toast";
 
 function SendMessage() {
@@ -16,7 +21,7 @@ function SendMessage() {
 
   const notify = (message) =>
     toast(`${message}`, {
-      icon: "🍪",
+      icon: "🍪"
     });
 
   const checkHandler = () => {
@@ -55,14 +60,28 @@ function SendMessage() {
               에게
             </ToBox>
             <TextBox>
-              <ReadMessageText placeholder="친구에게 보낼 쿠키를 작성해봐!" onChange={(e) => handleSetValue(e)} value={content}></ReadMessageText>
+              <ReadMessageText
+                placeholder="친구에게 보낼 쿠키를 작성해봐!"
+                onChange={(e) => handleSetValue(e)}
+                value={content}
+              ></ReadMessageText>
             </TextBox>
-            <FromBox>{is_anonymous == true ? <p>익명 보냄</p> : <FromRead>{senderName} 보냄</FromRead>}</FromBox>
+            <FromBox>
+              {is_anonymous == true ? (
+                <p>익명 보냄</p>
+              ) : (
+                <FromRead>{senderName} 보냄</FromRead>
+              )}
+            </FromBox>
           </div>
         </div>
         <div className="send_btn">
           <CheckBox>
-            <SendInput type="checkbox" checked={is_anonymous} onChange={(e) => checkHandler(e)} />
+            <SendInput
+              type="checkbox"
+              checked={is_anonymous}
+              onChange={(e) => checkHandler(e)}
+            />
             <SendCheck>익명으로 보내기</SendCheck>
           </CheckBox>
           <SendBtn type="button" onClick={cookieSend}>
@@ -103,13 +122,13 @@ const SendMessageContainer = styled.div`
   .send_letter {
     display: flex;
     width: 100%;
-    height: 370px;
+    height: 350px;
     margin-top: 10px;
     justify-content: center;
   }
   .message_background {
     width: 100%;
-    height: 300px;
+    height: 290px;
     padding: 20px;
     border-radius: 40px;
     border: 1px solid #a7a7a7;
