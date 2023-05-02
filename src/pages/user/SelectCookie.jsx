@@ -197,7 +197,7 @@ const SelectCookieBox = styled.div`
     font-family: "BRBA_B";
     font-size: 0.8rem;
     cursor: pointer;
-    margin: 5px;
+    margin-top: 5px;
     text-align: center;
     align-items: center;
     padding-top: 10px;
@@ -229,7 +229,8 @@ const SelectTip = styled.p`
 `;
 
 const CookieListBox = styled.ul`
-  width: 100%;
+  width: 90%;
+  margin-left: 5%;
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(3, auto);
