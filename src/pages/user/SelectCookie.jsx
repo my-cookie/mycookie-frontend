@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
-import { accessAtom } from "../../utils/atom";
+import { accessAtom, nicknameAtom, uuidAtom, roomAtom } from "../../utils/atom";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -10,10 +10,11 @@ function SelectCookie() {
   const navigate = useNavigate();
   const [cookie, setCookie] = useState([]); // 서버에서 불러오는 쿠키
   const [flavor, setFlavors] = useState(""); // 유저가 선택한 쿠키
-  const [uuid, setUuid] = useState("");
-  const [nickname, serNickname] = useState("");
   const location = useLocation();
   const [accessToken, setAccessToken] = useRecoilState(accessAtom);
+  const [uuid, setUuid] = useRecoilState(uuidAtom);
+  const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
+  const [nickname, setNickname] = useRecoilState(nicknameAtom);
 
   const notify = (message) =>
     toast(`${message}`, {
@@ -23,7 +24,7 @@ function SelectCookie() {
   useEffect(() => {
     try {
       setUuid(location.state.user_uuid);
-      serNickname(location.state.nickname);
+      setNickname(location.state.nickname);
     } catch {
       navigate("/");
     }
@@ -71,6 +72,9 @@ function SelectCookie() {
 
         if (status === 200) {
           setAccessToken(data.tokens.access);
+          setNickname(data.user.nickname);
+          setUuid(data.user.uuid.split("-").join(""));
+          setCurrentroom(data.user.uuid.split("-").join(""));
           navigate("/mymessage");
         } else {
           navigate("/");

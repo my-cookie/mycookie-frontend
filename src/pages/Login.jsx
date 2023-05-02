@@ -1,14 +1,31 @@
 import styled from "styled-components";
 import MainCookie from "../assets/cookie_main.png";
 import Kakao from "../assets/kakao.png";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
   const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
   const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const navigate = useNavigate();
 
   const KakaoLoginBtn = () => {
     window.location.href = KAKAO_AUTH_URL;
+  };
+
+  const GuestLoginBtn = () => {
+    axios
+      .post(`/api/auth/login`, { code: "guest" })
+      .then((result) => {
+        const { status, data } = result;
+        if (status === 201) {
+          navigate("/nickname", { state: { user_uuid: data.user_uuid } });
+        } else {
+          navigate("/");
+        }
+      })
+      .catch((error) => {});
   };
 
   return (
@@ -21,6 +38,9 @@ function Login() {
         <div className="kakaoBtn_box">
           <KakaoLogin onClick={KakaoLoginBtn}>
             <KakaoBtn src={Kakao} alt="카카오버튼" />
+          </KakaoLogin>
+          <KakaoLogin className="guestBtn_box" onClick={GuestLoginBtn}>
+            게스트로 로그인
           </KakaoLogin>
         </div>
       </div>
@@ -63,6 +83,14 @@ const LoginContainer = styled.div`
 
   .kakaoBtn_box {
     width: 100%;
+  }
+  .guestBtn_box {
+    width: 100%;
+    height: 50px;
+    margin-top: 10px;
+    font-family: "BRBA_B";
+    font-size: 1em;
+    background-color: #d7c7fa;
   }
 `;
 

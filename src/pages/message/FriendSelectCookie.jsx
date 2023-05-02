@@ -5,6 +5,7 @@ import { useRecoilValue, useRecoilState } from "recoil";
 import { anonymousAtom, contentAtom, privateAxios, receiverAtom, sendingAtom, roomAtom, sendmsgAtom } from "../../utils/atom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import LoadingLogin from "../loading/LoadingLogin";
 
 function FriendSelectCookie() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ function FriendSelectCookie() {
   const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
   const [isSending, setIsSending] = useRecoilState(sendingAtom);
   const [msg, setMsg] = useRecoilState(sendmsgAtom);
+  const [loading, setLoading] = useState(false);
 
   async function getCookie() {
     try {
@@ -41,10 +43,8 @@ function FriendSelectCookie() {
     setFlavors(`${e.target.id}`);
   };
 
-  const selectBtn = () => {
-    if (flavor.length === 0) {
-      notify(`${receiver.nickname}(이)가 좋아하는 쿠키맛을 골라줘 ~`);
-    } else {
+  useEffect(() => {
+    if (loading) {
       axiosInstance
         .post(`api/msg/save`, {
           receiver: parseInt(receiver.id),
@@ -71,9 +71,12 @@ function FriendSelectCookie() {
               setMsg(data.msg_id);
               navigate("/loadingmsg");
             }
+            setLoading(false);
           }
         })
         .catch((error) => {
+          setLoading(false);
+
           setContent("");
           if (error.response.status === 429) {
             notify(`${receiver.nickname}에게 보낼 쿠키를 다 소진했어!😥`);
@@ -85,9 +88,19 @@ function FriendSelectCookie() {
           setReceiver("");
         });
     }
+  }, [loading]);
+
+  const selectBtn = () => {
+    if (flavor.length === 0) {
+      notify(`${receiver.nickname}(이)가 좋아하는 쿠키맛을 골라줘 ~`);
+    } else {
+      setLoading(true);
+    }
   };
 
-  return (
+  return loading ? (
+    <LoadingLogin />
+  ) : (
     <FriendSelectBox>
       <div className="contents_container">
         <div className="friend_select_title">
@@ -148,6 +161,9 @@ const FriendSelectBox = styled.div`
     font-family: "BRBA_B";
     margin: 0 auto;
     padding: 0 40px;
+  }
+  .temp {
+    background-color: red;
   }
   .friend_select_title {
     width: 100%;
