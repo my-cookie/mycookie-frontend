@@ -175,6 +175,7 @@ const SelectCookieBox = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
   }
 
   .cookie_img {
@@ -238,6 +239,7 @@ const CookieListBox = styled.ul`
   .cookie_img {
     width: 90%;
   }
+
   // @media (min-width: 1000px) {
   //   width: 100%;
   //   display: grid;

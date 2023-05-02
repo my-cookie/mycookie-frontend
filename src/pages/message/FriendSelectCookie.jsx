@@ -190,6 +190,7 @@ const FriendSelectBox = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
   }
   .cookie_img {
     width: 100px;
