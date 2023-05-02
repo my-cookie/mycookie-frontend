@@ -147,7 +147,7 @@ const SelectCookieBox = styled.div`
 
   .select_title {
     width: 100%;
-    height: 40%;
+    height: 30%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -156,7 +156,7 @@ const SelectCookieBox = styled.div`
 
   .select_cookie {
     width: 100%;
-    height: 80%;
+    height: 60%;
     display: flex;
     justify-content: center;
   }
@@ -167,7 +167,7 @@ const SelectCookieBox = styled.div`
     border-radius: 40px;
     border: 1px solid #a7a7a7;
     background-color: #f8f8f8;
-    padding: 20px;
+    padding: 10px;
   }
 
   .cookie_list {
@@ -180,12 +180,12 @@ const SelectCookieBox = styled.div`
   .cookie_img {
     width: 100px;
     border-radius: 10px;
-    @media (max-width: 350px) {
-      width: 100%;
-    }
-    @media (max-width: 370px) {
-      width: 90%;
-    }
+    // @media (max-width: 350px) {
+    //   width: 100%;
+    // }
+    // @media (max-width: 370px) {
+    //   width: 90%;
+    // }
   }
 
   .cookie_btn {
@@ -201,12 +201,12 @@ const SelectCookieBox = styled.div`
     text-align: center;
     align-items: center;
     padding-top: 10px;
-    @media (max-width: 350px) {
-      width: 100%;
-    }
-    @media (max-width: 370px) {
-      width: 100%;
-    }
+    // @media (max-width: 350px) {
+    //   width: 100%;
+    // }
+    // @media (max-width: 370px) {
+    //   width: 100%;
+    // }
   }
   .cookie_all_btn {
     background: none;
@@ -231,44 +231,48 @@ const SelectTip = styled.p`
 const CookieListBox = styled.ul`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 150px);
+  justify-content: center;
+  grid-template-columns: repeat(3, auto);
   grid-template-rows: repeat(2, 150px);
-  @media (min-width: 1000px) {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 90px);
-    grid-template-rows: repeat(2, 150px);
-    .cookie_img {
-      width: 80px;
-    }
-  }
-  @media (max-width: 500px) {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 110px);
-    grid-template-rows: repeat(2, 150px);
-    .cookie_list {
-      width: 100%;
-    }
-  }
-  @media (max-width: 350px) {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 80px);
-    grid-template-rows: repeat(2, 150px);
-    .cookie_list {
-      width: 100%;
-    }
-  }
-  @media (max-width: 370px) {
+  .cookie_img {
     width: 90%;
-    display: grid;
-    grid-template-columns: repeat(3, 80px);
-    grid-template-rows: repeat(2, 150px);
-    .cookie_list {
-      width: 100%;
-    }
   }
+  // @media (min-width: 1000px) {
+  //   width: 100%;
+  //   display: grid;
+  //   grid-template-columns: repeat(3, 90px);
+  //   grid-template-rows: repeat(2, 150px);
+  //   .cookie_img {
+  //     width: 80px;
+  //   }
+  // }
+  // @media (max-width: 500px) {
+  //   width: 100%;
+  //   display: grid;
+  //   grid-template-columns: repeat(3, 110px);
+  //   grid-template-rows: repeat(2, 150px);
+  //   .cookie_list {
+  //     width: 100%;
+  //   }
+  // }
+  // @media (max-width: 350px) {
+  //   width: 100%;
+  //   display: grid;
+  //   grid-template-columns: repeat(3, 80px);
+  //   grid-template-rows: repeat(2, 150px);
+  //   .cookie_list {
+  //     width: 100%;
+  //   }
+  // }
+  // @media (max-width: 370px) {
+  //   width: 90%;
+  //   display: grid;
+  //   grid-template-columns: repeat(3, 80px);
+  //   grid-template-rows: repeat(2, 150px);
+  //   .cookie_list {
+  //     width: 100%;
+  //   }
+  // }
 `;
 
 const SelectBtn = styled.button`
