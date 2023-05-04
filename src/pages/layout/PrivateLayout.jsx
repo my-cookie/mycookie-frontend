@@ -99,7 +99,7 @@ function PrivateLayout() {
           .catch((err) => {
             // setAccessToken(null);
           });
-      }, 10000);
+      }, 3000);
     }
   }, [accessToken]);
 
