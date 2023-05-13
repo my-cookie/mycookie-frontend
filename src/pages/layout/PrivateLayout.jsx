@@ -179,8 +179,6 @@ function PrivateLayout() {
           setMsg(null);
         };
       }
-    } else if (!currentroom && uuid) {
-      client.current.disconnect();
     }
   }, [currentroom]);
 
