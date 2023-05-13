@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import styled from "styled-components";
-import { privateAxios, nicknameAtom } from "../../utils/atom";
+import { privateAxios, nicknameAtom, roomAtom } from "../../utils/atom";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -10,6 +10,7 @@ function MyPage() {
   const axiosInstance = useRecoilValue(privateAxios);
   const [tempNickname, setTempNickname] = useState("");
   const [nickname, setNickname] = useRecoilState(nicknameAtom);
+  const [currentroom, setCurrentroom] = useRecoilState(roomAtom);
 
   const notify = (message) =>
     toast(`${message}`, {
@@ -55,6 +56,7 @@ function MyPage() {
     axiosInstance
       .post(`api/auth/logout`)
       .then((res) => {
+        setCurrentroom(null);
         navigate("/");
       })
       .catch((error) => {});

@@ -110,6 +110,26 @@ export const privateAxios = selector({
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    privateAxios.interceptors.response.use(
+      function (response) {
+        return response;
+      },
+      function (error) {
+        console.log("실행");
+        if (error.response?.status == 401) {
+          const originalRequest = error.config;
+          axios.post(`/api/auth/access`, {}).then((response) => {
+            // setAccessToken(response.data.access);
+            axios.headers.common.Authorization = `Bearer ${response.data.access}`;
+            originalRequest.headers.common.Authorization = `Bearer ${response.data.access}`;
+          });
+          return axios(originalRequest);
+        }
+        // return Promise.reject(error);
+      }
+    );
     return privateAxios;
+
+    // 중단된 요청 (에러난 요청)을 새로운 토큰으로 재전송
   },
 });
