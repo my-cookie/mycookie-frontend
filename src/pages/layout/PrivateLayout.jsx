@@ -122,15 +122,14 @@ function PrivateLayout() {
                 })
                 .catch((err) => {});
             } else {
-              setSendMessage(
-                sendMessage.map((el) => {
-                  if (el == data) {
-                    return { ...el, is_read: true };
-                  } else {
-                    return el;
-                  }
-                })
-              );
+              let newSendMessage = sendMessage.map((el) => {
+                if (el == data) {
+                  return { ...el, is_read: true };
+                } else {
+                  return el;
+                }
+              });
+              setSendMessage(newSendMessage);
             }
           };
         };

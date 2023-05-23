@@ -1,16 +1,6 @@
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  sendMessageAtom,
-  postReceiverIconAtom,
-  privateAxios,
-  receiveMsgStatusAtom,
-  roomAtom,
-  readingAtom,
-  sendmsgAtom,
-  tabIndexAtom,
-  receiveMessageAtom
-} from "../utils/atom";
+import { sendMessageAtom, postReceiverIconAtom, privateAxios, receiveMsgStatusAtom, roomAtom, readingAtom, sendmsgAtom, tabIndexAtom, receiveMessageAtom } from "../utils/atom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -27,9 +17,7 @@ function ReceiverCookie() {
   const [sendMessage, setSendMessage] = useRecoilState(sendMessageAtom);
 
   const clickHandler = (e) => {
-    const select = newReceiver.filter(
-      (newReceiver) => newReceiver.id == e.target.id
-    );
+    const select = newReceiver.filter((newReceiver) => newReceiver.id == e.target.id);
     setReadData(select);
     if (select[0].is_read == false) {
       axiosInstance
@@ -64,15 +52,9 @@ function ReceiverCookie() {
       >
         <div className="receive_tabs_message">
           <TabList className="receive_tab_list">
-            <Tab className={tabIndex[1] == 0 ? "selected_tab" : "receive_tab"}>
-              전체편지
-            </Tab>
-            <Tab className={tabIndex[1] == 1 ? "selected_tab" : "receive_tab"}>
-              읽은편지
-            </Tab>
-            <Tab className={tabIndex[1] == 2 ? "selected_tab" : "receive_tab"}>
-              안읽은편지
-            </Tab>
+            <Tab className={tabIndex[1] == 0 ? "selected_tab" : "receive_tab"}>전체편지</Tab>
+            <Tab className={tabIndex[1] == 1 ? "selected_tab" : "receive_tab"}>읽은편지</Tab>
+            <Tab className={tabIndex[1] == 2 ? "selected_tab" : "receive_tab"}>안읽은편지</Tab>
           </TabList>
         </div>
         <div className="receive_box">
@@ -81,24 +63,9 @@ function ReceiverCookie() {
               {newReceiver &&
                 newReceiver.map((newReceiver) => {
                   return (
-                    <Button
-                      key={newReceiver.id}
-                      id={newReceiver.id}
-                      onClick={clickHandler}
-                    >
-                      <img
-                        src={newReceiver.flavor.img}
-                        id={newReceiver.id}
-                        alt="img"
-                        width={50}
-                      />
-                      {newReceiver.is_anonymous == false ? (
-                        <p className="receiver_nickname">
-                          {newReceiver.sender.nickname}
-                        </p>
-                      ) : (
-                        <p className="receiver_nickname">익명</p>
-                      )}
+                    <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
+                      <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
+                      {newReceiver.is_anonymous == false ? <p className="receiver_nickname">{newReceiver.sender.nickname}</p> : <p className="receiver_nickname">익명</p>}
                     </Button>
                   );
                 })}
@@ -109,24 +76,9 @@ function ReceiverCookie() {
                 newReceiver.map((newReceiver) => {
                   if (newReceiver.is_read == true) {
                     return (
-                      <Button
-                        key={newReceiver.id}
-                        id={newReceiver.id}
-                        onClick={clickHandler}
-                      >
-                        <img
-                          src={newReceiver.flavor.img}
-                          id={newReceiver.id}
-                          alt="img"
-                          width={50}
-                        />
-                        {newReceiver.is_anonymous == false ? (
-                          <p className="receiver_nickname">
-                            {newReceiver.sender.nickname}
-                          </p>
-                        ) : (
-                          <p className="receiver_nickname">익명</p>
-                        )}
+                      <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
+                        <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
+                        {newReceiver.is_anonymous == false ? <p className="receiver_nickname">{newReceiver.sender.nickname}</p> : <p className="receiver_nickname">익명</p>}
                       </Button>
                     );
                   }
@@ -138,24 +90,9 @@ function ReceiverCookie() {
                 newReceiver.map((newReceiver) => {
                   if (newReceiver.is_read == false) {
                     return (
-                      <Button
-                        key={newReceiver.id}
-                        id={newReceiver.id}
-                        onClick={clickHandler}
-                      >
-                        <img
-                          src={newReceiver.flavor.img}
-                          id={newReceiver.id}
-                          alt="img"
-                          width={50}
-                        />
-                        {newReceiver.is_anonymous == false ? (
-                          <p className="receiver_nickname">
-                            {newReceiver.sender.nickname}
-                          </p>
-                        ) : (
-                          <p className="receiver_nickname">익명</p>
-                        )}
+                      <Button key={newReceiver.id} id={newReceiver.id} onClick={clickHandler}>
+                        <img src={newReceiver.flavor.img} id={newReceiver.id} alt="img" width={50} />
+                        {newReceiver.is_anonymous == false ? <p className="receiver_nickname">{newReceiver.sender.nickname}</p> : <p className="receiver_nickname">익명</p>}
                       </Button>
                     );
                   }
