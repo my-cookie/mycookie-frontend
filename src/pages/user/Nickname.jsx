@@ -34,8 +34,7 @@ function Nickname() {
     e.preventDefault();
 
     if (nickname.length > 6) {
-      notify(1111);
-      console.log("dp");
+      notify("닉네임은 6자 이하로 정해줘 ~");
     } else if (nickname.match(/\s/g) || nickname.match(emoji1) || nickname.match(emoji2)) {
       notify("닉네임에 공백과 특수문자는 사용할 수 없어 ~ 🤭");
     } else {
